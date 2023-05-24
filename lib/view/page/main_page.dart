@@ -1,37 +1,46 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saessak_flutter/controller/auth_controller.dart';
 
-class MainPage extends StatelessWidget {
+import '../../controller/main_controller.dart';
+
+class MainPage extends GetView<MainController> {
   const MainPage({Key? key}) : super(key: key);
   static const String route = '/main';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Column(
-        children: [
-          Text('main'),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 100),
-            child: Container(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  elevation: 0,
-                  backgroundColor: Colors.red
-                ),
-                onPressed: Get.find<AuthController>().logout,
-                child: Text('로그아웃'),
-              ),
-            ),
-          ),
-        ],
-      )),
+      appBar: AppBar(
+        centerTitle: false,
+        automaticallyImplyLeading: false,   // 자동 뒤로가기 버튼 생성 비활성화
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: PageView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        controller: controller.pageController,
+        itemCount: controller.screens.length,
+        itemBuilder: (context, index) {
+          return controller.screens[index];
+        }
+      ),
+      bottomNavigationBar: Obx(
+        () => BottomNavigationBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.green,
+          onTap: controller.onPageTapped,
+          currentIndex: controller.curPage.value,
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+            BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '일정일지'),
+            BottomNavigationBarItem(icon: Icon(Icons.chat), label: '게시판'),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'controller/auth_controller.dart';
 import 'controller/login_controller.dart';
 import 'controller/set_profile_controller.dart';
 import 'controller/signup_controller.dart';
+import 'controller/main_controller.dart';
 import 'util/app_pages.dart';
 import 'util/app_routes.dart';
 
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => LoginController(), fenix: true);
         Get.lazyPut(() => SignupController(), fenix: true);
         Get.lazyPut(() => SetProfileController(), fenix: true);
+        Get.lazyPut(() => MainController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.login,
