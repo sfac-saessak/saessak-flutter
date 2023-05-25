@@ -11,6 +11,7 @@ final int views;
 final int reportNum;
 final List<Map> comments;
 final Timestamp writeTime;
+final String tag;
   Post({
     required this.userInfo,
     required this.title,
@@ -19,7 +20,8 @@ final Timestamp writeTime;
     required this.views,
     required this.reportNum,
     required this.comments,
-    required this.writeTime
+    required this.writeTime,
+    required this.tag
   });
 
 }

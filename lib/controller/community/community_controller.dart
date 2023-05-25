@@ -8,14 +8,13 @@ class CommunityController extends GetxController {
   List<Post> postList = List.generate(
       10,
       (index) => Post(
-          userInfo: {
-            'nickName' : '$index번째유저'
-          },
+          tag: '질문글',
+          userInfo: {'nickName': '$index번째유저'},
           title: 'title: 식물이 말라가요 도와줭 $index',
           content: '내용내용내용 글내용 내용내요 식물이 말라가고 이쒀여 도와주세여 흐귷규 $index',
           photoURL: [],
           views: 123,
           reportNum: 0,
-          comments: [{},{},{},{}],
+          comments: [{}, {}, {}, {}],
           writeTime: Timestamp.fromDate(DateTime.now())));
 }
