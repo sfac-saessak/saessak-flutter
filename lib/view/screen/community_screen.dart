@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:saessak_flutter/component/community/post_card.dart';
 import 'package:saessak_flutter/controller/community/community_controller.dart';
+import 'package:saessak_flutter/view/page/community/post_write_page.dart';
+
+// 페이지네이션 미구현
 
 class CommunityScreen extends GetView<CommunityController> {
   const CommunityScreen({Key? key}) : super(key: key);
@@ -11,7 +14,9 @@ class CommunityScreen extends GetView<CommunityController> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton:
-          FloatingActionButton(onPressed: () {}, child: Text('글쓰기')),
+          FloatingActionButton(onPressed: () {
+            Get.to(PostWritePage());
+          }, child: Text('글쓰기')),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(

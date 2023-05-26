@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 
 import '../../../model/community/post.dart';
 
+enum SampleItem { itemOne, itemTwo, itemThree }
+
 class PostDetailPage extends StatelessWidget {
   const PostDetailPage({super.key, required this.post});
 
@@ -25,7 +27,26 @@ class PostDetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('3시간 전 . 조회수 ${post.views}'),
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz)),
+              PopupMenuButton(
+                onSelected: (value) {
+                  
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<SampleItem>>[
+                  const PopupMenuItem(
+                    value: SampleItem.itemOne,
+                    child: Text('게시글 수정'),
+                  ),
+                  const PopupMenuItem<SampleItem>(
+                    value: SampleItem.itemTwo,
+                    child: Text('게시글 삭제'),
+                  ),
+                  const PopupMenuItem<SampleItem>(
+                    value: SampleItem.itemThree,
+                    child: Text('신고하기'),
+                  ),
+                ],
+              ),
             ],
           ),
           Divider(),
