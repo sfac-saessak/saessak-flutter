@@ -1,35 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saessak_flutter/controller/community/community_controller.dart';
 
+import '../../../component/community/comment_card.dart';
 import '../../../model/community/post.dart';
 
 enum SampleItem { itemOne, itemTwo, itemThree }
 
-class PostDetailPage extends StatelessWidget {
+class PostDetailPage extends GetView<CommunityController> {
   const PostDetailPage({super.key, required this.post});
 
   final Post post;
 
   @override
   Widget build(BuildContext context) {
+    print(post.imgUrlList);
+    TextEditingController _commentTextController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(children: [
-          Chip(label: Text(post.tag)),
-          Text(
+          Row(children: [
+            Chip(label: Text(post.tag)),
+            Text(
             post.title,
             style: TextStyle(fontSize: 30),
             maxLines: 3,
           ),
+          ],),
+          
+          Text(controller.convertTime(post.writeTime)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('3시간 전 . 조회수 ${post.views}'),
+              Expanded(child: Text('${DateTime.fromMillisecondsSinceEpoch(post.writeTime.millisecondsSinceEpoch)}')),
+              Text('조회수 ${post.views}'),
               PopupMenuButton(
                 onSelected: (value) {
-                  
+                  if(SampleItem.itemOne == value){
+                    print('게시글수정');
+                    controller.moveToModifyPostPage(post);
+                  }
                 },
                 itemBuilder: (BuildContext context) =>
                     <PopupMenuEntry<SampleItem>>[
@@ -61,12 +74,19 @@ class PostDetailPage extends StatelessWidget {
             ],
           ),
           Divider(),
-          Container(
-            width: Get.width * 0.7,
-            height: Get.height * 0.25,
-            child: Text('사진'),
-            color: Colors.green[100],
-          ),
+          //...사진리스트.map((e) => 사진 컨테이너)
+          ...post.imgUrlList.map((e) {
+            print(e);
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: Get.width * 0.7,
+                height: Get.height * 0.25,
+                child: Image.network('$e'),
+              ),
+            );
+          }).toList(),
+
           Text(post.content),
           SizedBox(
             height: 100,
@@ -76,67 +96,56 @@ class PostDetailPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('댓글 ${post.comments.length}'),
-              TextButton(onPressed: () {}, child: Text('댓글쓰기')),
-            ],
-          ),
-          Divider(),
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.green,
-                child: Text('프로필이미지'),
+              Text('댓글 0'),
+              TextButton(
+                child: Text('댓글 작성'),
+                onPressed: () async {
+                  Get.defaultDialog(
+                    content: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextField(
+                          controller: _commentTextController,
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () async {
+                            Get.find<CommunityController>().writeComment(
+                                content: _commentTextController.text,
+                                post: post);
+                            await controller.getComments(post);
+                            Get.back();
+                          },
+                          child: const Text('완료'),
+                        )
+                      ],
+                    ),
+                  );
+                },
               ),
-              Text(post.userInfo['nickName']),
             ],
           ),
-          Text('위 댓글 작성자 프로필, 댓글 내용은 post.comment 에서 받음'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(DateTime.now().toString()),
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz)),
-            ],
+          Obx(
+            () => Column(
+              children:
+                  Get.find<CommunityController>().commentList.value != null
+                      ? Get.find<CommunityController>()
+                          .commentList
+                          .value!
+                          .map(
+                            (e) => CommentCard(
+                              nickName: e.data()['userInfo']['nickName'],
+                              content: e.data()['content'],
+                              writeTime: e.data()['writeTime'],
+                            ),
+                          )
+                          .toList()
+                      : []
+
+              // 커멘트 컬렉션 . get() . docs . map ( (e) => Comment.fromMap(e.data())) . toList()
+              ,
+            ),
           ),
-          Divider(),
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.green,
-                child: Text('프로필이미지'),
-              ),
-              Text(post.userInfo['nickName']),
-            ],
-          ),
-          Text('위 댓글 작성자 프로필, 댓글 내용은 post.comment 에서 받음'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(DateTime.now().toString()),
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz)),
-            ],
-          ),
-          Divider(),
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.green,
-                child: Text('프로필이미지'),
-              ),
-              Text(post.userInfo['nickName']),
-            ],
-          ),
-          Text('위 댓글 작성자 프로필, 댓글 내용은 post.comment 에서 받음'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(DateTime.now().toString()),
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz)),
-            ],
-          )
         ]),
       ),
     );
