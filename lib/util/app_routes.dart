@@ -1,3 +1,4 @@
+import 'package:saessak_flutter/view/screen/splash_screen.dart';
 
 import '../view/page/login_page.dart';
 import '../view/page/set_profile_page.dart';
