@@ -10,4 +10,5 @@ class AppRoutes {
   static const main = MainPage.route;
   static const signup = SignupPage.route;
   static const setName = SetProfilePage.route;
+  static const splash = Splash.route;
 }

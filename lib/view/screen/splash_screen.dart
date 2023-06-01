@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
+  static const String route = '/splash';
 
   @override
   _SplashState createState() => _SplashState();
@@ -34,9 +33,8 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
         curve: Curves.easeOut,
       ),
     );
-    Timer(Duration(milliseconds: 700), () {
-      _animationController.forward();
-    });
+    Future.delayed(const Duration(milliseconds: 400),
+        () => _animationController.forward());
   }
 
   @override
@@ -69,13 +67,12 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
                 Positioned(
                   left: 0,
                   right: 0,
-                  bottom: 320,
+                  bottom: 310,
                   child: Opacity(
                     opacity: _opacityAnimation.value,
                     child: Center(
                       child: Image.asset(
                         'assets/images/title.png',
-                        scale: 3,
                       ),
                     ),
                   ),
