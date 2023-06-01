@@ -65,8 +65,8 @@ class AuthController extends GetxController {
   signInWithGoogle() => AuthService().signInWithGoogle();
 
   @override
-  void onReady() async {
-    super.onReady();
+  void onInit() async {
+    super.onInit();
     await Future.delayed(2500.milliseconds);
     FirebaseAuth.instance.authStateChanges().listen((value) {
       user(value);
