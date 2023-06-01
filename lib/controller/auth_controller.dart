@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,7 +34,9 @@ class AuthController extends GetxController {
             child: Text('취소'),
           ),
         ),
-        SizedBox(width: 20,),
+        SizedBox(
+          width: 20,
+        ),
         Container(
           width: 100,
           child: ElevatedButton(
@@ -64,16 +65,19 @@ class AuthController extends GetxController {
   signInWithGoogle() => AuthService().signInWithGoogle();
 
   @override
-  onInit() {
+  void onInit() async {
     super.onInit();
+    await Future.delayed(2500.milliseconds);
     FirebaseAuth.instance.authStateChanges().listen((value) {
       user(value);
       if (value != null) {
         // 유저가 있는 상태
-        if (user.value!.metadata.creationTime == user.value!.metadata.lastSignInTime) {    // 계정 생성 후 첫 로그인
+        if (user.value!.metadata.creationTime ==
+            user.value!.metadata.lastSignInTime) {
+          // 계정 생성 후 첫 로그인
           Get.offAllNamed(AppRoutes.setName);
         } else {
-          Get.offAllNamed(AppRoutes.main);
+          Get.offNamed(AppRoutes.main);
         }
       } else {
         // 유저가 없는 상태

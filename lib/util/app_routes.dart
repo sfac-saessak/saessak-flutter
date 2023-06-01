@@ -1,3 +1,4 @@
+import 'package:saessak_flutter/view/screen/splash_screen.dart';
 
 import '../view/page/login_page.dart';
 import '../view/page/set_profile_page.dart';
@@ -9,4 +10,5 @@ class AppRoutes {
   static const main = MainPage.route;
   static const signup = SignupPage.route;
   static const setName = SetProfilePage.route;
+  static const splash = Splash.route;
 }
