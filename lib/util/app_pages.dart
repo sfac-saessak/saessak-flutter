@@ -13,11 +13,7 @@ class AppPages {
         page: () => const MainPage(),
         transition: Transition.fadeIn,
         transitionDuration: Duration(milliseconds: 500)),
-    GetPage(
-        name: LoginPage.route,
-        page: () => const LoginPage(),
-        transition: Transition.fadeIn,
-        transitionDuration: Duration(milliseconds: 500)),
+    GetPage(name: LoginPage.route, page: () => const LoginPage()),
     GetPage(name: SignupPage.route, page: () => const SignupPage()),
     GetPage(name: SetProfilePage.route, page: () => const SetProfilePage()),
     GetPage(
