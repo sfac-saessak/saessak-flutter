@@ -33,8 +33,8 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
         curve: Curves.easeOut,
       ),
     );
-
-    _animationController.forward();
+    Future.delayed(const Duration(milliseconds: 400),
+        () => _animationController.forward());
   }
 
   @override
