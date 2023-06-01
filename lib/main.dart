@@ -27,16 +27,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: Splash(),
-      // initialBinding: BindingsBuilder(() {
-      //   Get.put(AuthController());
-      //   Get.lazyPut(() => LoginController(), fenix: true);
-      //   Get.lazyPut(() => SignupController(), fenix: true);
-      //   Get.lazyPut(() => SetProfileController(), fenix: true);
-      //   Get.lazyPut(() => MainController(), fenix: true);
-      // }),
-      // getPages: AppPages.pages,
-      // initialRoute: AppRoutes.login,
+      initialBinding: BindingsBuilder(() {
+        Get.put(AuthController());
+        Get.lazyPut(() => LoginController(), fenix: true);
+        Get.lazyPut(() => SignupController(), fenix: true);
+        Get.lazyPut(() => SetProfileController(), fenix: true);
+        Get.lazyPut(() => MainController(), fenix: true);
+      }),
+      getPages: AppPages.pages,
+      initialRoute: AppRoutes.splash,
     );
   }
 }
