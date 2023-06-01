@@ -22,28 +22,32 @@ class PostDetailPage extends GetView<CommunityController> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(children: [
-          Row(children: [
-            Chip(label: Text(post.tag)),
-            Text(
-            post.title,
-            style: TextStyle(fontSize: 30),
-            maxLines: 3,
+          Row(
+            children: [
+              Chip(label: Text(post.tag)),
+              Text(
+                post.title,
+                style: TextStyle(fontSize: 30),
+                maxLines: 3,
+              ),
+            ],
           ),
-          ],),
-          
+
           Text(controller.convertTime(post.writeTime)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: Text('${DateTime.fromMillisecondsSinceEpoch(post.writeTime.millisecondsSinceEpoch)}')),
+              Expanded(
+                  child: Text(
+                      '${DateTime.fromMillisecondsSinceEpoch(post.writeTime.millisecondsSinceEpoch)}')),
               Text('조회수 ${post.views}'),
               PopupMenuButton(
                 onSelected: (value) {
-                  if(value == SampleItem.itemOne){
+                  if (value == SampleItem.itemOne) {
                     print('게시글수정');
                     controller.moveToModifyPostPage(post);
                   }
-                   if(value == SampleItem.itemTwo){
+                  if (value == SampleItem.itemTwo) {
                     print('게시글 삭제');
                     controller.removePost(post);
                   }
@@ -72,7 +76,9 @@ class PostDetailPage extends GetView<CommunityController> {
               CircleAvatar(
                 radius: 30,
                 backgroundColor: Colors.green,
-                backgroundImage: post.userInfo['profileImg']!=null? NetworkImage(post.userInfo['profileImg']) : null,
+                backgroundImage: post.userInfo['profileImg'] != null
+                    ? NetworkImage(post.userInfo['profileImg'])
+                    : null,
                 child: Text('프로필이미지'),
               ),
               Text(post.userInfo['nickName']),
@@ -119,6 +125,7 @@ class PostDetailPage extends GetView<CommunityController> {
                                 content: _commentTextController.text,
                                 post: post);
                             await controller.getComments(post);
+                            _commentTextController.text = '';
                             Get.back();
                           },
                           child: const Text('완료'),
@@ -145,7 +152,6 @@ class PostDetailPage extends GetView<CommunityController> {
                               commentId: e.id,
                               post: post,
                               authorUid: e.data()['userInfo']['uid'],
-                        
                             ),
                           )
                           .toList()

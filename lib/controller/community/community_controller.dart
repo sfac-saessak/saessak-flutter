@@ -411,6 +411,7 @@ class CommunityController extends GetxController {
         .collection('community')
         .doc(post.postId)
         .set({'commentsNum': data.docs.length}, SetOptions(merge: true));
+        
   }
 
   // ## 댓글 삭제기능
