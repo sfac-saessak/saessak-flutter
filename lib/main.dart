@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
+import 'package:saessak_flutter/controller/community/community_controller.dart';
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
 import 'firebase_options.dart';
 
@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => SignupController(), fenix: true);
         Get.lazyPut(() => SetProfileController(), fenix: true);
         Get.lazyPut(() => MainController(), fenix: true);
+        Get.lazyPut(() => CommunityController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.splash,
