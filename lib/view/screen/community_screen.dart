@@ -13,44 +13,82 @@ class CommunityScreen extends GetView<CommunityController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton:
-          FloatingActionButton(onPressed: () {
-            Get.to(PostWritePage());
-          }, child: Text('글쓰기')),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        // 누르면 해당 태그 값으로 컨트롤러 curTag 값 변경. 해당 태그 값 변경시 해당되는 포스트만 db에서 가져와서 리빌드.
-                      },
-                      child: Chip(label: Text('전체'))),
-                  Chip(label: Text('정보')),
-                  Chip(label: Text('질문')),
-                  Chip(label: Text('잡담'))
-                ],
-              ),
-            ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            controller.titleController.text = '';
+            controller.contentController.text = '';
+            controller.imgXfileList.value = [];
+            Get.to(() => PostWritePage());
+          },
+          child: Text('글쓰기')),
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                  onTap: () {
+                    controller.curTab = '전체';
+                    controller.getPosts();
+                  },
+                  child: Chip(label: Text('전체'))),
+              GestureDetector(
+                  onTap: () {
+                    // 정보탭만 가져오기
+                    controller.curTab = '정보';
+                    controller.getInfoPosts();
+                  },
+                  child: Chip(label: Text('정보'))),
+              GestureDetector(
+                  onTap: () {
+                    // 질문탭만 가져오기
+                    controller.curTab = '질문';
+                    controller.getQuestionPosts();
+                  },
+                  child: Chip(label: Text('질문'))),
+              GestureDetector(
+                  onTap: () {
+                    // 잡담탭만 가져오기
+                    controller.curTab = '잡담';
+                    controller.getTalkPosts();
+                  },
+                  child: Chip(label: Text('잡담')))
+            ],
           ),
-          SliverAppBar(
-            backgroundColor: Colors.green,
-            expandedHeight: Get.height / 4,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                child: Text('슬리버 앱바'),
-              ),
+          Expanded(
+            child: Obx(
+              () => ListView.builder(
+                  itemCount: controller.postList.value!.length,
+                  itemBuilder: (context, index) {
+                    if (controller.curTab == '전체') {
+                      if ((index) % 5 == 4 &&
+                          controller.postList.value!.length - 1 == index) {
+                        controller.getMorePosts();
+                      }
+                    }
+                    if (controller.curTab == '정보') {
+                      if ((index) % 5 == 4 &&
+                          controller.postList.value!.length - 1 == index) {
+                        controller.getMoreInfoPosts();
+                      }
+                    }
+                    if (controller.curTab == '질문') {
+                      if ((index) % 5 == 4 &&
+                          controller.postList.value!.length - 1 == index) {
+                        controller.getMoreQuestionPosts();
+                      }
+                    }
+                    if (controller.curTab == '잡담') {
+                      if ((index) % 5 == 4 &&
+                          controller.postList.value!.length - 1 == index) {
+                        controller.getMoreTalkPosts();
+                      }
+                    }
+
+                    return PostCard(post: controller.postList.value![index]);
+                  }),
             ),
-          ),
-          SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-            return PostCard(
-              post: controller.postList[index],
-            );
-          }, childCount: controller.postList.length))
+          )
         ],
       ),
     );
