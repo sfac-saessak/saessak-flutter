@@ -40,27 +40,4 @@ class AuthService {
 
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
-
-  // Firestore에 사용자 정보 저장
-  saveUserInfoToFirestore(User user) async {
-    final userDocRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
-    final userDocSnapshot = await userDocRef.get();
-
-    if (userDocSnapshot.exists) {
-      // 문서가 이미 존재하는 경우 업데이트
-      await userDocRef.update({
-        'email': user.email,
-        'name': user.displayName,
-        'profileImg': user.photoURL,
-      });
-    } else {
-      // 문서가 존재하지 않는 경우 생성
-      await userDocRef.set({
-        'uid': user.uid,
-        'email': user.email,
-        'name': user.displayName,
-        'profileImg': user.photoURL,
-      });
-    }
-  }
 }

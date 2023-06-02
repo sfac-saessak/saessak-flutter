@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../service/auth_service.dart';
+import '../service/db_service.dart';
 import '../util/app_routes.dart';
 
 class SetProfileController extends GetxController {
@@ -33,7 +34,7 @@ class SetProfileController extends GetxController {
     }
 
     await user!.updateDisplayName(nameController.text);
-    await AuthService().saveUserInfoToFirestore(user!);
+    await DBService().saveUserInfoToFirestore(user!);
     Get.offAllNamed(AppRoutes.main);
   }
 
