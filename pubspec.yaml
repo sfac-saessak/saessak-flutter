@@ -54,6 +54,7 @@ dependencies:
   table_calendar: ^3.0.9
   intl: ^0.18.1
   pull_to_refresh: ^2.0.0
+  flutter_datetime_picker: ^1.5.1
 
 dev_dependencies:
   flutter_test:
@@ -103,6 +104,23 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+
+  fonts:
+    - family: NotoSansKR
+      fonts:
+        - asset: assets/fonts/NotoSansKR-Thin.otf
+          weight: 100
+        - asset: assets/fonts/NotoSansKR-Light.otf
+          weight: 300
+        - asset: assets/fonts/NotoSansKR-Regular.otf
+          weight: 400
+        - asset: assets/fonts/NotoSansKR-Medium.otf
+          weight: 500
+        - asset: assets/fonts/NotoSansKR-Bold.otf
+          weight: 700
+        - asset: assets/fonts/NotoSansKR-Black.otf
+          weight: 900
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
