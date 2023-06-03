@@ -7,12 +7,15 @@ class Challenge {
   String admin;         // 챌린지 개설자 uid
   String title;         // 제목
   String content;       // 내용
-  Timestamp createdAt;   // 생성 시간
-  Timestamp startDate;   // 챌린지 시작 날짜
-  Timestamp endDate;     // 챌린지 끝 날짜
+  Timestamp createdAt;  // 생성 시간
+  Timestamp startDate;  // 챌린지 시작 날짜
+  Timestamp endDate;    // 챌린지 끝 날짜
   List? members;        // 참여 멤버 리스트
   int? memberLimit;     // 인원수
   String? imageUrl;     // 이미지
+  String? recentMessage;
+  String? recentMessageSender;
+  String? recentMessageTime;
 
   Challenge({
     this.challengeId,
@@ -26,6 +29,9 @@ class Challenge {
     this.members,
     this.memberLimit,
     this.imageUrl,
+    this.recentMessage,
+    this.recentMessageSender,
+    this.recentMessageTime,
   });
 
   Map<String, dynamic> toMap() {
@@ -41,6 +47,9 @@ class Challenge {
       'members': this.members,
       'memberLimit': this.memberLimit,
       'imageUrl': imageUrl,
+      'recentMessage': this.recentMessage,
+      'recentMessageSender': this.recentMessageSender,
+      'recentMessageTime': this.recentMessageTime,
     };
   }
 
@@ -57,6 +66,9 @@ class Challenge {
       members: map['members'] as List?,
       memberLimit: map['memberLimit'] as int?,
       imageUrl: map['imageUrl'] as String?,
+      recentMessage: map['recentMessage'] as String?,
+      recentMessageSender: map['recentMessageSender'] as String?,
+      recentMessageTime: map['recentMessageTime'] as String?,
     );
   }
 }

@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -80,5 +82,13 @@ class DBService {
     await groupDocumentReference.update({
       "members": FieldValue.arrayUnion(["${uid}"])
     });
+  }
+
+  // 참여중인 챌린지 가져오기
+  getJoinedChallenges() async {
+    DocumentSnapshot userDoc = await userCollection.doc(uid).get();
+    if (userDoc.exists) {
+      return userDoc.get('challenges');
+    }
   }
 }

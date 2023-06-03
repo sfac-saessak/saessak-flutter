@@ -20,8 +20,8 @@ class AllChallengeScreen extends GetView<ChallengeController> {
         children: [
           Obx(
             () => SmartRefresher(
-              controller: controller.refreshController,
-              onRefresh: controller.onRefresh,
+              controller: controller.allRefreshController,
+              onRefresh: controller.allChallengeRefresh,
               header: WaterDropHeader(),
               child: ListView.builder(
                 itemCount: controller.allChallengeList.length,

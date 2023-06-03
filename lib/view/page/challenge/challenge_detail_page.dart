@@ -32,17 +32,17 @@ class ChallengeDetailPage extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.transparent, // 컨테이너의 배경색
-                    borderRadius: BorderRadius.circular(10), // 모서리의 둥근 정도 설정
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: Colors.black, // 테두리의 색상
-                      width: 1, // 테두리의 두께
+                      color: Colors.black,
+                      width: 1,
                     ),
                   ),
                   child: Text('${challenge.plant}'),
                 ),
                 Icon(Icons.people),
-                Text('${challenge.memberLimit}'),
+                Text('${challenge.members!.length}/${challenge.memberLimit}'),
                 Spacer(),
                 Text('3시간 전'),
               ],
@@ -82,6 +82,7 @@ class ChallengeDetailPage extends StatelessWidget {
                           IconButton(
                             onPressed: () async {
                               DBService(uid: FirebaseAuth.instance.currentUser!.uid).joinChallenge(challenge.challengeId!);
+                              Get.back();
                             },
                             icon: const Icon(
                               Icons.done,

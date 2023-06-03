@@ -19,7 +19,8 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   late TabController tabController;         // 탭바 컨트롤러
   RxBool isLoading = false.obs;             // 로딩중 상태
 
-  RefreshController refreshController = RefreshController(initialRefresh: false);   // 새로고침 컨트롤러
+  RefreshController allRefreshController = RefreshController(initialRefresh: false);      // 전체 챌린지 새로고침 컨트롤러
+  RefreshController joinedRefreshController = RefreshController(initialRefresh: false);   // 참여중 챌린지 새로고침 컨트롤러
   TextEditingController plantController = TextEditingController();    // 식물 컨트롤러
   TextEditingController titleController = TextEditingController();    // 제목 컨트롤러
   TextEditingController contentController = TextEditingController();  // 내용 컨트롤러
@@ -29,7 +30,8 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   Rx<Timestamp?> startDate = Rx<Timestamp?>(null);  // 챌린지 시작 날짜
   Rx<Timestamp?> endDate = Rx<Timestamp?>(null);    // 챌린지 끝 날짜
 
-  RxList allChallengeList = [].obs;
+  RxList allChallengeList = [].obs;         // 전체 챌린지 리스트
+  RxList joinedChallengeList = [].obs;      // 참여중인 챌린지 리스트
 
   final List<Tab> tabs = <Tab>[             // 탭
     Tab(text: '참여중'),
@@ -109,7 +111,7 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     Get.back();
   }
 
-  // 챌린지 가져오기
+  // 전체 챌린지 가져오기
   getChallenge() async {
     isLoading(true);
     allChallengeList([]);
@@ -119,10 +121,32 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     isLoading(false);
   }
 
+  // 참여중인 챌린지 가져오기
+  getJoinedChallenges() async {
+    isLoading(true);
+    var joinedChallengeIdList = await DBService(uid: user.uid).getJoinedChallenges();
+    var challenges = [];
+    if (joinedChallengeIdList.length > 0) {
+      for (var joinedChallengeId in joinedChallengeIdList) {
+        var challenge = await DBService().challengeCollection.doc(joinedChallengeId).get();
+        challenges.add(Challenge.fromMap(challenge.data() as Map<String, dynamic>));
+      }
+      joinedChallengeList(challenges);
+      log('joinedChallengeList ${joinedChallengeList}');
+    }
+    isLoading(false);
+  }
+
   // 새로고침
-  void onRefresh() async {
+  void allChallengeRefresh() async {
     await getChallenge();
-    refreshController.refreshCompleted();
+    allRefreshController.refreshCompleted();
+  }
+
+  // 새로고침
+  void joinedChallengeRefresh() async {
+    await getJoinedChallenges();
+    joinedRefreshController.refreshCompleted();
   }
 
   @override
@@ -130,12 +154,14 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     super.onInit();
     tabController = TabController(length: tabs.length, vsync: this);
     getChallenge();
+    getJoinedChallenges();
   }
 
   @override
   void onClose() {
     super.onClose();
     tabController.dispose();
-    refreshController.dispose();
+    allRefreshController.dispose();
+    joinedRefreshController.dispose();
   }
 }
