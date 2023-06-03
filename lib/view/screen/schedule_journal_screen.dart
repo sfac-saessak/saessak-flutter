@@ -9,22 +9,21 @@ class ScheduleJournalScreen extends GetView<ScheduleController> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Obx( // Rx값 변경시 전체 컬럼 리빌드. (컬럼 = 상단부 캘린더 + 하단부 선택일 일정)
+        child: Obx(
+      // Rx값 변경시 전체 컬럼 리빌드. (컬럼 = 상단부 캘린더 + 하단부 선택일 일정)
       () => Column(
         children: [
-
           // 상단부 캘린더
           TableCalendar(
             calendarStyle: CalendarStyle(
               markersAlignment: Alignment.bottomRight,
             ),
             calendarBuilders: CalendarBuilders(
-
               // 일정 있는 날에 표시되는 마커
               markerBuilder: (context, day, _) {
                 // 일정은 controller의 events에 <Map<DateTime, List>>의 형태로 저장하고 있음
                 // 해당일에 일정이 있다면 마커가 표시됨.
-                return controller.events.value[day] != null 
+                return controller.events.value[day] != null
                     ? Container(
                         width: 24,
                         height: 24,
@@ -55,12 +54,27 @@ class ScheduleJournalScreen extends GetView<ScheduleController> {
           // 임시로 구현한 일정추가 버튼
           TextButton(
               onPressed: () {
-                controller.addSchedule();
+                Get.defaultDialog(
+                  title: '일정추가',
+                  content: Column(
+                    children: [
+                      Text('식물이름: ex)초록이'),
+                      Text('날짜: ${controller.selectedDay.value}'),
+                      Text('내용: ex)물주기'),
+                      TextButton(
+                          onPressed: () {
+                            controller.addSchedule();
+                            Get.back();
+                          },
+                          child: Text('저장'))
+                    ],
+                  ),
+                );
+                // controller.addSchedule();
               },
               child: Text('일정추가')),
 
-
-          // 하단부 선택일 일정 리스트뷰.    
+          // 하단부 선택일 일정 리스트뷰.
           Expanded(
             child: ListView(
                 children: controller
@@ -69,13 +83,19 @@ class ScheduleJournalScreen extends GetView<ScheduleController> {
                     ? [
                         ...controller.events.value[controller.selectedDay.value]
                             .map((e) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container( // 임시 구현. 일정 하나에 컨테이너 하나씩
-                                    height: 20,
-                                    width: 50,
-                                    color: Colors.black,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    // 임시 구현. 일정 하나에 컨테이너 하나씩
+                                    height: 100,
+                                    color: Colors.green[100],
+                                    child: Row(
+                                      children: [
+                                        Text('[${e.plantName}]'),
+                                        Text(e.content)
+                                      ],
+                                    ),
                                   ),
-                            ))
+                                ))
                             .toList()
                       ]
                     : []),
@@ -87,7 +107,9 @@ class ScheduleJournalScreen extends GetView<ScheduleController> {
 }
 
 class Event {
-  String title;
+  String plantName;
+  DateTime date;
+  String content;
 
-  Event(this.title);
+  Event({required this.plantName, required this.date, required this.content});
 }

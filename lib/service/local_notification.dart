@@ -69,7 +69,7 @@ class FlutterLocalNotification {
         0,
         '물 줘',
         '물 줘야지',
-        TZDateTime.now(getLocation('Asia/Seoul')).add(Duration(seconds: 5)),
+        TZDateTime.now(getLocation('Asia/Seoul')).add(Duration(seconds: 15)),
         notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
