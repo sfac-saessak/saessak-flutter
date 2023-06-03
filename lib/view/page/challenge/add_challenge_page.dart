@@ -65,7 +65,7 @@ class AddChallengePage extends GetView<ChallengeController> {
                   },
                   child: Text(
                     controller.startDate.value != null
-                        ? '${DateFormat("yyyy-MM-dd").format(controller.startDate.value!)}'
+                        ? '${DateFormat("yyyy-MM-dd").format(controller.startDate.value!.toDate())}'
                         : '날짜 선택',
                     style: TextStyle(fontSize: 12),
                   ),
@@ -77,7 +77,7 @@ class AddChallengePage extends GetView<ChallengeController> {
                   },
                   child: Text(
                     controller.endDate.value != null
-                        ? '${DateFormat("yyyy-MM-dd").format(controller.endDate.value!)}'
+                        ? '${DateFormat("yyyy-MM-dd").format(controller.endDate.value!.toDate())}'
                         : '날짜 선택',
                     style: TextStyle(fontSize: 12),
                   ),

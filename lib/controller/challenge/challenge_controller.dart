@@ -1,11 +1,13 @@
-
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:saessak_flutter/service/db_service.dart';
 
 import '../../model/challenge.dart';
@@ -17,18 +19,21 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   late TabController tabController;         // 탭바 컨트롤러
   RxBool isLoading = false.obs;             // 로딩중 상태
 
+  RefreshController refreshController = RefreshController(initialRefresh: false);   // 새로고침 컨트롤러
   TextEditingController plantController = TextEditingController();    // 식물 컨트롤러
   TextEditingController titleController = TextEditingController();    // 제목 컨트롤러
   TextEditingController contentController = TextEditingController();  // 내용 컨트롤러
 
   Rxn<int> selectedMemberLimit = Rxn();     // 인원수 선택값
   Rxn<File> selectedImage = Rxn();          // 추가한 사진
-  Rx<DateTime?> startDate = Rx<DateTime?>(null);  // 챌린지 시작 날짜
-  Rx<DateTime?> endDate = Rx<DateTime?>(null);    // 챌린지 끝 날짜
+  Rx<Timestamp?> startDate = Rx<Timestamp?>(null);  // 챌린지 시작 날짜
+  Rx<Timestamp?> endDate = Rx<Timestamp?>(null);    // 챌린지 끝 날짜
+
+  RxList allChallengeList = [].obs;
 
   final List<Tab> tabs = <Tab>[             // 탭
-    Tab(text: '참여중인 챌린지'),
-    Tab(text: '전체 챌린지'),
+    Tab(text: '참여중'),
+    Tab(text: '전체'),
   ];
 
   final List<Widget> tabViews = <Widget>[   // 탭 뷰
@@ -60,9 +65,9 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
 
     if (pickedDate != null) {
       if (isStartDate) {
-        startDate.value = pickedDate;
+        startDate.value = Timestamp.fromDate(pickedDate);
       } else {
-        endDate.value = pickedDate;
+        endDate.value = Timestamp.fromDate(pickedDate);
       }
     }
   }
@@ -80,9 +85,8 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   createChallenge() async {
     var imageUrl;
     isLoading(true);
-
     if (selectedImage.value != null) {
-      var ref = FirebaseStorage.instance.ref('diary/${user.uid}/${DateTime.now()}');
+      var ref = FirebaseStorage.instance.ref('challenge/${user.uid}/${DateTime.now()}');
       await ref.putFile(selectedImage.value!);
       var downloadUrl = await ref.getDownloadURL();
       imageUrl = downloadUrl;
@@ -93,7 +97,7 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
       admin: user.uid,
       title: titleController.text,
       content: contentController.text,
-      createdAt: DateTime.now(),
+      createdAt: Timestamp.now(),
       startDate: startDate.value!,
       endDate: endDate.value!,
       memberLimit: selectedMemberLimit.value,
@@ -101,19 +105,37 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     );
 
     await DBService(uid: user.uid).createChallenge(challenge);
+    isLoading(false);
+    Get.back();
+  }
 
+  // 챌린지 가져오기
+  getChallenge() async {
+    isLoading(true);
+    allChallengeList([]);
+    QuerySnapshot snapshot = await DBService().getAllChallenge();
+    allChallengeList(snapshot.docs.map((doc) => Challenge.fromMap(doc.data() as Map<String, dynamic>)).toList());
+    log('${allChallengeList}');
     isLoading(false);
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-    tabController.dispose();
+  // 새로고침
+  void onRefresh() async {
+    await getChallenge();
+    refreshController.refreshCompleted();
   }
 
   @override
   void onInit() {
     super.onInit();
     tabController = TabController(length: tabs.length, vsync: this);
+    getChallenge();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    tabController.dispose();
+    refreshController.dispose();
   }
 }

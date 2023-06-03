@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/challenge/challenge_controller.dart';
+import '../../../util/app_color.dart';
 
 class ChallengeScreen extends GetView<ChallengeController> {
   const ChallengeScreen({Key? key}) : super(key: key);
@@ -16,8 +17,9 @@ class ChallengeScreen extends GetView<ChallengeController> {
           TabBar(
             controller: controller.tabController,
             tabs: controller.tabs,
-            labelColor: Colors.black,
-            indicatorColor: Colors.black,
+            labelColor: AppColor.primary, // 선택된 탭의 색상
+            unselectedLabelColor: AppColor.gray, // 선택되지 않은 탭의 색상
+            indicatorColor: AppColor.primary,
           ),
           Expanded(
             child: TabBarView(

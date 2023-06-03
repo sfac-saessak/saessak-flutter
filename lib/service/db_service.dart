@@ -65,11 +65,20 @@ class DBService {
   }
 
   // 전체 챌린지 가져오기
-  getUserGroups() async {
-    DocumentSnapshot userDoc = await userCollection.doc(uid).get();
-    if (userDoc.exists) {
-      var groupList = userDoc.get('groups');
-      return groupList;
-    }
+  Future getAllChallenge() async {
+    return challengeCollection.orderBy('createdAt', descending: true).get();
+  }
+
+  // 챌린지 참가
+  Future joinChallenge(String challengeId) async {
+    DocumentReference userDocumentReference = userCollection.doc(uid);
+    DocumentReference groupDocumentReference = challengeCollection.doc(challengeId);
+
+    await userDocumentReference.update({
+      "challenges": FieldValue.arrayUnion(["${challengeId}"])
+    });
+    await groupDocumentReference.update({
+      "members": FieldValue.arrayUnion(["${uid}"])
+    });
   }
 }
