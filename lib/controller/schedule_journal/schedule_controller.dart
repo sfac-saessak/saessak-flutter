@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../service/local_notification.dart';
 import '../../view/screen/schedule_journal_screen.dart';
 
 class ScheduleController extends GetxController {
@@ -12,10 +13,24 @@ class ScheduleController extends GetxController {
   addSchedule() {
     if (events.value[selectedDay.value] == null) {
       events.value[selectedDay.value] = [Event('title')];
+      FlutterLocalNotification.showNotification();
+      FlutterLocalNotification.showSceduledNotification();
       events.refresh();
     } else {
       events.value[selectedDay.value].add(Event('title'));
+      FlutterLocalNotification.showNotification();
+      FlutterLocalNotification.showSceduledNotification();
       events.refresh();
     }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    
+    FlutterLocalNotification.init();
+    Future.delayed(const Duration(seconds: 3),
+        FlutterLocalNotification.requestNotificationPermission());
   }
 }

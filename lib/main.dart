@@ -6,6 +6,7 @@ import 'package:saessak_flutter/controller/community/community_controller.dart';
 import 'package:saessak_flutter/controller/schedule_journal/schedule_controller.dart';
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
 import 'firebase_options.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import 'controller/auth_controller.dart';
 import 'controller/login_controller.dart';
@@ -21,6 +22,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   initializeDateFormatting();
+  tz.initializeTimeZones();
   runApp(const MyApp());
 }
 
