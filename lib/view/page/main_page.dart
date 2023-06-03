@@ -37,6 +37,7 @@ class MainPage extends GetView<MainController> {
             BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
             BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '일정일지'),
             BottomNavigationBarItem(icon: Icon(Icons.chat), label: '게시판'),
+            BottomNavigationBarItem(icon: Icon(Icons.emoji_events), label: '챌린지'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
           ],
         ),
