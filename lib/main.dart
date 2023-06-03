@@ -5,6 +5,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:saessak_flutter/controller/community/community_controller.dart';
 import 'package:saessak_flutter/controller/schedule_journal/schedule_controller.dart';
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
+import 'controller/challenge/challenge_controller.dart';
+import 'controller/challenge/chat_controller.dart';
 import 'firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -40,6 +42,8 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => MainController(), fenix: true);
         Get.lazyPut(() => CommunityController(), fenix: true);
         Get.lazyPut(() => ScheduleController(), fenix: true);
+        Get.lazyPut(() => ChallengeController(), fenix: true);
+        Get.lazyPut(() => ChatController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.splash,

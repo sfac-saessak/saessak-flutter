@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controller/main_controller.dart';
+import '../../util/app_color.dart';
 
 class MainPage extends GetView<MainController> {
   const MainPage({Key? key}) : super(key: key);
@@ -15,7 +16,25 @@ class MainPage extends GetView<MainController> {
         centerTitle: false,
         automaticallyImplyLeading: false,   // 자동 뒤로가기 버튼 생성 비활성화
         backgroundColor: Colors.white,
+        foregroundColor: AppColor.black,
         elevation: 0,
+        actions: [
+          Obx(
+            () {
+              if (controller.curPage.value == 3) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {},
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ],
       ),
       body: PageView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -37,6 +56,7 @@ class MainPage extends GetView<MainController> {
             BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
             BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '일정일지'),
             BottomNavigationBarItem(icon: Icon(Icons.chat), label: '게시판'),
+            BottomNavigationBarItem(icon: Icon(Icons.emoji_events), label: '챌린지'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
           ],
         ),
