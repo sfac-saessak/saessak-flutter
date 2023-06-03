@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
 import 'controller/challenge/challenge_controller.dart';
+import 'controller/challenge/chat_controller.dart';
 import 'firebase_options.dart';
 
 import 'controller/auth_controller.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => SetProfileController(), fenix: true);
         Get.lazyPut(() => MainController(), fenix: true);
         Get.lazyPut(() => ChallengeController(), fenix: true);
+        Get.lazyPut(() => ChatController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.splash,

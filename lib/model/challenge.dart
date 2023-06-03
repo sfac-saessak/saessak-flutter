@@ -15,7 +15,7 @@ class Challenge {
   String? imageUrl;     // 이미지
   String? recentMessage;
   String? recentMessageSender;
-  String? recentMessageTime;
+  Timestamp? recentMessageTime;
 
   Challenge({
     this.challengeId,
@@ -68,7 +68,7 @@ class Challenge {
       imageUrl: map['imageUrl'] as String?,
       recentMessage: map['recentMessage'] as String?,
       recentMessageSender: map['recentMessageSender'] as String?,
-      recentMessageTime: map['recentMessageTime'] as String?,
+      recentMessageTime: map['recentMessageTime'] as Timestamp?,
     );
   }
 }

@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 
 import '../../model/challenge.dart';
 import '../../util/app_color.dart';
+import '../../util/app_routes.dart';
 import '../../util/app_text_style.dart';
 import '../page/challenge/challenge_detail_page.dart';
+import '../page/challenge/chat_page.dart';
 
 class JoinedChallengeTile extends StatelessWidget {
   const JoinedChallengeTile({Key? key, required this.challenge}) : super(key: key);
@@ -16,7 +18,7 @@ class JoinedChallengeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => ChallengeDetailPage(challenge: challenge));
+        Get.toNamed(AppRoutes.chat, arguments: [challenge]);
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -46,7 +48,12 @@ class JoinedChallengeTile extends StatelessWidget {
                   child: Text('${challenge.recentMessage}', style: AppTextStyle.body4_r(color: AppColor.darkGray), overflow: TextOverflow.ellipsis, maxLines: 2)
                 ),
                 Spacer(),
-                Text('${challenge.recentMessageTime ?? ''}', style: AppTextStyle.body5_r(color: AppColor.gray)),
+                Text(
+                  challenge.recentMessageTime != null
+                    ? '${DateFormat('HH:mm').format(challenge.recentMessageTime!.toDate())}'
+                    : '',
+                  style: AppTextStyle.body5_r(color: AppColor.gray)
+                ),
               ],
             ),
           ],

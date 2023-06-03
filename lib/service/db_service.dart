@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../model/challenge.dart';
+import '../model/message.dart';
 
 class DBService {
   final String? uid;
@@ -90,5 +91,15 @@ class DBService {
     if (userDoc.exists) {
       return userDoc.get('challenges');
     }
+  }
+
+  // 메세지 보내기
+  sendMessage(String groupId, Message message) async {
+    challengeCollection.doc(groupId).collection("messages").add(message.toMap());
+    challengeCollection.doc(groupId).update({
+      "recentMessage": message.message,
+      "recentMessageSender": message.sender,
+      "recentMessageTime": message.time,
+    });
   }
 }
