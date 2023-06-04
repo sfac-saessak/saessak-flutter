@@ -59,6 +59,14 @@ class ChallengeDetailPage extends StatelessWidget {
             SizedBox(height: 40,),
             Text('${challenge.content}'),
             Spacer(),
+            challenge.imageUrl != null
+              ? Container(
+                width: 150,
+                height: 150,
+                color: Colors.grey[300],
+                child: Image.network(challenge.imageUrl!, fit: BoxFit.cover)
+              )
+              : Container(),
             Container(
               width: double.infinity,
               child: ElevatedButton(
