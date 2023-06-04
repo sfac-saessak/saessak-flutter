@@ -93,6 +93,11 @@ class DBService {
     }
   }
 
+  // 챌린지 검색
+  searchChallengeByPlant(String plant) {
+    return challengeCollection.where("plant", isEqualTo: plant).get();
+  }
+
   // 메세지 보내기
   sendMessage(String groupId, Message message) async {
     challengeCollection.doc(groupId).collection("messages").add(message.toMap());

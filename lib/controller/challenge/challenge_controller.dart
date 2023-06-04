@@ -24,6 +24,7 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   TextEditingController plantController = TextEditingController();    // 식물 컨트롤러
   TextEditingController titleController = TextEditingController();    // 제목 컨트롤러
   TextEditingController contentController = TextEditingController();  // 내용 컨트롤러
+  TextEditingController searchController = TextEditingController();   // 검색 컨트롤러
 
   Rxn<int> selectedMemberLimit = Rxn();     // 인원수 선택값
   Rxn<File> selectedImage = Rxn();          // 추가한 사진
@@ -32,6 +33,7 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
 
   RxList allChallengeList = [].obs;         // 전체 챌린지 리스트
   RxList joinedChallengeList = [].obs;      // 참여중인 챌린지 리스트
+  RxList searchResultList = [].obs;         // 챌린지 검색결과 리스트
 
   final List<Tab> tabs = <Tab>[             // 탭
     Tab(text: '참여중'),
@@ -137,16 +139,25 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     isLoading(false);
   }
 
-  // 새로고침
+  // 전체 챌린지 새로고침
   void allChallengeRefresh() async {
     await getChallenge();
     allRefreshController.refreshCompleted();
   }
 
-  // 새로고침
+  // 참여중 챌린지 새로고침
   void joinedChallengeRefresh() async {
     await getJoinedChallenges();
     joinedRefreshController.refreshCompleted();
+  }
+
+  // search
+  void searchChallenge() async {
+    isLoading(true);
+    var res = await DBService().searchChallengeByPlant(searchController.text);
+    List<dynamic> snapshotData = res.docs.map((doc) => doc.data()).toList();
+    searchResultList(snapshotData.map((e) => Challenge.fromMap(e)).toList());
+    isLoading(false);
   }
 
   @override
