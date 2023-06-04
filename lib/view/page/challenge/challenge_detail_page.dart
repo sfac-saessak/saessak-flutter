@@ -83,6 +83,7 @@ class ChallengeDetailPage extends StatelessWidget {
                             onPressed: () async {
                               DBService(uid: FirebaseAuth.instance.currentUser!.uid).joinChallenge(challenge.challengeId!);
                               Get.back();
+                              Get.snackbar('${challenge.title}', '참가 완');
                             },
                             icon: const Icon(
                               Icons.done,

@@ -151,7 +151,7 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     joinedRefreshController.refreshCompleted();
   }
 
-  // search
+  // 챌린지 검색
   void searchChallenge() async {
     isLoading(true);
     var res = await DBService().searchChallengeByPlant(searchController.text);

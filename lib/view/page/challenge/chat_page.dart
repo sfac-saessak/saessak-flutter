@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import '../../../controller/challenge/chat_controller.dart';
 import '../../../model/message.dart';
 import '../../../util/app_color.dart';
+import '../../../util/app_text_style.dart';
+import '../../widget/app_text_field.dart';
 import '../../widget/message_tile.dart';
+import 'chat_detail_page.dart';
 
 class ChatPage extends GetView<ChatController> {
   const ChatPage({Key? key}) : super(key: key);
@@ -23,17 +26,17 @@ class ChatPage extends GetView<ChatController> {
         actions: [
           IconButton(
             onPressed: () {
-
+              Get.to(() => ChatDetailPage(challenge: controller.challenge));
             },
             icon: const Icon(Icons.info_outline),
           )
         ],
       ),
       body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 18),
         color: AppColor.lightGrey,
         child: Column(
           children: <Widget>[
-            // chat messages here
             Obx(
               () => Expanded(
                 child: ListView.builder(
@@ -49,47 +52,31 @@ class ChatPage extends GetView<ChatController> {
             Container(
               alignment: Alignment.bottomCenter,
               width: Get.width,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-                width: Get.width,
-                color: Colors.grey[700],
-                child: Row(children: [
+              decoration: BoxDecoration(
+                color: AppColor.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: AppColor.primary,
+                  width: 1.0,
+                ),
+              ),
+              child: Row(
+                children: [
                   Expanded(
-                    child: TextFormField(
+                    child: AppTextField(
+                      hintText: '채팅 입력...',
                       controller: controller.messageController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                        hintText: "Send a message...",
-                        hintStyle: TextStyle(color: Colors.white, fontSize: 16),
-                        border: InputBorder.none,
-                      ),
-                    ),
+                    )
                   ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  GestureDetector(
-                    onTap: () {
+                  TextButton(
+                    child: Text('전송', style: AppTextStyle.body2_m(color: AppColor.primary)),
+                    onPressed: () {
                       controller.sendMessage(controller.challenge.challengeId!);
                     },
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.send,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
-                ]),
+                  ),
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),

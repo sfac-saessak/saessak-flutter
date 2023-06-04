@@ -25,7 +25,11 @@ class AddChallengePage extends GetView<ChallengeController> {
         elevation: 0,
         actions: [
           TextButton(
-            onPressed: controller.createChallenge,
+            onPressed: () {
+              controller.createChallenge();
+              Get.back();
+              Get.snackbar('챌린지', '등록 완');
+            },
             child: Text('완료', style: AppTextStyle.body3_m(color: AppColor.primary)),
           ),
         ],

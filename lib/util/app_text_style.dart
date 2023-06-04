@@ -39,6 +39,6 @@ class AppTextStyle {
   static TextStyle body5_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 10, color: color);
 
   // caption
-  static TextStyle cation_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 8, color: color);
-  static TextStyle cation_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 8, color: color);
+  static TextStyle caption_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 8, color: color);
+  static TextStyle caption_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 8, color: color);
 }
