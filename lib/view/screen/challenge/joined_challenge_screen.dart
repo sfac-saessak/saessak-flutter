@@ -13,7 +13,7 @@ class JoinedChallengeScreen extends GetView<ChallengeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColor.lightGray,
+      color: AppColor.lightGrey,
       padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
       child: Stack(
         children: [

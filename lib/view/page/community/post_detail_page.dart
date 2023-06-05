@@ -14,9 +14,6 @@ class PostDetailPage extends GetView<CommunityController> {
 
   @override
   Widget build(BuildContext context) {
-    print(post.imgUrlList);
-    TextEditingController _commentTextController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -32,7 +29,6 @@ class PostDetailPage extends GetView<CommunityController> {
               ),
             ],
           ),
-
           Text(controller.convertTime(post.writeTime)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,11 +40,9 @@ class PostDetailPage extends GetView<CommunityController> {
               PopupMenuButton(
                 onSelected: (value) {
                   if (value == SampleItem.itemOne) {
-                    print('게시글수정');
                     controller.moveToModifyPostPage(post);
                   }
                   if (value == SampleItem.itemTwo) {
-                    print('게시글 삭제');
                     controller.removePost(post);
                   }
                 },
@@ -85,9 +79,7 @@ class PostDetailPage extends GetView<CommunityController> {
             ],
           ),
           Divider(),
-          //...사진리스트.map((e) => 사진 컨테이너)
           ...post.imgUrlList.map((e) {
-            print(e);
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -116,18 +108,11 @@ class PostDetailPage extends GetView<CommunityController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextField(
-                          controller: _commentTextController,
+                          controller: controller.commentTextController,
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () async {
-                            Get.find<CommunityController>().writeComment(
-                                content: _commentTextController.text,
-                                post: post);
-                            await controller.getComments(post);
-                            _commentTextController.text = '';
-                            Get.back();
-                          },
+                          onPressed: () => controller.completeComment(post),
                           child: const Text('완료'),
                         )
                       ],
@@ -155,10 +140,7 @@ class PostDetailPage extends GetView<CommunityController> {
                             ),
                           )
                           .toList()
-                      : []
-
-              // 커멘트 컬렉션 . get() . docs . map ( (e) => Comment.fromMap(e.data())) . toList()
-              ,
+                      : [],
             ),
           ),
         ]),

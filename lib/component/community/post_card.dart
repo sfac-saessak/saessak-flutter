@@ -18,18 +18,7 @@ class PostCard extends StatelessWidget {
       padding: const EdgeInsets.all(15.0),
       child: GestureDetector(
         onTap: () async {
-          if (FirebaseAuth.instance.currentUser!.uid != post.userInfo['uid']) {
-            print('조회수 증가 대상 해당');
-            await FirebaseFirestore.instance
-                .collection('community')
-                .doc(post.postId)
-                .update({'views': FieldValue.increment(1)});
-            print('조회수 증가 완료');
-          } else {
-            print('조회수 증가 대상 해당하지 않음');
-          }
-          await Get.find<CommunityController>().getComments(post);
-          Get.to(PostDetailPage(post: post));
+          Get.find<CommunityController>().goPost(post);
         },
         child: SizedBox(
             height: 240,

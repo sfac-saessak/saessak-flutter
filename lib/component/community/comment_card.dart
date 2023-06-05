@@ -46,13 +46,9 @@ class CommentCard extends GetView<CommunityController> {
             PopupMenuButton(
               onSelected: (value) async {
                 if (value == SampleItem.itemOne) {
-                  print('댓글 삭제');
                   controller.removeComment(post, commentId, authorUid);
-                  controller.getComments(post);
                 }
-                if (value == SampleItem.itemTwo) {
-                  print('댓글 신고');
-                }
+                if (value == SampleItem.itemTwo) {}
               },
               itemBuilder: (BuildContext context) =>
                   <PopupMenuEntry<SampleItem>>[

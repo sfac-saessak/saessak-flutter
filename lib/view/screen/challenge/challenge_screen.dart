@@ -18,7 +18,7 @@ class ChallengeScreen extends GetView<ChallengeController> {
             controller: controller.tabController,
             tabs: controller.tabs,
             labelColor: AppColor.primary, // 선택된 탭의 색상
-            unselectedLabelColor: AppColor.gray, // 선택되지 않은 탭의 색상
+            unselectedLabelColor: AppColor.grey, // 선택되지 않은 탭의 색상
             indicatorColor: AppColor.primary,
           ),
           Expanded(

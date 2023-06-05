@@ -5,7 +5,8 @@ import 'package:saessak_flutter/component/community/post_card.dart';
 import 'package:saessak_flutter/controller/community/community_controller.dart';
 import 'package:saessak_flutter/view/page/community/post_write_page.dart';
 
-// 페이지네이션 미구현
+import '../../util/app_color.dart';
+
 
 class CommunityScreen extends GetView<CommunityController> {
   const CommunityScreen({Key? key}) : super(key: key);
@@ -23,37 +24,16 @@ class CommunityScreen extends GetView<CommunityController> {
           child: Text('글쓰기')),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GestureDetector(
-                  onTap: () {
-                    controller.curTab = '전체';
-                    controller.getPosts();
-                  },
-                  child: Chip(label: Text('전체'))),
-              GestureDetector(
-                  onTap: () {
-                    // 정보탭만 가져오기
-                    controller.curTab = '정보';
-                    controller.getInfoPosts();
-                  },
-                  child: Chip(label: Text('정보'))),
-              GestureDetector(
-                  onTap: () {
-                    // 질문탭만 가져오기
-                    controller.curTab = '질문';
-                    controller.getQuestionPosts();
-                  },
-                  child: Chip(label: Text('질문'))),
-              GestureDetector(
-                  onTap: () {
-                    // 잡담탭만 가져오기
-                    controller.curTab = '잡담';
-                    controller.getTalkPosts();
-                  },
-                  child: Chip(label: Text('잡담')))
-            ],
+          // 상단 탭 바
+          Container(
+            color: AppColor.white,
+            child: TabBar(
+              controller: controller.communityTabController,
+              tabs: controller.communityTabs,
+              labelColor: AppColor.primary, // 선택된 탭의 색상
+              unselectedLabelColor: AppColor.grey, // 선택되지 않은 탭의 색상
+              indicatorColor: AppColor.primary,
+            ),
           ),
           Expanded(
             child: Obx(

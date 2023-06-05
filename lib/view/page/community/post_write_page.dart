@@ -97,7 +97,6 @@ class PostWritePage extends GetView<CommunityController> {
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: [
-                          //post에서 받아온 imgUrlList로 만든 컨테이너들 추가 -> 만약 글 작성시 or 사진첨부 없는 글 수정시 그냥 없는거임(리스트 기본값 []로 되어있으므로).
                           ...controller.imgDownloadUrlList
                               .map((e) => Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -111,16 +110,13 @@ class PostWritePage extends GetView<CommunityController> {
                                         height: Get.height * 0.1,
                                         width: Get.height * 0.1,
                                       ),
-                                      onTap: () {
-                                        controller.imgDownloadUrlList.remove(e);
-                                        // 추가한 사진 삭제
-                                        print(controller.imgDownloadUrlList);
-                                      },
+                                      onTap: () => controller.imgDownloadUrlList
+                                          .remove(e)
+                                      // 탭하면 추가한 사진 삭제
+                                      ,
                                     ),
                                   ))
                               .toList(),
-
-                          ///
                           ...controller.imgXfileList.map((e) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -134,30 +130,15 @@ class PostWritePage extends GetView<CommunityController> {
                                   height: Get.height * 0.1,
                                   width: Get.height * 0.1,
                                 ),
-                                onTap: () {
-                                  controller.imgXfileList
-                                      .remove(e); // 추가한 사진 삭제
-                                },
+                                onTap: () => controller.imgXfileList
+                                    .remove(e) // 탭하면 추가한 사진 삭제
+                                ,
                               ),
                             );
                           }).toList(),
                           GestureDetector(
                             // 선택한 사진을 동일 사이즈로 버튼 우측에 보이도록 추가.
-                            onTap: () async {
-                              try {
-                                XFile? image = await ImagePicker()
-                                    .pickImage(source: ImageSource.gallery);
-                                if (image != null) {
-                                  controller.imgXfileList.add(image);
-                                  print(
-                                      'controller.imgXfileList: ${controller.imgXfileList}');
-                                  print(
-                                      'controller List: ${controller.imgXfileList}');
-                                }
-                              } catch (e) {
-                                print(e);
-                              }
-                            },
+                            onTap: () => controller.addPhoto(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
