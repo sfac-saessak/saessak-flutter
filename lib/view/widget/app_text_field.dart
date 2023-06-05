@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../util/app_color.dart';
@@ -9,7 +8,12 @@ class AppTextField extends StatelessWidget {
   final TextEditingController controller;
   final Function(String)? onSubmitted;
 
-  const AppTextField({Key? key, required this.hintText, required this.controller, this.onSubmitted}) : super(key: key);
+  const AppTextField(
+      {Key? key,
+      required this.hintText,
+      required this.controller,
+      this.onSubmitted})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

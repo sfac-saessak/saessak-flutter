@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,18 +36,18 @@ class ChatPage extends GetView<ChatController> {
         color: AppColor.lightGrey,
         child: Column(
           children: <Widget>[
-            Obx(
-              () => Expanded(
-                child: ListView.builder(
-                  controller: controller.scrollController,
-                  itemCount: controller.chats.length,
-                  itemBuilder: (context, index) {
-                    Message chat = controller.chats[index];
-                    return MessageTile(message: chat, sentByMe: controller.user.displayName == chat.sender);
-                  },
-                ),
-              )
-            ),
+            Obx(() => Expanded(
+                  child: ListView.builder(
+                    controller: controller.scrollController,
+                    itemCount: controller.chats.length,
+                    itemBuilder: (context, index) {
+                      Message chat = controller.chats[index];
+                      return MessageTile(
+                          message: chat,
+                          sentByMe: controller.user.displayName == chat.sender);
+                    },
+                  ),
+                )),
             Container(
               alignment: Alignment.bottomCenter,
               width: Get.width,
@@ -63,13 +62,16 @@ class ChatPage extends GetView<ChatController> {
               child: Row(
                 children: [
                   Expanded(
-                    child: AppTextField(
-                      hintText: '채팅 입력...',
-                      controller: controller.messageController,
-                    )
-                  ),
+                      child: AppTextField(
+                    hintText: '채팅 입력...',
+                    controller: controller.messageController,
+                    onSubmitted: (p0) {
+                      controller.sendMessage(controller.challenge.challengeId!);
+                    },
+                  )),
                   TextButton(
-                    child: Text('전송', style: AppTextStyle.body2_m(color: AppColor.primary)),
+                    child: Text('전송',
+                        style: AppTextStyle.body2_m(color: AppColor.primary)),
                     onPressed: () {
                       controller.sendMessage(controller.challenge.challengeId!);
                     },
