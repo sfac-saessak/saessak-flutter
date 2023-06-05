@@ -6,6 +6,7 @@ import '../view/screen/community_screen.dart';
 import '../view/screen/home_screen.dart';
 import '../view/screen/schedule_journal_screen.dart';
 import '../view/screen/setting_screen.dart';
+import '../view/screen/challenge/challenge_screen.dart';
 
 
 class MainController extends GetxController {
@@ -16,6 +17,7 @@ class MainController extends GetxController {
     HomeScreen(),
     ScheduleJournalScreen(),
     CommunityScreen(),
+    ChallengeScreen(),
     SettingScreen(),
   ];
 
