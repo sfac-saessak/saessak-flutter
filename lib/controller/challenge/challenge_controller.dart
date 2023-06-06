@@ -181,6 +181,7 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     Get.back();
   }
 
+  // 시간 변환
   String convertTime(Timestamp time) {
     DateTime recentMessageTime = time.toDate();
     Duration difference = DateTime.now().difference(recentMessageTime);
@@ -192,9 +193,19 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     } else if (difference.inMinutes > 0) {
       return '${difference.inMinutes}분 전';
     } else {
-      return '';
+      return '지금';
     }
   }
+
+  // 모집 마감 디데이 구하기
+  int getDeadline(Timestamp time) {
+    DateTime deadline = time.toDate();
+    Duration difference = DateTime.now().difference(deadline);
+    return difference.inDays;
+  }
+
+  // 진행중 / 마감 판별
+
 
   @override
   void onInit() {

@@ -19,20 +19,22 @@ class AllChallengeScreen extends GetView<ChallengeController> {
       child: Stack(
         children: [
           Obx(
-            () => SmartRefresher(
-              controller: controller.allRefreshController,
-              onRefresh: controller.allChallengeRefresh,
-              header: WaterDropHeader(),
-              child: ListView.builder(
-                itemCount: controller.allChallengeList.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: ChallengeTile(challenge: controller.allChallengeList[index]),
-                  );
-                },
+            () => controller.isLoading.value
+              ? Center(child: CircularProgressIndicator())
+              : SmartRefresher(
+                controller: controller.allRefreshController,
+                onRefresh: controller.allChallengeRefresh,
+                header: WaterDropHeader(),
+                child: ListView.builder(
+                  itemCount: controller.allChallengeList.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: ChallengeTile(challenge: controller.allChallengeList[index]),
+                    );
+                  },
+                ),
               ),
-            ),
           ),
           Positioned(
             bottom: 16.0,

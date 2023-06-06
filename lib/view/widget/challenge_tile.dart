@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../controller/challenge/challenge_controller.dart';
 import '../../model/challenge.dart';
 import '../../util/app_color.dart';
 import '../../util/app_text_style.dart';
@@ -14,14 +15,17 @@ class ChallengeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.find<ChallengeController>();
+    bool challengeEnd = controller.getDeadline(challenge.startDate) > 0;
+
     return GestureDetector(
       onTap: () {
-        Get.to(() => ChallengeDetailPage(challenge: challenge));
+        Get.to(() => ChallengeDetailPage(challenge: challenge, challengeEnd: challengeEnd));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: AppColor.white,
+          color: challengeEnd ? AppColor.black20 : AppColor.white,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
@@ -35,7 +39,14 @@ class ChallengeTile extends StatelessWidget {
                 SizedBox(width: 4),
                 Text('${challenge.members!.length}/${challenge.memberLimit}', style: AppTextStyle.body4_r()),
                 Spacer(),
-                Text('마감 1일 전', style: AppTextStyle.body5_m()),
+                challengeEnd
+                  ? Text('종료', style: AppTextStyle.body5_m(color: Colors.red))
+                  : Text(
+                      controller.getDeadline(challenge.startDate) == 0
+                        ? '마감 D-DAY'
+                        : '마감 D${controller.getDeadline(challenge.startDate)}',
+                      style: AppTextStyle.body5_m()
+                    )
               ],
             ),
             SizedBox(height: 8),
