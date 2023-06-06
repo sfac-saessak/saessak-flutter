@@ -14,7 +14,7 @@ class AllChallengeScreen extends GetView<ChallengeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColor.lightGrey,
+      color: AppColor.black10,
       padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
       child: Stack(
         children: [

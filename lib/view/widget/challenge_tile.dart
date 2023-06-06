@@ -33,7 +33,7 @@ class ChallengeTile extends StatelessWidget {
                 SizedBox(width: 10),
                 Icon(Icons.people, color: AppColor.primary, size: 16),
                 SizedBox(width: 4),
-                Text('${challenge.memberLimit}', style: AppTextStyle.body4_r()),
+                Text('${challenge.members!.length}/${challenge.memberLimit}', style: AppTextStyle.body4_r()),
                 Spacer(),
                 Text('마감 1일 전', style: AppTextStyle.body5_m()),
               ],
@@ -41,16 +41,16 @@ class ChallengeTile extends StatelessWidget {
             SizedBox(height: 8),
             Container(
               width: 250,
-              child: Text('${challenge.content}', style: AppTextStyle.body4_r(color: AppColor.darkGrey), overflow: TextOverflow.ellipsis)
+              child: Text('${challenge.content}', style: AppTextStyle.body4_r(color: AppColor.black70), overflow: TextOverflow.ellipsis)
             ),
             SizedBox(height: 14),
             Row(
               children: [
-                Icon(Icons.access_time, color: AppColor.grey, size: 16),
+                Icon(Icons.access_time, color: AppColor.black40, size: 16),
                 SizedBox(width: 4),
                 Text(
                   '${DateFormat("yyyy-MM-dd").format(challenge.startDate.toDate())} ~ ${DateFormat("yyyy-MM-dd").format(challenge.endDate.toDate())}',
-                  style: AppTextStyle.body5_r(color: AppColor.grey)
+                  style: AppTextStyle.body5_r(color: AppColor.black40)
                 ),
               ],
             ),

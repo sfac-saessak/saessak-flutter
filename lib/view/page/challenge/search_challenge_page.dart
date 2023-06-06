@@ -14,7 +14,7 @@ class SearchChallengePage extends GetView<ChallengeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.lightGrey,
+      backgroundColor: AppColor.black10,
       appBar: AppBar(
         title: Text('챌린지 검색', style: AppTextStyle.body2_m()),
         centerTitle: true,

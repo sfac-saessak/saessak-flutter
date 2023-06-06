@@ -97,7 +97,7 @@ class ChatDetailPage extends StatelessWidget {
                 UserModel member = members[index];
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: AppColor.grey,
+                    backgroundColor: AppColor.black50,
                     backgroundImage: member.profileImg != null ? NetworkImage(member.profileImg!) : null,
                     child: member.profileImg != null ? null : Icon(Icons.person, color: AppColor.white),
                   ),

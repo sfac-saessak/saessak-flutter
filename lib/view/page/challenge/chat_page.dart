@@ -33,7 +33,7 @@ class ChatPage extends GetView<ChatController> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 22, vertical: 18),
-        color: AppColor.lightGrey,
+        color: AppColor.black10,
         child: Column(
           children: <Widget>[
             Obx(() => Expanded(

@@ -181,6 +181,20 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     Get.back();
   }
 
+  String convertTime(Timestamp time) {
+    DateTime recentMessageTime = time.toDate();
+    Duration difference = DateTime.now().difference(recentMessageTime);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays}일 전';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}시간 전';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}분 전';
+    } else {
+      return '';
+    }
+  }
 
   @override
   void onInit() {

@@ -27,7 +27,7 @@ class MessageTile extends StatelessWidget {
               sentByMe
                 ? Container()
                 : CircleAvatar(
-                    backgroundColor: AppColor.grey,
+                    backgroundColor: AppColor.black20,
                     backgroundImage: message.sender.profileImg != null ? NetworkImage(message.sender.profileImg!) : null,
                     child: message.sender.profileImg != null ? null : Icon(Icons.person, color: AppColor.white),
                   ),

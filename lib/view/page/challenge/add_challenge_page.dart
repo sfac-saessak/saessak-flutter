@@ -36,28 +36,28 @@ class AddChallengePage extends GetView<ChallengeController> {
       ),
       body: Obx(
         () => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Text('이름', style: AppTextStyle.body2_b()),
-                  SizedBox(width: 18),
+                  Text('이름', style: AppTextStyle.body3_m()),
+                  SizedBox(width: 24),
                   Expanded(child: AppTextField(hintText: '챌린지 이름을 입력해주세요', controller: controller.titleController)),
                 ],
               ),
               Row(
                 children: [
-                  Text('식물', style: AppTextStyle.body2_b()),
-                  SizedBox(width: 18),
+                  Text('식물', style: AppTextStyle.body3_m()),
+                  SizedBox(width: 24),
                   Expanded(child: AppTextField(hintText: '함께 키울 식물을 입력해주세요', controller: controller.plantController)),
                 ],
               ),
               Row(
                 children: [
-                  Text('기간', style: AppTextStyle.body2_b()),
-                  SizedBox(width: 18),
+                  Text('기간', style: AppTextStyle.body3_m()),
+                  SizedBox(width: 24),
                   GestureDetector(
                     onTap: () {
                       controller.selectDate(true);
@@ -68,7 +68,7 @@ class AddChallengePage extends GetView<ChallengeController> {
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            color: AppColor.grey,
+                            color: AppColor.black20,
                             width: 1.0,
                           ),
                         ),
@@ -83,7 +83,7 @@ class AddChallengePage extends GetView<ChallengeController> {
                             style: AppTextStyle.body3_m(),
                           ),
                           Spacer(),
-                          Icon(Icons.calendar_today, size: 16, color: AppColor.grey),
+                          Icon(Icons.calendar_today, size: 16, color: AppColor.primary60),
                         ],
                       ),
                     ),
@@ -99,7 +99,7 @@ class AddChallengePage extends GetView<ChallengeController> {
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            color: AppColor.grey,
+                            color: AppColor.black20,
                             width: 1.0,
                           ),
                         ),
@@ -111,10 +111,10 @@ class AddChallengePage extends GetView<ChallengeController> {
                             controller.endDate.value != null
                               ? '${DateFormat("yyyy-MM-dd").format(controller.endDate.value!.toDate())}'
                               : '선택',
-                            style: AppTextStyle.body3_m(),
+                            style: controller.endDate.value != null ? AppTextStyle.body4_r() : AppTextStyle.body4_r(color: AppColor.black30),
                           ),
                           Spacer(),
-                          Icon(Icons.calendar_today, size: 16, color: AppColor.grey),
+                          Icon(Icons.calendar_today, size: 16, color: AppColor.primary60),
                         ],
                       ),
                     ),
@@ -123,8 +123,8 @@ class AddChallengePage extends GetView<ChallengeController> {
               ),
               Row(
                 children: [
-                  Text('인원', style: AppTextStyle.body2_b()),
-                  SizedBox(width: 18),
+                  Text('인원', style: AppTextStyle.body3_m()),
+                  SizedBox(width: 24),
                   DropdownButton(
                     value: controller.selectedMemberLimit.value,
                     items: controller.memberLimitList.map((String value) {
@@ -142,18 +142,43 @@ class AddChallengePage extends GetView<ChallengeController> {
                   ),
                 ],
               ),
-              Expanded(child: AppTextField(hintText: '챌린지를 설명해주세요', controller: controller.contentController)),
+              SizedBox(height: 20),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColor.black20)
+                  ),
+                  child: AppTextField(
+                    hintText: '챌린지를 설명해주세요',
+                    controller: controller.contentController
+                  )
+                )
+              ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: GestureDetector(
                   onTap: controller.selectImage,
-                  child: Container(
-                    width: 150,
-                    height: 150,
-                    color: Colors.grey[300],
-                    child: controller.selectedImage.value != null
-                      ? Image.file(controller.selectedImage.value!, fit: BoxFit.cover)
-                      : null,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+                        child: Text('사진첨부', style: AppTextStyle.body3_m()),
+                      ),
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: AppColor.black10,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child: controller.selectedImage.value != null
+                          ? Image.file(controller.selectedImage.value!, fit: BoxFit.cover)
+                          : Icon(Icons.add, color: AppColor.black60, size: 30),
+                      ),
+                    ],
                   ),
                 ),
               ),

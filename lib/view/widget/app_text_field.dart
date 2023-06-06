@@ -21,9 +21,9 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: AppTextStyle.body3_r(color: AppColor.grey),
+        hintStyle: AppTextStyle.body4_r(color: AppColor.black30),
         border: InputBorder.none,
-        contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+        contentPadding: EdgeInsets.symmetric(horizontal: 1),
       ),
       onSubmitted: onSubmitted,
     );

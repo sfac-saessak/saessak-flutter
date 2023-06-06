@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../controller/challenge/challenge_controller.dart';
 import '../../model/challenge.dart';
 import '../../util/app_color.dart';
 import '../../util/app_routes.dart';
@@ -49,7 +50,7 @@ class JoinedChallengeTile extends StatelessWidget {
                     challenge.recentMessageSender != ''
                       ? '${challenge.recentMessageSender}: ${challenge.recentMessage}'
                       : '채팅을 시작해 보세요!',
-                    style: AppTextStyle.body4_r(color: AppColor.darkGrey),
+                    style: AppTextStyle.body4_r(color: AppColor.black70),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2
                   ),
@@ -57,9 +58,9 @@ class JoinedChallengeTile extends StatelessWidget {
                 Spacer(),
                 Text(
                   challenge.recentMessageTime != null
-                    ? '${DateFormat('HH:mm').format(challenge.recentMessageTime!.toDate())}'
+                    ? '${Get.find<ChallengeController>().convertTime(challenge.recentMessageTime!)}'
                     : '',
-                  style: AppTextStyle.body5_r(color: AppColor.grey)
+                  style: AppTextStyle.body5_r(color: AppColor.black30)
                 ),
               ],
             ),
