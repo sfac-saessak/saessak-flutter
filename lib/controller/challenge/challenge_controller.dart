@@ -11,6 +11,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:saessak_flutter/service/db_service.dart';
 
 import '../../model/challenge.dart';
+import '../../view/page/challenge/challenge_detail_page.dart';
 import '../../view/screen/challenge/all_challenge_screen.dart';
 import '../../view/screen/challenge/joined_challenge_screen.dart';
 
@@ -202,6 +203,42 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     DateTime deadline = time.toDate();
     Duration difference = DateTime.now().difference(deadline);
     return difference.inDays;
+  }
+
+  // 챌린지 수정
+  editChallenge(Challenge challenge) async {
+
+    final challengeDocRef = DBService().challengeCollection.doc(challenge.challengeId);
+
+    if (challenge.imageUrl != null) {
+      await FirebaseStorage.instance.refFromURL(challenge.imageUrl!).delete();
+    }
+
+    if (selectedImage.value != null) {
+      var ref = FirebaseStorage.instance.ref('challenge/${user.uid}/${DateTime.now()}');
+      await ref.putFile(selectedImage.value!);
+      var downloadUrl = await ref.getDownloadURL();
+      challenge.imageUrl = downloadUrl;
+    }
+
+    await challengeDocRef.update({
+      'title': titleController.text,
+      'content': contentController.text,
+      'image': challenge.imageUrl,
+    });
+
+    var data = await FirebaseFirestore.instance
+      .collection('challenges')
+      .doc(challenge.challengeId)
+      .get();
+
+    challenge = Challenge.fromMap(data.data()!);
+
+    selectedImage.value = null;
+    titleController.text = '';
+    contentController.text = '';
+
+    Get.off(ChallengeDetailPage(challenge: challenge, challengeEnd: getDeadline(challenge.startDate) > 0));
   }
 
   // 진행중 / 마감 판별

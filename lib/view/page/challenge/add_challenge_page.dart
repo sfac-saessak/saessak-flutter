@@ -157,16 +157,16 @@ class AddChallengePage extends GetView<ChallengeController> {
                 )
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+                child: Text('사진첨부', style: AppTextStyle.body3_m()),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
                 child: GestureDetector(
                   onTap: controller.selectImage,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-                        child: Text('사진첨부', style: AppTextStyle.body3_m()),
-                      ),
                       Container(
                         width: 60,
                         height: 60,

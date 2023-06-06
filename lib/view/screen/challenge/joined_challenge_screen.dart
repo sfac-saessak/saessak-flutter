@@ -18,22 +18,20 @@ class JoinedChallengeScreen extends GetView<ChallengeController> {
       child: Stack(
         children: [
           Obx(
-            () => controller.isLoading.value
-              ? Center(child: CircularProgressIndicator())
-              : SmartRefresher(
-                controller: controller.joinedRefreshController,
-                onRefresh: controller.joinedChallengeRefresh,
-                header: WaterDropHeader(),
-                child: ListView.builder(
-                  itemCount: controller.joinedChallengeList.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: JoinedChallengeTile(challenge: controller.joinedChallengeList[index]),
-                    );
-                  },
-                ),
+            () => SmartRefresher(
+              controller: controller.joinedRefreshController,
+              onRefresh: controller.joinedChallengeRefresh,
+              header: WaterDropHeader(),
+              child: ListView.builder(
+                itemCount: controller.joinedChallengeList.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: JoinedChallengeTile(challenge: controller.joinedChallengeList[index]),
+                  );
+                },
               ),
+            ),
           ),
         ],
       ),

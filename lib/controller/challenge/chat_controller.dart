@@ -10,6 +10,7 @@ import '../../model/challenge.dart';
 import '../../model/message.dart';
 import '../../model/user_model.dart';
 import '../../service/db_service.dart';
+import 'challenge_controller.dart';
 
 class ChatController extends GetxController {
   Challenge challenge = Get.arguments[0];
@@ -95,6 +96,7 @@ class ChatController extends GetxController {
   @override
   void onClose() {
     scrollController.dispose();
+    Get.find<ChallengeController>().getJoinedChallenges();
     log('onClose');
     super.onClose();
   }

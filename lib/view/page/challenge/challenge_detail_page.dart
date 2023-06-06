@@ -9,6 +9,7 @@ import '../../../model/challenge.dart';
 import '../../../service/db_service.dart';
 import '../../../util/app_color.dart';
 import '../../../util/app_text_style.dart';
+import 'edit_challenge_page.dart';
 
 class ChallengeDetailPage extends StatelessWidget {
   const ChallengeDetailPage({Key? key, required this.challenge, required this.challengeEnd}) : super(key: key);
@@ -28,7 +29,7 @@ class ChallengeDetailPage extends StatelessWidget {
         elevation: 0,
         actions: controller.user.uid == challenge.admin ? [
           IconButton(
-            onPressed: (){},
+            onPressed: () => Get.off(() => EditChallengePage(challenge: challenge)),
             icon: Icon(Icons.edit),
           ),
           // IconButton(
