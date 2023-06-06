@@ -15,6 +15,13 @@ class SetProfileController extends GetxController {
   TextEditingController nameController = TextEditingController();
   User? get user => FirebaseAuth.instance.currentUser;
   Rxn<File> selectedImage = Rxn();
+  RxBool isEnableButton = false.obs; // 버튼 활성화 위한 bool
+
+  onChanged () {
+    if(nameController.text != null && nameController.text != ''){
+      isEnableButton.value = true;
+    } else { isEnableButton.value = false;}
+  }
 
   addProfilePhoto() async {
     var picker = ImagePicker();

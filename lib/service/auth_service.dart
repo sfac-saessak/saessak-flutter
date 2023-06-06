@@ -13,7 +13,8 @@ class AuthService {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException catch (e) { // 에러 발생시
+    } on FirebaseAuthException catch (e) {
+      // 에러 발생시
       switch (e.code) {
         case 'invalid-email':
           Get.find<LoginController>().emailErrorText.value = '유효하지 않은 이메일입니다.';
@@ -46,9 +47,56 @@ class AuthService {
   logout() => FirebaseAuth.instance.signOut();
 
   // 회원가입
-  signup(String email, String password) {
-    FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password);
+  signup(String email, String password) async {
+    var res = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password).then((value) =>  Get.rawSnackbar(
+          title: '회원가입 성공',
+          message: '환영합니다! 프로필 정보를 입력해주세요.',
+          maxWidth: Get.width * 0.8,
+          borderRadius: 12,
+          duration: Duration(seconds: 5)) )
+        .catchError((e) {
+      if (e.code == 'email-already-in-use') {
+        Get.rawSnackbar(
+            title: '회원가입 실패',
+            message: '이미 사용중인 이메일 주소입니다.',
+            maxWidth: Get.width * 0.8,
+            borderRadius: 12,
+            duration: Duration(seconds: 5));
+      }
+      if (e.code == 'invalid-email') {
+        Get.rawSnackbar(
+            title: '회원가입 실패',
+            message: '유효하지 않은 이메일 주소입니다.',
+            maxWidth: Get.width * 0.8,
+            borderRadius: 12,
+            duration: Duration(seconds: 5));
+      }
+      if (e.code == 'operation-not-allowed') {
+        Get.rawSnackbar(
+            title: '회원가입 실패',
+            message: '사용할 수 없는 이메일/비밀번호 입니다.',
+            maxWidth: Get.width * 0.8,
+            borderRadius: 12,
+            duration: Duration(seconds: 5));
+      }
+      if (e.code == 'weak-password') {
+        Get.rawSnackbar(
+            title: '회원가입 실패',
+            message: '너무 쉬운 비밀번호 입니다.',
+            maxWidth: Get.width * 0.8,
+            borderRadius: 12,
+            duration: Duration(seconds: 5));
+      }
+    });
+
+  }
+
+
+  // 비밀번호 재설정 메일 발송
+  sendResetPasswordEmail (String email) async {
+    await FirebaseAuth.instance
+    .sendPasswordResetEmail(email: email);
   }
 
   // 구글 로그인

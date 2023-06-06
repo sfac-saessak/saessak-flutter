@@ -62,7 +62,6 @@ class SignupController extends GetxController {
     String password = pwController.text.trim();
     String passwordConfirm = pwConfirmController.text.trim();
     AuthController().signup(email, password);
-    Get.snackbar('회원가입 성공!', '성공적으로 계정을 생성했습니다.');
     return;
   }
 

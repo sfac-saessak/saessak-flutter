@@ -7,6 +7,7 @@ import 'package:saessak_flutter/controller/schedule_journal/schedule_controller.
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
 import 'controller/challenge/challenge_controller.dart';
 import 'controller/challenge/chat_controller.dart';
+import 'controller/reset_password_controller.dart';
 import 'firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: ThemeData(fontFamily: 'NotoSansKR'),
       initialBinding: BindingsBuilder(() {
         Get.put(AuthController());
         Get.lazyPut(() => LoginController(), fenix: true);
@@ -44,6 +46,7 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => ScheduleController(), fenix: true);
         Get.lazyPut(() => ChallengeController(), fenix: true);
         Get.lazyPut(() => ChatController(), fenix: true);
+        Get.lazyPut(() => ResetPasswordController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.splash,

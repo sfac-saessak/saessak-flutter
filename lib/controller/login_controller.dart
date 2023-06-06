@@ -16,6 +16,7 @@ class LoginController extends GetxController {
   }
 
   signup() => Get.toNamed(AppRoutes.signup);
+  resetPassWord() => Get.toNamed(AppRoutes.resetPassword);
 
   signInWithGoogle() => AuthController().signInWithGoogle();
 

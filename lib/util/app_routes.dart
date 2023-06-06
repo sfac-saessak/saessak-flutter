@@ -1,3 +1,4 @@
+import 'package:saessak_flutter/view/page/reset_password_page.dart';
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
 
 import '../view/page/challenge/chat_page.dart';
@@ -13,4 +14,5 @@ class AppRoutes {
   static const setName = SetProfilePage.route;
   static const splash = Splash.route;
   static const chat = ChatPage.route;
+  static const resetPassword = ResetPasswordPage.route;
 }

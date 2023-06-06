@@ -7,11 +7,11 @@ class CustomButton extends StatelessWidget {
       {super.key,
       required this.onPressed,
       required this.text,
-      required this.isValidLogin});
+      required this.isenableButton});
 
   final VoidCallback onPressed;
   final String text;
-  final bool isValidLogin;
+  final bool isenableButton;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             elevation: 0),
-        onPressed: isValidLogin ? onPressed : null,
+        onPressed: isenableButton ? onPressed : null,
         child: Text(text),
       ),
     );
