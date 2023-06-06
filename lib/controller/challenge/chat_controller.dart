@@ -8,19 +8,22 @@ import 'package:get/get.dart';
 
 import '../../model/challenge.dart';
 import '../../model/message.dart';
+import '../../model/user_model.dart';
 import '../../service/db_service.dart';
 
 class ChatController extends GetxController {
   Challenge challenge = Get.arguments[0];
   TextEditingController messageController = TextEditingController();
-  RxList chats = [].obs;
+  RxList<Message> chats = <Message>[].obs;
   User user = FirebaseAuth.instance.currentUser!;
   ScrollController scrollController = ScrollController();
+  RxList<UserModel> memberList = <UserModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
     log('chat group => ${challenge.title}');
+    getMembers();
     // Firestore 컬렉션의 스트림을 구독하여 chats 리스트 갱신
     FirebaseFirestore.instance
         .collection('challenges')
@@ -30,7 +33,7 @@ class ChatController extends GetxController {
         .snapshots()
         .listen((QuerySnapshot snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        chats(snapshot.docs.map((doc) => Message.fromMap(doc.data() as Map<String, dynamic>)).toList());
+        updateChats(snapshot.docs);
       } else {
         chats([]);
       }
@@ -44,18 +47,55 @@ class ChatController extends GetxController {
     });
   }
 
+  // 채팅 업데이트
+  void updateChats(List<QueryDocumentSnapshot> docs) async {
+    var futureMessages = docs.map((doc) async {
+      var message = doc.data() as Map<String, dynamic>;
+
+      var userInfo = await getUserInfoById(message['sender']);
+      var userModel = UserModel.fromMap(userInfo);
+      return Message(
+        message: message['message'],
+        sender: userModel,
+        time: message['time'],
+      );
+    }).toList();
+
+    var messages = await Future.wait(futureMessages);
+    chats(messages);
+  }
+
   // 메세지 보내기
-  void sendMessage(String challengeId) {
+  void sendMessage(String challengeId) async {
     if (messageController.text.isNotEmpty) {
-      Message message = Message(message: messageController.text, sender: user.displayName!, time: Timestamp.now());
+      var userInfo = await getUserInfoById(user.uid);
+      var userModel = UserModel.fromMap(userInfo);
+      Message message = Message(message: messageController.text, sender: userModel, time: Timestamp.now());
       DBService().sendMessage(challengeId, message);
       messageController.clear();
     }
   }
 
+  // uid로 유저 정보 가져오기
+  Future<Map<String, dynamic>> getUserInfoById(String uid) async {
+    var userInfo = await DBService().getUserInfoById(uid);
+    return userInfo;
+  }
+
+  // 멤버 가져오기
+  void getMembers() async {
+    List<UserModel> members = [];
+    for (var member in challenge.members!) {
+      var userInfo = await getUserInfoById(member);
+      members.add(UserModel.fromMap(userInfo));
+    }
+    memberList(members);
+  }
+
   @override
   void onClose() {
     scrollController.dispose();
+    log('onClose');
     super.onClose();
   }
 }

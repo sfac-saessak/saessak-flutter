@@ -24,14 +24,20 @@ class MessageTile extends StatelessWidget {
                 sentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              sentByMe ? Container() : CircleAvatar(),
+              sentByMe
+                ? Container()
+                : CircleAvatar(
+                    backgroundColor: AppColor.grey,
+                    backgroundImage: message.sender.profileImg != null ? NetworkImage(message.sender.profileImg!) : null,
+                    child: message.sender.profileImg != null ? null : Icon(Icons.person, color: AppColor.white),
+                  ),
               SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   sentByMe
                       ? Container()
-                      : Text(message.sender, style: AppTextStyle.body3_m()),
+                      : Text(message.sender.name, style: AppTextStyle.body3_m()),
                   sentByMe ? Container() : SizedBox(height: 8),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -63,7 +69,7 @@ class MessageTile extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              constraints: BoxConstraints(maxWidth: 240),
+                              constraints: BoxConstraints(maxWidth: 200),
                               child: Text(
                                 message.message,
                                 style: AppTextStyle.body3_r(

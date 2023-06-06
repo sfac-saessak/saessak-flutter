@@ -25,7 +25,7 @@ class ChatPage extends GetView<ChatController> {
         actions: [
           IconButton(
             onPressed: () {
-              Get.to(() => ChatDetailPage(challenge: controller.challenge));
+              Get.to(() => ChatDetailPage(challenge: controller.challenge, members: controller.memberList));
             },
             icon: const Icon(Icons.info_outline),
           )
@@ -44,7 +44,7 @@ class ChatPage extends GetView<ChatController> {
                       Message chat = controller.chats[index];
                       return MessageTile(
                           message: chat,
-                          sentByMe: controller.user.displayName == chat.sender);
+                          sentByMe: controller.user.uid == chat.sender.uid);
                     },
                   ),
                 )),

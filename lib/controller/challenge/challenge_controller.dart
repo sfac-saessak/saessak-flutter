@@ -26,10 +26,10 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   TextEditingController contentController = TextEditingController();  // 내용 컨트롤러
   TextEditingController searchController = TextEditingController();   // 검색 컨트롤러
 
-  Rxn<int> selectedMemberLimit = Rxn();     // 인원수 선택값
-  Rxn<File> selectedImage = Rxn();          // 추가한 사진
   Rx<Timestamp?> startDate = Rx<Timestamp?>(null);  // 챌린지 시작 날짜
   Rx<Timestamp?> endDate = Rx<Timestamp?>(null);    // 챌린지 끝 날짜
+  Rxn<int> selectedMemberLimit = Rxn();     // 인원수 선택값
+  Rxn<File> selectedImage = Rxn();          // 추가한 사진
 
   RxList allChallengeList = [].obs;         // 전체 챌린지 리스트
   RxList joinedChallengeList = [].obs;      // 참여중인 챌린지 리스트
@@ -128,14 +128,21 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     isLoading(true);
     var joinedChallengeIdList = await DBService(uid: user.uid).getJoinedChallenges();
     var challenges = [];
+
     if (joinedChallengeIdList.length > 0) {
       for (var joinedChallengeId in joinedChallengeIdList) {
         var challenge = await DBService().challengeCollection.doc(joinedChallengeId).get();
         challenges.add(Challenge.fromMap(challenge.data() as Map<String, dynamic>));
       }
+
+      // 최근 메세지 시간으로 정렬
+      challenges = challenges.where((challenge) => challenge.recentMessageTime != null).toList();
+      challenges.sort((a, b) => b.recentMessageTime!.compareTo(a.recentMessageTime!)); // 내림차순 정렬
+
       joinedChallengeList(challenges);
-      log('joinedChallengeList ${joinedChallengeList}');
+      log('joinedChallengeList $joinedChallengeList');
     }
+
     isLoading(false);
   }
 
@@ -159,6 +166,21 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     searchResultList(snapshotData.map((e) => Challenge.fromMap(e)).toList());
     isLoading(false);
   }
+
+  // 챌린지 참가
+  void joinChallenge(String challengeId) {
+    DBService(uid: user.uid).joinChallenge(challengeId);
+    getJoinedChallenges();
+    Get.back();
+  }
+
+  // 챌린지 포기
+  void exitChallenge(String challengeId) {
+    DBService(uid: user.uid).exitChallenge(challengeId);
+    getJoinedChallenges();
+    Get.back();
+  }
+
 
   @override
   void onInit() {

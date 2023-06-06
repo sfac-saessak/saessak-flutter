@@ -37,6 +37,14 @@ class DBService {
     }
   }
 
+  getUserInfoById(String uid) {
+    final userDocRef = userCollection.doc(uid);
+    final userDoc = userDocRef.get().then((snapshot) {
+      return snapshot.data() as Map<String, dynamic>;
+    });
+    return userDoc;
+  }
+
   // 챌린지 생성
   Future createChallenge(Challenge challenge) async {
     DocumentReference challengeDocumentReference = await challengeCollection.add({
@@ -53,6 +61,7 @@ class DBService {
       'image': challenge.imageUrl,
       'recentMessage': '',
       'recentMessageSender': '',
+      'recentMessageTime': DateTime.now(),
     });
 
     // 멤버 업데이트
@@ -116,7 +125,7 @@ class DBService {
     challengeCollection.doc(groupId).collection("messages").add(message.toMap());
     challengeCollection.doc(groupId).update({
       "recentMessage": message.message,
-      "recentMessageSender": message.sender,
+      "recentMessageSender": message.sender.name,
       "recentMessageTime": message.time,
     });
   }

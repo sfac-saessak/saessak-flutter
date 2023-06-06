@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../controller/challenge/challenge_controller.dart';
 import '../../../model/challenge.dart';
 import '../../../service/db_service.dart';
 import '../../../util/app_color.dart';
@@ -61,7 +62,7 @@ class ChallengeDetailPage extends StatelessWidget {
             Spacer(),
             challenge.imageUrl != null
               ? Container(
-                width: 150,
+                width: double.infinity,
                 height: 150,
                 color: Colors.grey[300],
                 child: Image.network(challenge.imageUrl!, fit: BoxFit.cover)
@@ -89,8 +90,7 @@ class ChallengeDetailPage extends StatelessWidget {
                           ),
                           IconButton(
                             onPressed: () async {
-                              DBService(uid: FirebaseAuth.instance.currentUser!.uid).joinChallenge(challenge.challengeId!);
-                              Get.back();
+                              Get.find<ChallengeController>().joinChallenge(challenge.challengeId!);
                               Get.snackbar('${challenge.title}', '참가 완');
                             },
                             icon: const Icon(

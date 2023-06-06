@@ -1,9 +1,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:saessak_flutter/model/user_model.dart';
 
 class Message {
   String message;
-  String sender;
+  UserModel sender;
   Timestamp time;
 
   Message({
@@ -15,7 +16,7 @@ class Message {
   Map<String, dynamic> toMap() {
     return {
       'message': this.message,
-      'sender': this.sender,
+      'sender': this.sender.uid,
       'time': this.time,
     };
   }
@@ -23,7 +24,7 @@ class Message {
   factory Message.fromMap(Map<String, dynamic> map) {
     return Message(
       message: map['message'] as String,
-      sender: map['sender'] as String,
+      sender: map['sender'] as UserModel,
       time: map['time'] as Timestamp,
     );
   }

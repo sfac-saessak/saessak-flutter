@@ -46,9 +46,9 @@ class JoinedChallengeTile extends StatelessWidget {
                 Container(
                   width: 250,
                   child: Text(
-                    challenge.recentMessageTime != null
+                    challenge.recentMessageSender != ''
                       ? '${challenge.recentMessageSender}: ${challenge.recentMessage}'
-                      : '',
+                      : '채팅을 시작해 보세요!',
                     style: AppTextStyle.body4_r(color: AppColor.darkGrey),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2

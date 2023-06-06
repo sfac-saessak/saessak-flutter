@@ -3,15 +3,15 @@ class UserModel {
   final String uid;
   final String email;
   final String name;
-  final String profileImg;
-  final List challenges;
+  final String? profileImg;
+  final List? challenges;
 
   UserModel({
     required this.uid,
     required this.email,
     required this.name,
-    required this.profileImg,
-    required this.challenges,
+    this.profileImg,
+    this.challenges,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,7 +20,7 @@ class UserModel {
       'email': this.email,
       'name': this.name,
       'profileImg': this.profileImg,
-      'groups': this.challenges,
+      'challenges': this.challenges,
     };
   }
 
@@ -29,8 +29,8 @@ class UserModel {
       uid: map['uid'] as String,
       email: map['email'] as String,
       name: map['name'] as String,
-      profileImg: map['profileImg'] as String,
-      challenges: map['groups'] as List,
+      profileImg: map['profileImg'] as String?,
+      challenges: map['challenges'] as List?,
     );
   }
 

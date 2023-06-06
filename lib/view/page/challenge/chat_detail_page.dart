@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../controller/challenge/challenge_controller.dart';
 import '../../../model/challenge.dart';
+import '../../../model/user_model.dart';
 import '../../../service/db_service.dart';
 import '../../../util/app_color.dart';
 import '../../../util/app_routes.dart';
 import '../../../util/app_text_style.dart';
 
 class ChatDetailPage extends StatelessWidget {
-  const ChatDetailPage({Key? key, required this.challenge}) : super(key: key);
+  const ChatDetailPage({Key? key, required this.challenge, required this.members}) : super(key: key);
   final Challenge challenge;
+  final List<UserModel> members;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +49,7 @@ class ChatDetailPage extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () async {
-                          DBService(uid: FirebaseAuth.instance.currentUser!.uid).exitChallenge(challenge.challengeId!);
-                          Get.back();
+                          Get.find<ChallengeController>().exitChallenge(challenge.challengeId!);
                           Get.snackbar('${challenge.title}', '탈주 완');
                         },
                         icon: const Icon(
@@ -87,7 +89,24 @@ class ChatDetailPage extends StatelessWidget {
               ),
             ],
           ),
-          Text('개설자 : ${challenge.admin}')
+          Text('개설자 : ${challenge.admin}'),
+          Expanded(
+            child: ListView.builder(
+              itemCount: members.length,
+              itemBuilder: (context, index) {
+                UserModel member = members[index];
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: AppColor.grey,
+                    backgroundImage: member.profileImg != null ? NetworkImage(member.profileImg!) : null,
+                    child: member.profileImg != null ? null : Icon(Icons.person, color: AppColor.white),
+                  ),
+                  title: Text('${member.name}'),
+                  subtitle: Text('${member.email}'),
+                );
+              }
+            ),
+          ),
         ],
       ),
     );
