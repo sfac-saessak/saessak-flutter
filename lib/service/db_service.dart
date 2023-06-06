@@ -85,12 +85,30 @@ class DBService {
     });
   }
 
+  // 챌린지 포기
+  Future exitChallenge(String challengeId) async {
+    DocumentReference userDocumentReference = userCollection.doc(uid);
+    DocumentReference groupDocumentReference = challengeCollection.doc(challengeId);
+
+    await userDocumentReference.update({
+      "challenges": FieldValue.arrayRemove(["${challengeId}"])
+    });
+    await groupDocumentReference.update({
+      "members": FieldValue.arrayRemove(["${uid}"])
+    });
+  }
+
   // 참여중인 챌린지 가져오기
   getJoinedChallenges() async {
     DocumentSnapshot userDoc = await userCollection.doc(uid).get();
     if (userDoc.exists) {
       return userDoc.get('challenges');
     }
+  }
+
+  // 챌린지 검색
+  searchChallengeByPlant(String plant) {
+    return challengeCollection.where("plant", isEqualTo: plant).get();
   }
 
   // 메세지 보내기

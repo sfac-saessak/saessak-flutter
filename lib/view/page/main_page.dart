@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../controller/main_controller.dart';
 import '../../util/app_color.dart';
+import 'challenge/search_challenge_page.dart';
 
 class MainPage extends GetView<MainController> {
   const MainPage({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class MainPage extends GetView<MainController> {
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
                     icon: Icon(Icons.search),
-                    onPressed: () {},
+                    onPressed: () => Get.to(() => SearchChallengePage()),
                   ),
                 );
               } else {

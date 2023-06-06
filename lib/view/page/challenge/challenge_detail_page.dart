@@ -59,6 +59,14 @@ class ChallengeDetailPage extends StatelessWidget {
             SizedBox(height: 40,),
             Text('${challenge.content}'),
             Spacer(),
+            challenge.imageUrl != null
+              ? Container(
+                width: 150,
+                height: 150,
+                color: Colors.grey[300],
+                child: Image.network(challenge.imageUrl!, fit: BoxFit.cover)
+              )
+              : Container(),
             Container(
               width: double.infinity,
               child: ElevatedButton(
@@ -83,6 +91,7 @@ class ChallengeDetailPage extends StatelessWidget {
                             onPressed: () async {
                               DBService(uid: FirebaseAuth.instance.currentUser!.uid).joinChallenge(challenge.challengeId!);
                               Get.back();
+                              Get.snackbar('${challenge.title}', '참가 완');
                             },
                             icon: const Icon(
                               Icons.done,

@@ -35,7 +35,6 @@ class ChatController extends GetxController {
         chats([]);
       }
       update(); // GetX에게 상태 업데이트를 알림
-      log('chats => ${chats}');
     });
 
     ever(chats, (_) {

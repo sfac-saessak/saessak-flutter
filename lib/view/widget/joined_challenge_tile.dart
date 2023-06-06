@@ -45,7 +45,14 @@ class JoinedChallengeTile extends StatelessWidget {
               children: [
                 Container(
                   width: 250,
-                  child: Text('${challenge.recentMessage}', style: AppTextStyle.body4_r(color: AppColor.darkGrey), overflow: TextOverflow.ellipsis, maxLines: 2)
+                  child: Text(
+                    challenge.recentMessageTime != null
+                      ? '${challenge.recentMessageSender}: ${challenge.recentMessage}'
+                      : '',
+                    style: AppTextStyle.body4_r(color: AppColor.darkGrey),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2
+                  ),
                 ),
                 Spacer(),
                 Text(
