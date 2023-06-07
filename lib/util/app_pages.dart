@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:saessak_flutter/view/page/reset_password_page.dart';
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
 
 import '../view/page/challenge/chat_page.dart';
@@ -22,5 +23,7 @@ class AppPages {
         page: () => const Splash(),
         transition: Transition.noTransition),
     GetPage(name: ChatPage.route, page: () => const ChatPage()),
+    GetPage(
+        name: ResetPasswordPage.route, page: () => const ResetPasswordPage())
   ];
 }

@@ -61,6 +61,9 @@ class AuthController extends GetxController {
   // 회원가입
   signup(String email, String pw) => AuthService().signup(email, pw);
 
+  // 비밀번호 재설정 메일 발송
+  sendResetPasswordEmail (String email) => AuthService().sendResetPasswordEmail(email);
+
   // 구글 로그인
   signInWithGoogle() => AuthService().signInWithGoogle();
 

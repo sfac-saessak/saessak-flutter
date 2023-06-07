@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:saessak_flutter/controller/community/community_controller.dart';
+import 'package:saessak_flutter/controller/schedule_journal/schedule_controller.dart';
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
 import 'controller/challenge/challenge_controller.dart';
 import 'controller/challenge/chat_controller.dart';
+import 'controller/reset_password_controller.dart';
 import 'firebase_options.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import 'controller/auth_controller.dart';
 import 'controller/login_controller.dart';
@@ -20,6 +24,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  initializeDateFormatting();
+  tz.initializeTimeZones();
   runApp(const MyApp());
 }
 
@@ -29,6 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: ThemeData(fontFamily: 'NotoSansKR'),
       initialBinding: BindingsBuilder(() {
         Get.put(AuthController());
         Get.lazyPut(() => LoginController(), fenix: true);
@@ -36,8 +43,10 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => SetProfileController(), fenix: true);
         Get.lazyPut(() => MainController(), fenix: true);
         Get.lazyPut(() => CommunityController(), fenix: true);
+        Get.lazyPut(() => ScheduleController(), fenix: true);
         Get.lazyPut(() => ChallengeController(), fenix: true);
         Get.lazyPut(() => ChatController(), fenix: true);
+        Get.lazyPut(() => ResetPasswordController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.splash,

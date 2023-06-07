@@ -1,8 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:saessak_flutter/util/app_color.dart';
+import 'package:saessak_flutter/util/app_routes.dart';
 
+import '../../component/login/custom_button.dart';
+import '../../component/login/custom_text_field.dart';
 import '../../controller/login_controller.dart';
 
 class LoginPage extends GetView<LoginController> {
@@ -11,75 +14,122 @@ class LoginPage extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0),
-          child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 50),
-                TextField(
-                  controller: controller.emailController,
-                  decoration: InputDecoration(
-                    labelText: '이메일',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                TextField(
-                  controller: controller.pwController,
-                  decoration: InputDecoration(
-                    labelText: '비밀번호',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                Container(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            child: SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              child: Obx(
+                () => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/logo.png',fit: BoxFit.fill,),
+                    Image.asset('assets/images/title.png',fit: BoxFit.fill,),
+                    SizedBox(height: 50),
+                    Column(
+                      children: [
+                        CustomTextField(
+                          controller: controller.emailController,
+                          onChanged: controller.onChanged,
+                          hintText: '이메일주소',
+                          errorText: controller.emailErrorText.value ?? null,
                         ),
-                        elevation: 0
+                        SizedBox(height: 16.0),
+                        CustomTextField(
+                          controller: controller.pwController,
+                          onChanged: controller.onChanged,
+                          hintText: '비밀번호',
+                          errorText: controller.pwErrorText.value ?? null,
+                          suffixIcon: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.remove_red_eye,
+                                color: AppColor.grey,
+                              )),
+                        ),
+                      ],
                     ),
-                    onPressed: controller.login,
-                    child: Text('로그인'),
-                  ),
+                    SizedBox(height: 16.0),
+                    CustomButton(
+                      text: '로그인',
+                      onPressed: controller.login,
+                      isenableButton: controller.isValidLogin.value,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                            onPressed: controller.resetPassWord,
+                            child: Text(
+                              '비밀번호찾기',
+                              style: TextStyle(color: AppColor.black),
+                            )),
+                        TextButton(
+                            onPressed: controller.signup,
+                            child: Text(
+                              '회원가입',
+                              style: TextStyle(color: AppColor.black),
+                            )),
+                      ],
+                    ),
+                    SizedBox(height: 30),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Divider(
+                          color: AppColor.darkGrey,
+                        )),
+                        Text(
+                          '      SNS 계정으로 로그인      ',
+                          style: TextStyle(color: AppColor.darkGrey),
+                        ),
+                        Expanded(
+                            child: Divider(
+                          color: AppColor.darkGrey,
+                        )),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: controller.signInWithGoogle,
+                      child: Stack(children: [
+                        Container(
+                          width: double.infinity,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AppColor.lightGrey,
+                            ),
+                          ),
+                          child: Center(
+                              child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                              'Google로 로그인',
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
+                        ),
+                        Positioned(
+                            child: Image.asset('assets/images/google_logo.png',
+                                width: 30),
+                            bottom: 15,
+                            left: 15),
+                      ]),
+                    )
+                  ],
                 ),
-                TextButton(
-                    onPressed: controller.signup,
-                    child: Text('회원가입')
-                ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  onTap: controller.signInWithGoogle,
-                  child: Container(
-                    width: double.infinity,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(FontAwesomeIcons.google),
-                          SizedBox(width: 8),
-                          Text('Sign in with Google'),
-                        ],
-                      )
-                    ),
-                  ),
-                )
-              ],
+              ),
             ),
           ),
         ),

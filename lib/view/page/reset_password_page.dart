@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/component/login/custom_button.dart';
 import 'package:saessak_flutter/component/login/custom_text_field.dart';
+import 'package:saessak_flutter/controller/reset_password_controller.dart';
 
-import '../../controller/signup_controller.dart';
-
-class SignupPage extends GetView<SignupController> {
-  const SignupPage({Key? key}) : super(key: key);
-  static const String route = '/signup';
+class ResetPasswordPage extends GetView<ResetPasswordController> {
+  const ResetPasswordPage({Key? key}) : super(key: key);
+  static const String route = '/resetPassword';
 
   @override
   Widget build(BuildContext context) {
@@ -38,35 +37,16 @@ class SignupPage extends GetView<SignupController> {
                     SizedBox(height: 50),
                     CustomTextField(
                       controller: controller.emailController,
-                      hintText: '이메일',
+                      hintText: '이메일을 입력해주세요',
                       errorText: controller.emailErrorText.value,
                       onChanged: controller.emailOnChanged,
                     ),
-                    SizedBox(height: 16.0),
-                    CustomTextField(
-                      controller: controller.pwController,
-                      hintText: '비밀번호',
-                      errorText: controller.pwErrorText.value,
-                      onChanged: () {
-                        controller.pwOnChanged();
-                        controller.pwConfirmOnChanged();
-                      },
-                    ),
-                    SizedBox(height: 16.0),
-                    CustomTextField(
-                      controller: controller.pwConfirmController,
-                      hintText: '비밀번호 확인',
-                      errorText: controller.pwConfirmErrorText.value,
-                      onChanged: () {
-                        controller.pwOnChanged();
-                        controller.pwConfirmOnChanged();
-                      },
-                    ),
-                    SizedBox(height: 36.0),
+                    
+                    SizedBox(height: 20.0),
                     CustomButton(
-                        onPressed: controller.signUp,
-                        text: '회원가입',
-                        isenableButton: controller.isValidSignUp.value)
+                        onPressed: controller.sendResetPasswordEmail,
+                        text: '비밀번호 재설정 메일 발송',
+                        isenableButton: controller.isEnableButton.value)
                   ],
                 ),
               ),

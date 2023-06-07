@@ -14,37 +14,35 @@ class PostDetailPage extends GetView<CommunityController> {
 
   @override
   Widget build(BuildContext context) {
-    print(post.imgUrlList);
-    TextEditingController _commentTextController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(children: [
-          Row(children: [
-            Chip(label: Text(post.tag)),
-            Text(
-            post.title,
-            style: TextStyle(fontSize: 30),
-            maxLines: 3,
+          Row(
+            children: [
+              Chip(label: Text(post.tag)),
+              Text(
+                post.title,
+                style: TextStyle(fontSize: 30),
+                maxLines: 3,
+              ),
+            ],
           ),
-          ],),
-          
           Text(controller.convertTime(post.writeTime)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: Text('${DateTime.fromMillisecondsSinceEpoch(post.writeTime.millisecondsSinceEpoch)}')),
+              Expanded(
+                  child: Text(
+                      '${DateTime.fromMillisecondsSinceEpoch(post.writeTime.millisecondsSinceEpoch)}')),
               Text('조회수 ${post.views}'),
               PopupMenuButton(
                 onSelected: (value) {
-                  if(value == SampleItem.itemOne){
-                    print('게시글수정');
+                  if (value == SampleItem.itemOne) {
                     controller.moveToModifyPostPage(post);
                   }
-                   if(value == SampleItem.itemTwo){
-                    print('게시글 삭제');
+                  if (value == SampleItem.itemTwo) {
                     controller.removePost(post);
                   }
                 },
@@ -72,16 +70,16 @@ class PostDetailPage extends GetView<CommunityController> {
               CircleAvatar(
                 radius: 30,
                 backgroundColor: Colors.green,
-                backgroundImage: post.userInfo['profileImg']!=null? NetworkImage(post.userInfo['profileImg']) : null,
+                backgroundImage: post.userInfo['profileImg'] != null
+                    ? NetworkImage(post.userInfo['profileImg'])
+                    : null,
                 child: Text('프로필이미지'),
               ),
               Text(post.userInfo['nickName']),
             ],
           ),
           Divider(),
-          //...사진리스트.map((e) => 사진 컨테이너)
           ...post.imgUrlList.map((e) {
-            print(e);
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -110,17 +108,11 @@ class PostDetailPage extends GetView<CommunityController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextField(
-                          controller: _commentTextController,
+                          controller: controller.commentTextController,
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () async {
-                            Get.find<CommunityController>().writeComment(
-                                content: _commentTextController.text,
-                                post: post);
-                            await controller.getComments(post);
-                            Get.back();
-                          },
+                          onPressed: () => controller.completeComment(post),
                           child: const Text('완료'),
                         )
                       ],
@@ -145,14 +137,10 @@ class PostDetailPage extends GetView<CommunityController> {
                               commentId: e.id,
                               post: post,
                               authorUid: e.data()['userInfo']['uid'],
-                        
                             ),
                           )
                           .toList()
-                      : []
-
-              // 커멘트 컬렉션 . get() . docs . map ( (e) => Comment.fromMap(e.data())) . toList()
-              ,
+                      : [],
             ),
           ),
         ]),
