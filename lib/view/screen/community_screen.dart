@@ -7,7 +7,6 @@ import 'package:saessak_flutter/view/page/community/post_write_page.dart';
 
 import '../../util/app_color.dart';
 
-
 class CommunityScreen extends GetView<CommunityController> {
   const CommunityScreen({Key? key}) : super(key: key);
 
