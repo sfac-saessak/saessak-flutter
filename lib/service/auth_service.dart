@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:saessak_flutter/controller/login_controller.dart';
 
+import '../util/app_routes.dart';
+
 class AuthService {
   // 로그인
   login(String email, String password) async {
@@ -49,12 +51,13 @@ class AuthService {
   // 회원가입
   signup(String email, String password) async {
     var res = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password).then((value) =>  Get.rawSnackbar(
-          title: '회원가입 성공',
-          message: '환영합니다! 프로필 정보를 입력해주세요.',
-          maxWidth: Get.width * 0.8,
-          borderRadius: 12,
-          duration: Duration(seconds: 5)) )
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) => Get.rawSnackbar(
+            title: '회원가입 성공',
+            message: '환영합니다! 프로필 정보를 입력해주세요.',
+            maxWidth: Get.width * 0.8,
+            borderRadius: 12,
+            duration: Duration(seconds: 5)))
         .catchError((e) {
       if (e.code == 'email-already-in-use') {
         Get.rawSnackbar(
@@ -89,14 +92,11 @@ class AuthService {
             duration: Duration(seconds: 5));
       }
     });
-
   }
 
-
   // 비밀번호 재설정 메일 발송
-  sendResetPasswordEmail (String email) async {
-    await FirebaseAuth.instance
-    .sendPasswordResetEmail(email: email);
+  sendResetPasswordEmail(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
   // 구글 로그인
@@ -110,7 +110,13 @@ class AuthService {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
+    var userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    var additionalUserInfo = userCredential.additionalUserInfo;
+    if (additionalUserInfo!.isNewUser) {
+      return Get.offAllNamed(AppRoutes.setName);
+    }
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    return await userCredential;
   }
 }
