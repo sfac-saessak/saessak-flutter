@@ -95,6 +95,22 @@ class PlantController extends GetxController {
     getPlants();
   }
 
+  // 식물 삭제
+  deletePlant(String plantId) async {
+    isLoading(true);
+    await DBService(uid: user.uid).deletePlant(plantId);
+    isLoading(false);
+    Get.back();
+    getPlants();
+  }
+
+  // 심은지 며칠
+  int getDaysSincePlanting(Timestamp time) {
+    DateTime plantingDate = time.toDate();
+    int daysSincePlanting = DateTime.now().difference(plantingDate).inDays;
+    return daysSincePlanting;
+  }
+
   @override
   void onInit() {
     super.onInit();

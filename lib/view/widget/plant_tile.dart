@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:saessak_flutter/view/page/plant/plant_detail_page.dart';
 
 import '../../model/plant.dart';
 import '../../util/app_color.dart';
@@ -13,24 +15,30 @@ class PlantTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(30),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-        decoration: BoxDecoration(
-          color: AppColor.white,
-        ),
-        child: Column(
-          children: [
-            plant.imageUrl != null
-              ? Container(
-                width: double.infinity,
-                height: 150,
-                color: Colors.grey[300],
-                child: Image.network(plant.imageUrl!, fit: BoxFit.cover)
-              )
-              : Container(),
-            Text('${plant.name}'),
-            Text('${plant.species}', style: AppTextStyle.body3_m(color: AppColor.primary)),
-          ],
+      child: GestureDetector(
+        onTap: () {
+          Get.to(() => PlantDetailPage(plant: plant));
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          decoration: BoxDecoration(
+            color: AppColor.white,
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: 200,
+                height: 200,
+                child: CircleAvatar(
+                  backgroundColor: AppColor.black20,
+                  backgroundImage: plant.imageUrl != null ? NetworkImage(plant.imageUrl!) : null,
+                  child: plant.imageUrl != null ? null : Icon(Icons.person, color: AppColor.white),
+                ),
+              ),
+              Text('${plant.name}'),
+              Text('${plant.species}', style: AppTextStyle.body3_m(color: AppColor.primary)),
+            ],
+          ),
         ),
       ),
     );

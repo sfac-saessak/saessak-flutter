@@ -39,6 +39,7 @@ class DBService {
     }
   }
 
+  // uid로 유저 정보 가져오기
   getUserInfoById(String uid) {
     final userDocRef = userCollection.doc(uid);
     final userDoc = userDocRef.get().then((snapshot) {
@@ -56,8 +57,13 @@ class DBService {
     });
   }
 
+  // 식물 가져오기
   Future getPlants() async {
     return plantsCollection.doc(uid).collection("plant").orderBy('createdAt', descending: true).get();
+  }
+
+  Future deletePlant(String plantId) async {
+    await plantsCollection.doc(uid).collection("plant").doc(plantId).delete();
   }
 
 
