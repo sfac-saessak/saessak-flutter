@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../controller/plant/plant_controller.dart';
 import '../../../model/plant.dart';
 import '../../../util/app_color.dart';
+import 'add_plant_page.dart';
 
 class PlantDetailPage extends StatelessWidget {
   const PlantDetailPage({Key? key, required this.plant}) : super(key: key);
@@ -23,7 +24,9 @@ class PlantDetailPage extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: (){},
+            onPressed: (){
+              Get.off(() => AddPlantPage(plant: plant));
+            },
             icon: Icon(Icons.edit),
           ),
           IconButton(

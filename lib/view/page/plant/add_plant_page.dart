@@ -4,32 +4,53 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../controller/plant/plant_controller.dart';
+import '../../../model/plant.dart';
 import '../../../util/app_color.dart';
 import '../../../util/app_text_style.dart';
 import '../../widget/app_text_field.dart';
 
 class AddPlantPage extends GetView<PlantController> {
-  const AddPlantPage({Key? key}) : super(key: key);
+  const AddPlantPage({Key? key, this.plant}) : super(key: key);
+  
+  final Plant? plant;
 
   @override
   Widget build(BuildContext context) {
+    if (plant != null) {
+      controller.nameController.text = plant!.name;
+      controller.speciesController.text = plant!.species;
+      controller.plantingDate(plant!.plantingDate);
+      controller.optimalTemperatureController.text = plant!.optimalTemperature;
+      controller.wateringCycleController.text = plant!.wateringCycle.toString();
+      controller.lightRequirementController.text = plant!.lightRequirement;
+      controller.memoController.text = plant!.memo!;
+    }
+
     return Scaffold(
       backgroundColor: AppColor.white,
       appBar: AppBar(
-        title: Text('식물 등록'),
+        title: Text(plant == null ? '식물 등록' : '식물 수정'),
         centerTitle: true,
         backgroundColor: AppColor.white,
         foregroundColor: AppColor.black,
         elevation: 0,
         actions: [
-          TextButton(
-            onPressed: () {
-              controller.addPlant();
-              Get.back();
-              Get.snackbar('식물', '등록 완');
-            },
-            child: Text('등록'),
-          )
+          plant == null
+            ? TextButton(
+                onPressed: () {
+                  controller.addPlant();
+                  Get.back();
+                  Get.snackbar('식물', '등록 완');
+                },
+                child: Text('등록'),
+              )
+            : TextButton(
+                onPressed: () {
+                  controller.editPlant(plant!);
+                  Get.snackbar('식물', '수정 완');
+                },
+                child: Text('수정'),
+              )
         ],
       ),
       body: Obx(
@@ -52,7 +73,11 @@ class AddPlantPage extends GetView<PlantController> {
                         ),
                         child: controller.selectedImage.value != null
                             ? Image.file(controller.selectedImage.value!, fit: BoxFit.cover)
-                            : Icon(Icons.add, color: AppColor.black60, size: 30),
+                            : plant == null
+                              ? Icon(Icons.add, color: AppColor.black60, size: 30)
+                              : plant!.imageUrl != null
+                                ? Image.network(plant!.imageUrl!, fit: BoxFit.cover)
+                                : Icon(Icons.add, color: AppColor.black60, size: 30),
                       ),
                       Row(
                         children: [

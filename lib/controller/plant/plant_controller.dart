@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:saessak_flutter/view/page/plant/plant_detail_page.dart';
 
 import '../../model/plant.dart';
 import '../../service/db_service.dart';
@@ -28,7 +29,7 @@ class PlantController extends GetxController {
   Rxn<File> selectedImage = Rxn();                     // 추가한 사진
   RxBool isLoading = false.obs;                        // 로딩중 상태
 
-  RxList<Plant> plantList = <Plant>[].obs;
+  RxList<Plant> plantList = <Plant>[].obs;             // 식물 리스트
 
   // 이미지 선택
   void selectImage() async {
@@ -91,6 +92,15 @@ class PlantController extends GetxController {
 
     await DBService(uid: user.uid).addPlant(plant);
     isLoading(false);
+
+    nameController.clear();
+    speciesController.clear();
+    wateringCycleController.clear();
+    optimalTemperatureController.clear();
+    lightRequirementController.clear();
+    memoController.clear();
+    plantingDate(null);
+    selectedImage(null);
     Get.back();
     getPlants();
   }
@@ -101,6 +111,46 @@ class PlantController extends GetxController {
     await DBService(uid: user.uid).deletePlant(plantId);
     isLoading(false);
     Get.back();
+    getPlants();
+  }
+
+  // 식물 수정
+  editPlant(Plant plant) async {
+    final plantDocRef = DBService().plantsCollection.doc(user.uid).collection("plant").doc(plant.plantId);
+
+    if (selectedImage.value != null) {
+      await FirebaseStorage.instance.refFromURL(plant.imageUrl!).delete();
+      var ref = FirebaseStorage.instance.ref('plants/${user.uid}/${DateTime.now()}');
+      await ref.putFile(selectedImage.value!);
+      var downloadUrl = await ref.getDownloadURL();
+      plant.imageUrl = downloadUrl;
+    }
+
+    await plantDocRef.update({
+      'name': nameController.text,
+      'species': speciesController.text,
+      'plantingDate': plantingDate.value!,
+      'optimalTemperature': optimalTemperatureController.text,
+      'wateringCycle': int.tryParse(wateringCycleController.text)!,
+      'lightRequirement': lightRequirementController.text,
+      'memo': memoController.text,
+      'imageUrl': plant.imageUrl,
+    });
+
+    var data = await plantDocRef.get();
+
+    plant = Plant.fromMap(data.data()!);
+
+    nameController.clear();
+    speciesController.clear();
+    wateringCycleController.clear();
+    optimalTemperatureController.clear();
+    lightRequirementController.clear();
+    memoController.clear();
+    plantingDate(null);
+    selectedImage(null);
+
+    Get.off(PlantDetailPage(plant: plant));
     getPlants();
   }
 

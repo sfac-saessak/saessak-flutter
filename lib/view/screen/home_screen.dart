@@ -17,7 +17,7 @@ class HomeScreen extends GetView<PlantController> {
       child: Column(
         children: [
           IconButton(
-            onPressed: () => Get.to(() => AddPlantPage()),
+            onPressed: () => Get.to(() => AddPlantPage(plant: null)),
             icon: Icon(Icons.add),
           ),
           Expanded(
