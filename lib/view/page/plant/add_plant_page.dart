@@ -23,7 +23,11 @@ class AddPlantPage extends GetView<PlantController> {
         elevation: 0,
         actions: [
           TextButton(
-            onPressed: controller.addPlant,
+            onPressed: () {
+              controller.addPlant();
+              Get.back();
+              Get.snackbar('식물', '등록 완');
+            },
             child: Text('등록'),
           )
         ],

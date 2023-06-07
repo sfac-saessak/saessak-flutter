@@ -1,4 +1,5 @@
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,6 +15,8 @@ import '../../service/db_service.dart';
 class PlantController extends GetxController {
   User get user => FirebaseAuth.instance.currentUser!;
 
+  PageController pageController = PageController(initialPage: 0);
+
   TextEditingController nameController = TextEditingController();                // 애칭
   TextEditingController speciesController = TextEditingController();             // 종
   TextEditingController wateringCycleController = TextEditingController();       // 급수 주기
@@ -24,6 +27,8 @@ class PlantController extends GetxController {
   Rx<Timestamp?> plantingDate = Rx<Timestamp?>(null);  // 심은 날짜
   Rxn<File> selectedImage = Rxn();                     // 추가한 사진
   RxBool isLoading = false.obs;                        // 로딩중 상태
+
+  RxList<Plant> plantList = <Plant>[].obs;
 
   // 이미지 선택
   void selectImage() async {
@@ -51,6 +56,16 @@ class PlantController extends GetxController {
     }
   }
 
+  // 식물 가져오기
+  getPlants() async {
+    isLoading(true);
+    QuerySnapshot snapshot = await DBService(uid: user.uid).getPlants();
+    plantList(snapshot.docs.map((doc) => Plant.fromMap(doc.data() as Map<String, dynamic>)).toList());
+    isLoading(false);
+
+    pageController.jumpToPage(0);
+  }
+
   // 식물 추가
   addPlant() async {
     var imageUrl;
@@ -69,13 +84,20 @@ class PlantController extends GetxController {
       optimalTemperature: optimalTemperatureController.text,
       wateringCycle: int.tryParse(wateringCycleController.text)!,
       lightRequirement: lightRequirementController.text,
+      createdAt: Timestamp.now(),
       memo: memoController.text,
       imageUrl: imageUrl,
     );
 
     await DBService(uid: user.uid).addPlant(plant);
     isLoading(false);
-    Get.snackbar('${plant.name}', '등록 완');
     Get.back();
+    getPlants();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    getPlants();
   }
 }

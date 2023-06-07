@@ -56,6 +56,10 @@ class DBService {
     });
   }
 
+  Future getPlants() async {
+    return plantsCollection.doc(uid).collection("plant").orderBy('createdAt', descending: true).get();
+  }
+
 
   // 챌린지 생성
   Future createChallenge(Challenge challenge) async {

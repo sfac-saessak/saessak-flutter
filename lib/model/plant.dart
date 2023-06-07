@@ -9,6 +9,7 @@ class Plant {
   String optimalTemperature;  // 최적 온도
   int wateringCycle;          // 급수 주기
   String lightRequirement;    // 빛 요구도
+  Timestamp createdAt;        // 생성 시간
   String? memo;               // 메모
   String? imageUrl;           // 이미지
 
@@ -20,6 +21,7 @@ class Plant {
     required this.optimalTemperature,
     required this.wateringCycle,
     required this.lightRequirement,
+    required this.createdAt,
     this.memo,
     this.imageUrl,
   });
@@ -35,6 +37,7 @@ class Plant {
       'lightRequirement': this.lightRequirement,
       'memo': this.memo,
       'imageUrl': this.imageUrl,
+      'createdAt': this.createdAt,
     };
   }
 
@@ -47,6 +50,7 @@ class Plant {
       optimalTemperature: map['optimalTemperature'] as String,
       wateringCycle: map['wateringCycle'] as int,
       lightRequirement: map['lightRequirement'] as String,
+      createdAt: map['createdAt'] as Timestamp,
       memo: map['memo'] as String?,
       imageUrl: map['imageUrl'] as String?,
     );
