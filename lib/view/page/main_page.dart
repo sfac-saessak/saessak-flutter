@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../controller/main_controller.dart';
 import '../../util/app_color.dart';
 import 'challenge/search_challenge_page.dart';
-import 'friends_page.dart';
+import 'friends/friends_page.dart';
 
 class MainPage extends GetView<MainController> {
   const MainPage({Key? key}) : super(key: key);
