@@ -15,11 +15,13 @@ class DBService {
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
   final CollectionReference challengeCollection = FirebaseFirestore.instance.collection("challenges");
   final CollectionReference plantsCollection = FirebaseFirestore.instance.collection("plants");
+  final CollectionReference followCollection = FirebaseFirestore.instance.collection("follow");
 
   // 사용자 정보 저장
   saveUserInfoToFirestore(User user) async {
     final userDocRef = userCollection.doc(user.uid);
     final userDocSnapshot = await userDocRef.get();
+    final userFollowDocRef = followCollection.doc(user.uid);
 
     if (userDocSnapshot.exists) {
       // 문서가 이미 존재하는 경우 업데이트
@@ -35,6 +37,10 @@ class DBService {
         "challenges": [],
         'name': user.displayName,
         'profileImg': user.photoURL,
+      });
+      await userFollowDocRef.set({
+        'following': [],
+        'follower': [],
       });
     }
   }
@@ -70,6 +76,31 @@ class DBService {
   // 친구 검색
   Future searchFriend(String email) async {
     return userCollection.where('email', isEqualTo: email).get();
+  }
+
+  // 팔로우/팔로우 취소
+  Future toggleUserFollow(String uid) async {
+    final userFollowDocRef = followCollection.doc(this.uid);
+    final friendFollowDocRef = followCollection.doc(uid);
+
+    DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
+    List<dynamic> following = await documentSnapshot['following'];
+
+    if (following.contains(uid)) {
+      await userFollowDocRef.update({
+        'following': FieldValue.arrayRemove([uid])
+      });
+      await friendFollowDocRef.update({
+        'follower': FieldValue.arrayRemove([this.uid])
+      });
+    } else {
+      await userFollowDocRef.update({
+        'following': FieldValue.arrayUnion([uid])
+      });
+      await friendFollowDocRef.update({
+        'follower': FieldValue.arrayUnion([this.uid])
+      });
+    }
   }
 
   // 챌린지 생성

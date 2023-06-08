@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../controller/follow/friends_controller.dart';
 import '../../../util/app_color.dart';
 import '../../widget/app_text_field.dart';
+import '../../widget/friend_tile.dart';
 
 class SearchFriendScreen extends GetView<FriendsController> {
   const SearchFriendScreen({Key? key}) : super(key: key);
@@ -40,32 +41,7 @@ class SearchFriendScreen extends GetView<FriendsController> {
           ),
           SizedBox(height: 20),
           Obx(() => controller.searchResult.value != null
-            ? ListTile(
-                leading: CircleAvatar(
-                  radius: 36,
-                  backgroundColor: Colors.grey,
-                  child: controller.searchResult.value!.profileImg == null ? Icon(Icons.person, color: Colors.white) : null,
-                  backgroundImage: controller.searchResult.value!.profileImg != null
-                      ? NetworkImage(controller.searchResult.value!.profileImg!)
-                      : null,
-                ),
-                title: Text(controller.searchResult.value!.name),
-                subtitle: Text(controller.searchResult.value!.email),
-                // trailing: Container(
-                //   width: 80,
-                //   child: ElevatedButton(
-                //     style: ElevatedButton.styleFrom(
-                //         shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(30.0),
-                //         ),
-                //         elevation: 0
-                //     ),
-                //     onPressed: controller.followFriend,
-                //     child: Text('팔로우', style: NotoSans.regular),
-                //   ),
-                // ),
-              )
-              : Container(),
+            ? FriendTile(user: controller.searchResult.value!) : Container(),
           )
         ],
       ),
