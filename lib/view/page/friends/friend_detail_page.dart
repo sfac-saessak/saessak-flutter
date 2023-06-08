@@ -109,7 +109,7 @@ class FriendDetailPage extends GetView<FriendDetailController> {
                     Expanded(
                       child: Column(
                         children: [
-                          Text('0', style: AppTextStyle.body1_m()),
+                          Text('${controller.postList.length}', style: AppTextStyle.body1_m()),
                           SizedBox(height: 6),
                           Container(
                             width: double.infinity,
