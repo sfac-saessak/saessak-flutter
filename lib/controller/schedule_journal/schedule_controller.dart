@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
+import '../../model/schedule/event.dart';
 import '../../service/local_notification.dart';
-import '../../view/screen/schedule_journal_screen.dart';
 
 class ScheduleController extends GetxController {
 
