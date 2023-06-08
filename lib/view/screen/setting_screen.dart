@@ -34,7 +34,10 @@ class SettingScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${FirebaseAuth.instance.currentUser!.displayName}'),
-                Text('${FirebaseAuth.instance.currentUser!.email}'),
+                Text(
+                  '${FirebaseAuth.instance.currentUser!.email}',
+                  style: TextStyle(color: AppColor.black50),
+                ),
               ],
             ),
             Spacer(),
