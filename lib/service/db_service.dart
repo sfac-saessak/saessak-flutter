@@ -62,10 +62,15 @@ class DBService {
     return plantsCollection.doc(uid).collection("plant").orderBy('createdAt', descending: true).get();
   }
 
+  // 식물 삭제
   Future deletePlant(String plantId) async {
     await plantsCollection.doc(uid).collection("plant").doc(plantId).delete();
   }
 
+  // 친구 검색
+  Future searchFriend(String email) async {
+    return userCollection.where('email', isEqualTo: email).get();
+  }
 
   // 챌린지 생성
   Future createChallenge(Challenge challenge) async {
