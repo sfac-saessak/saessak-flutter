@@ -6,11 +6,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:saessak_flutter/component/community/comment_card.dart';
 import 'package:saessak_flutter/model/community/post.dart';
+import 'package:saessak_flutter/model/user_model.dart';
 import 'package:saessak_flutter/view/page/community/post_detail_page.dart';
 import 'package:saessak_flutter/view/page/community/post_write_page.dart';
-import 'package:saessak_flutter/view/screen/community_screen.dart';
 
 class CommunityController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -20,6 +21,30 @@ class CommunityController extends GetxController
   Rxn<List<Post>> postList = Rxn([]);
   DocumentSnapshot? lastVisible;
   String curTab = '전체';
+  RefreshController communityRefreshController =
+      RefreshController(initialRefresh: false);
+
+  //새로고침
+  getRefresh() {
+    switch (curTab) {
+      case '전체': // '전체' 탭
+        getPosts();
+        communityRefreshController.refreshCompleted();
+        break;
+      case '정보': // '정보' 탭
+        getInfoPosts();
+        communityRefreshController.refreshCompleted();
+        break;
+      case '질문': // '질문' 탭
+        getQuestionPosts();
+        communityRefreshController.refreshCompleted();
+        break;
+      case '잡담': // '잡담' 탭
+        getTalkPosts();
+        communityRefreshController.refreshCompleted();
+        break;
+    }
+  }
 
   // 탭 컨트롤러
   late TabController communityTabController;
@@ -65,10 +90,16 @@ class CommunityController extends GetxController
         .orderBy('writeTime', descending: true)
         .limit(5)
         .get()
-        .then((documentSnapshots) {
+        .then((documentSnapshots) async {
       lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
-      postList.value =
-          documentSnapshots.docs.map((e) => Post.fromMap(e.data())).toList();
+      postList.value = await Future.wait(documentSnapshots.docs.map((e) async {
+        var resUser =
+            await db.collection('users').doc(e.data()['userUid']).get();
+        UserModel user = UserModel.fromMap(resUser.data()!);
+        Post post = Post.fromMap(e.data());
+        post.user = user;
+        return post;
+      }).toList());
     });
   }
 
@@ -207,7 +238,7 @@ class CommunityController extends GetxController
   // postCard 눌러 해당 postDetailPage로 이동하기
   goPost(Post post) async {
     // 조회수 증가
-    if (FirebaseAuth.instance.currentUser!.uid != post.userInfo['uid']) {
+    if (FirebaseAuth.instance.currentUser!.uid != post.userUid) {
       // 조회수 증가 대상 판별
       await db
           .collection('community')
@@ -217,11 +248,18 @@ class CommunityController extends GetxController
       print('조회수 증가 대상 해당하지 않음');
     }
 
+    // 해당 포스트의 유저정보 가져오기
+    var userRes = await db.collection('users').doc(post.userUid).get();
+    UserModel user = UserModel.fromMap(userRes.data()!);
+
     // 해당 포스트의 댓글 가져오기
-    await Get.find<CommunityController>().getComments(post);
+    await getComments(post);
 
     // 해당 포스트로 이동
-    Get.to(PostDetailPage(post: post));
+    Get.to(PostDetailPage(
+      post: post,
+      user: user,
+    ));
   }
 
 // #### post_write_page controll
@@ -252,15 +290,17 @@ class CommunityController extends GetxController
         title: '업로드중입니다.',
         content: CircularProgressIndicator());
 
+    // modify
+    var userRes = await db
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    UserModel user = UserModel.fromMap(userRes.data()!);
+
     // 2. 사진 url 포함한 데이터 db에 업로드(doc 생성)
     var res = await db.collection('community').add({
       'writeTime': DateTime.now(),
-      'userInfo': {
-        'uid': FirebaseAuth.instance.currentUser!.uid,
-        'nickName': FirebaseAuth.instance.currentUser!.displayName,
-        'profileImg': FirebaseAuth.instance.currentUser!.photoURL,
-        'email': FirebaseAuth.instance.currentUser!.email
-      },
+      'userUid': user.uid,
       'tag': dropDownVal.value,
       'title': titleController.text,
       'content': contentController.text,
@@ -287,6 +327,7 @@ class CommunityController extends GetxController
         {'postId': res.id, 'imgUrlList': imgDownloadUrlList},
         SetOptions(merge: true));
 
+    // 현재 유저정보 가져오기
     var data = await db.collection('community').doc('${res.id}').get();
     Post post = Post.fromMap(data.data()!);
 
@@ -298,7 +339,10 @@ class CommunityController extends GetxController
 
     // 작성 완료 후 작성한 페이지로 이동
     Get.back();
-    Get.off(PostDetailPage(post: post)); // 왜 이전 write페이지가 스택에서 삭제가 안될까잉
+    Get.off(PostDetailPage(
+      post: post,
+      user: user,
+    )); // 왜 이전 write페이지가 스택에서 삭제가 안될까잉
 
     // 로딩중 끝
   }
@@ -309,7 +353,7 @@ class CommunityController extends GetxController
   // 게시글 수정 1 - 기존 작성한 게시글을 post로 받아 게시글 작성페이지로 이동하는 함수
   moveToModifyPostPage(Post post) {
     //
-    if (FirebaseAuth.instance.currentUser!.uid == post.userInfo['uid']) {
+    if (FirebaseAuth.instance.currentUser!.uid == post.userUid) {
       Get.off(PostWritePage(post: post));
     } else {
       Get.snackbar('권한이 없습니다.', '글의 작성자와 현재 사용자가 일치하지 않습니다.');
@@ -338,14 +382,17 @@ class CommunityController extends GetxController
         imgDownloadUrlList.add(fileUrl);
       }
     }
+
+    // 유저정보 받아오기
+    var userRes = await db
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    UserModel user = UserModel.fromMap(userRes.data()!);
+
     // 파이어스토어에 수정된 게시글 업로드
     await db.collection('community').doc(post.postId).set({
-      'userInfo': {
-        'uid': FirebaseAuth.instance.currentUser!.uid,
-        'nickName': FirebaseAuth.instance.currentUser!.displayName,
-        'profileImg': FirebaseAuth.instance.currentUser!.photoURL,
-        'email': FirebaseAuth.instance.currentUser!.email
-      },
+      'userUid': user.uid,
       'tag': dropDownVal.value,
       'title': titleController.text,
       'content': contentController.text,
@@ -363,12 +410,15 @@ class CommunityController extends GetxController
 
     // 수정 완료 후 수정한 페이지로 이동
     Get.back();
-    Get.off(PostDetailPage(post: post));
+    Get.off(PostDetailPage(
+      post: post,
+      user: user,
+    ));
   }
 
   // ## 게시글 삭제
   removePost(Post post) async {
-    if (FirebaseAuth.instance.currentUser!.uid == post.userInfo['uid']) {
+    if (FirebaseAuth.instance.currentUser!.uid == post.userUid) {
       // 게시글 작성페이지로 이동
       await db.collection('community').doc(post.postId).delete();
       await getPosts();
@@ -379,7 +429,7 @@ class CommunityController extends GetxController
   }
 
   // ## comment 받아오기
-  Rxn<List> commentList = Rxn([]);
+  Rxn<List> commentCardList = Rxn([]);
   getComments(Post post) async {
     var res = await db
         .collection('community')
@@ -387,7 +437,20 @@ class CommunityController extends GetxController
         .collection('comments')
         .orderBy('writeTime')
         .get();
-    commentList.value = res.docs;
+    List commentList = res.docs;
+    commentCardList.value = await Future.wait(commentList.map((e) async {
+      var resUser =
+          await db.collection('users').doc(e.data()['userUid']).get();
+      UserModel user = UserModel.fromMap(resUser.data()!);
+      return CommentCard(
+          user: user,
+          nickName: user.name,
+          content: e.data()['content'],
+          writeTime: e.data()['writeTime'],
+          commentId: e.id,
+          post: post,
+          authorUid: e.data()['userUid']);
+    }).toList());
   }
 
   // ## 댓글업로드
@@ -395,12 +458,7 @@ class CommunityController extends GetxController
     // 해당 post의 postId 이용하여 post doc > comments collection > comment doc 에 작성
     final docRef = db.collection('community').doc(post.postId);
     var res = await docRef.collection('comments').add({
-      'userInfo': {
-        'uid': FirebaseAuth.instance.currentUser!.uid,
-        'nickName': FirebaseAuth.instance.currentUser!.displayName,
-        'profileImg': FirebaseAuth.instance.currentUser!.photoURL,
-        'email': FirebaseAuth.instance.currentUser!.email
-      },
+      'userUid':  FirebaseAuth.instance.currentUser!.uid,
       'content': content,
       'reportNum': 0,
       'writeTime': DateTime.now()
@@ -440,18 +498,10 @@ class CommunityController extends GetxController
 // 시간 변환 함수
   String convertTime(Timestamp time) {
     DateTime writeTime = time.toDate();
-
     Duration difference = DateTime.now().difference(writeTime);
-
-    if (difference.inDays > 0) {
-      return '${difference.inDays} 일 전';
-    }
-    if (difference.inDays <= 0 && difference.inHours > 0) {
-      return '${difference.inHours} 시간 전';
-    }
-    if (difference.inDays <= 0 && difference.inHours <= 0) {
-      return '${difference.inMinutes} 분 전';
-    }
+    if (difference.inDays > 0) { return '${difference.inDays} 일 전'; }
+    if (difference.inDays <= 0 && difference.inHours > 0) { return '${difference.inHours} 시간 전'; }
+    if (difference.inDays <= 0 && difference.inHours <= 0) { return '${difference.inMinutes} 분 전'; }
     return '?';
   }
 
