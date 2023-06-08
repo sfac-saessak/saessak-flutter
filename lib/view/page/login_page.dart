@@ -30,8 +30,14 @@ class LoginPage extends GetView<LoginController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/logo.png',fit: BoxFit.fill,),
-                    Image.asset('assets/images/title.png',fit: BoxFit.fill,),
+                    Image.asset(
+                      'assets/images/logo.png',
+                      fit: BoxFit.fill,
+                    ),
+                    Image.asset(
+                      'assets/images/title.png',
+                      fit: BoxFit.fill,
+                    ),
                     SizedBox(height: 50),
                     Column(
                       children: [
@@ -47,12 +53,13 @@ class LoginPage extends GetView<LoginController> {
                           onChanged: controller.onChanged,
                           hintText: '비밀번호',
                           errorText: controller.pwErrorText.value ?? null,
+                          isObscured: controller.isObscured.value,
                           suffixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.remove_red_eye,
-                                color: AppColor.grey,
-                              )),
+                            onPressed: controller.changeObscure,
+                            icon: Image.asset(color: AppColor.black40,controller.isObscured.value
+                                ? '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeoff.png'
+                                : '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeon.png'),
+                          ),
                         ),
                       ],
                     ),

@@ -4,6 +4,7 @@ import 'package:saessak_flutter/component/login/custom_button.dart';
 import 'package:saessak_flutter/component/login/custom_text_field.dart';
 
 import '../../controller/signup_controller.dart';
+import '../../util/app_color.dart';
 
 class SignupPage extends GetView<SignupController> {
   const SignupPage({Key? key}) : super(key: key);
@@ -44,6 +45,13 @@ class SignupPage extends GetView<SignupController> {
                     ),
                     SizedBox(height: 16.0),
                     CustomTextField(
+                      isObscured: controller.isObscured.value,
+                          suffixIcon: IconButton(
+                            onPressed: controller.changeObscure,
+                            icon: Image.asset(color: AppColor.black40,controller.isObscured.value
+                                ? '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeoff.png'
+                                : '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeon.png'),
+                          ),
                       controller: controller.pwController,
                       hintText: '비밀번호',
                       errorText: controller.pwErrorText.value,
@@ -54,6 +62,13 @@ class SignupPage extends GetView<SignupController> {
                     ),
                     SizedBox(height: 16.0),
                     CustomTextField(
+                      isObscured: controller.isObscured.value,
+                          suffixIcon: IconButton(
+                            onPressed: controller.changeObscure,
+                            icon: Image.asset(color: AppColor.black40,controller.isObscured.value
+                                ? '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeoff.png'
+                                : '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeon.png'),
+                          ),
                       controller: controller.pwConfirmController,
                       hintText: '비밀번호 확인',
                       errorText: controller.pwConfirmErrorText.value,

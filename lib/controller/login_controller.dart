@@ -10,6 +10,13 @@ class LoginController extends GetxController {
   RxnString emailErrorText = RxnString(); // 이메일 입력란 에러메세지
   RxnString pwErrorText = RxnString(); // 비밀번호 입력란 에러메세지
    RxBool isValidLogin = false.obs; // 로그인 버튼 활성화 위한 bool
+   RxBool isObscured = true.obs; // 옵스큐어 버튼 활성화 위한 bool
+
+   changeObscure(){
+    isObscured.value = !isObscured.value;
+    print(isObscured.value);
+
+   }
 
   login() {
     AuthController().login(emailController.text, pwController.text);
