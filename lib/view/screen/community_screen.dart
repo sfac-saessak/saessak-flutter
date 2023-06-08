@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:saessak_flutter/component/community/post_card.dart';
 import 'package:saessak_flutter/controller/community/community_controller.dart';
 import 'package:saessak_flutter/view/page/community/post_write_page.dart';
@@ -36,36 +37,40 @@ class CommunityScreen extends GetView<CommunityController> {
           ),
           Expanded(
             child: Obx(
-              () => ListView.builder(
-                  itemCount: controller.postList.value!.length,
-                  itemBuilder: (context, index) {
-                    if (controller.curTab == '전체') {
-                      if ((index) % 5 == 4 &&
-                          controller.postList.value!.length - 1 == index) {
-                        controller.getMorePosts();
+              () => SmartRefresher(
+                controller: controller.communityRefreshController,
+                onRefresh: controller.getRefresh,
+                child: ListView.builder(
+                    itemCount: controller.postList.value!.length,
+                    itemBuilder: (context, index) {
+                      if (controller.curTab == '전체') {
+                        if ((index) % 5 == 4 &&
+                            controller.postList.value!.length - 1 == index) {
+                          controller.getMorePosts();
+                        }
                       }
-                    }
-                    if (controller.curTab == '정보') {
-                      if ((index) % 5 == 4 &&
-                          controller.postList.value!.length - 1 == index) {
-                        controller.getMoreInfoPosts();
+                      if (controller.curTab == '정보') {
+                        if ((index) % 5 == 4 &&
+                            controller.postList.value!.length - 1 == index) {
+                          controller.getMoreInfoPosts();
+                        }
                       }
-                    }
-                    if (controller.curTab == '질문') {
-                      if ((index) % 5 == 4 &&
-                          controller.postList.value!.length - 1 == index) {
-                        controller.getMoreQuestionPosts();
+                      if (controller.curTab == '질문') {
+                        if ((index) % 5 == 4 &&
+                            controller.postList.value!.length - 1 == index) {
+                          controller.getMoreQuestionPosts();
+                        }
                       }
-                    }
-                    if (controller.curTab == '잡담') {
-                      if ((index) % 5 == 4 &&
-                          controller.postList.value!.length - 1 == index) {
-                        controller.getMoreTalkPosts();
+                      if (controller.curTab == '잡담') {
+                        if ((index) % 5 == 4 &&
+                            controller.postList.value!.length - 1 == index) {
+                          controller.getMoreTalkPosts();
+                        }
                       }
-                    }
-
-                    return PostCard(post: controller.postList.value![index]);
-                  }),
+              
+                      return PostCard(post: controller.postList.value![index]);
+                    }),
+              ),
             ),
           )
         ],
