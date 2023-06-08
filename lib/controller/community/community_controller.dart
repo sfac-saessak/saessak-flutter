@@ -94,7 +94,7 @@ class CommunityController extends GetxController
       lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
       postList.value = await Future.wait(documentSnapshots.docs.map((e) async {
         var resUser =
-            await db.collection('users').doc(e.data()['userInfo']['uid']).get();
+            await db.collection('users').doc(e.data()['userUid']).get();
         UserModel user = UserModel.fromMap(resUser.data()!);
         Post post = Post.fromMap(e.data());
         post.user = user;
@@ -392,12 +392,7 @@ class CommunityController extends GetxController
 
     // 파이어스토어에 수정된 게시글 업로드
     await db.collection('community').doc(post.postId).set({
-      'userInfo': {
-        'uid': user.uid,
-        'nickName': user.name,
-        'profileImg': user.profileImg,
-        'email': user.email
-      },
+      'userUid': user.uid,
       'tag': dropDownVal.value,
       'title': titleController.text,
       'content': contentController.text,
@@ -445,7 +440,7 @@ class CommunityController extends GetxController
     List commentList = res.docs;
     commentCardList.value = await Future.wait(commentList.map((e) async {
       var resUser =
-          await db.collection('users').doc(e.data()['userInfo']['uid']).get();
+          await db.collection('users').doc(e.data()['userUid']).get();
       UserModel user = UserModel.fromMap(resUser.data()!);
       return CommentCard(
           user: user,
@@ -454,7 +449,7 @@ class CommunityController extends GetxController
           writeTime: e.data()['writeTime'],
           commentId: e.id,
           post: post,
-          authorUid: e.data()['userInfo']['uid']);
+          authorUid: e.data()['userUid']);
     }).toList());
   }
 
@@ -463,12 +458,7 @@ class CommunityController extends GetxController
     // 해당 post의 postId 이용하여 post doc > comments collection > comment doc 에 작성
     final docRef = db.collection('community').doc(post.postId);
     var res = await docRef.collection('comments').add({
-      'userInfo': {
-        'uid': FirebaseAuth.instance.currentUser!.uid,
-        'nickName': FirebaseAuth.instance.currentUser!.displayName,
-        'profileImg': FirebaseAuth.instance.currentUser!.photoURL,
-        'email': FirebaseAuth.instance.currentUser!.email
-      },
+      'userUid':  FirebaseAuth.instance.currentUser!.uid,
       'content': content,
       'reportNum': 0,
       'writeTime': DateTime.now()
