@@ -1,96 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/controller/community/community_controller.dart';
-
-import '../../../component/community/comment_card.dart';
+import 'package:saessak_flutter/util/app_color.dart';
+import 'package:saessak_flutter/util/app_text_style.dart';
 import '../../../model/community/post.dart';
+import '../../../model/user_model.dart';
 
 enum SampleItem { itemOne, itemTwo, itemThree }
 
 class PostDetailPage extends GetView<CommunityController> {
-  const PostDetailPage({super.key, required this.post});
+  const PostDetailPage({super.key, required this.post, required this.user});
 
   final Post post;
+  final UserModel user;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('게시글'),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: AppColor.black,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ListView(children: [
-          Row(
-            children: [
-              Chip(label: Text(post.tag)),
-              Text(
-                post.title,
-                style: TextStyle(fontSize: 30),
-                maxLines: 3,
-              ),
-            ],
+        child: ListView(
+          children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  child: Chip(label: Text(post.tag, style: AppTextStyle.body4_m().copyWith(color: AppColor.white),), backgroundColor: AppColor.primary,)),
+              ],
+            ),
           ),
-          Text(controller.convertTime(post.writeTime)),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundImage: user.profileImg != null ? NetworkImage(user.profileImg!) : null,
+                      ),
+                      SizedBox(width: 10,),
+                      Text(user.name, style: AppTextStyle.body1_m(), maxLines: 1, overflow: TextOverflow.ellipsis,),
+                    ],
+                  ),
+                ),
+                PopupMenuButton(
+                  onSelected: (value) {
+                    if (value == SampleItem.itemOne) {
+                      controller.moveToModifyPostPage(post);
+                    }
+                    if (value == SampleItem.itemTwo) {
+                      controller.removePost(post);
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<SampleItem>>[
+                    const PopupMenuItem(
+                      value: SampleItem.itemOne,
+                      child: Text('게시글 수정'),
+                    ),
+                    const PopupMenuItem<SampleItem>(
+                      value: SampleItem.itemTwo,
+                      child: Text('게시글 삭제'),
+                    ),
+                    const PopupMenuItem<SampleItem>(
+                      value: SampleItem.itemThree,
+                      child: Text('신고하기'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Divider(color: AppColor.black,),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              post.title,
+              style: AppTextStyle.header3(),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Divider(color: AppColor.black,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                  child: Text(
-                      '${DateTime.fromMillisecondsSinceEpoch(post.writeTime.millisecondsSinceEpoch)}')),
+              Text(controller.convertTime(post.writeTime)),
               Text('조회수 ${post.views}'),
-              PopupMenuButton(
-                onSelected: (value) {
-                  if (value == SampleItem.itemOne) {
-                    controller.moveToModifyPostPage(post);
-                  }
-                  if (value == SampleItem.itemTwo) {
-                    controller.removePost(post);
-                  }
-                },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<SampleItem>>[
-                  const PopupMenuItem(
-                    value: SampleItem.itemOne,
-                    child: Text('게시글 수정'),
-                  ),
-                  const PopupMenuItem<SampleItem>(
-                    value: SampleItem.itemTwo,
-                    child: Text('게시글 삭제'),
-                  ),
-                  const PopupMenuItem<SampleItem>(
-                    value: SampleItem.itemThree,
-                    child: Text('신고하기'),
-                  ),
-                ],
-              ),
             ],
           ),
-          Divider(),
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.green,
-                backgroundImage: post.userInfo['profileImg'] != null
-                    ? NetworkImage(post.userInfo['profileImg'])
-                    : null,
-                child: Text('프로필이미지'),
-              ),
-              Text(post.userInfo['nickName']),
-            ],
-          ),
-          Divider(),
+          SizedBox(height: 15,),
+
           ...post.imgUrlList.map((e) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: Get.width * 0.7,
-                height: Get.height * 0.25,
-                child: Image.network('$e'),
+                width: Get.width * 0.76,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.network('$e')),
               ),
             );
           }).toList(),
-
-          Text(post.content),
+          SizedBox(height: 15,),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(post.content),
+          ),
           SizedBox(
             height: 100,
           ),
@@ -99,7 +127,7 @@ class PostDetailPage extends GetView<CommunityController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('댓글 0'),
+              Text('댓글 ${post.commentsNum}', style: AppTextStyle.body4_b(),),
               TextButton(
                 child: Text('댓글 작성'),
                 onPressed: () async {
@@ -124,24 +152,9 @@ class PostDetailPage extends GetView<CommunityController> {
           ),
           Obx(
             () => Column(
-              children:
-                  Get.find<CommunityController>().commentList.value != null
-                      ? Get.find<CommunityController>()
-                          .commentList
-                          .value!
-                          .map(
-                            (e) => CommentCard(
-                              nickName: e.data()['userInfo']['nickName'],
-                              content: e.data()['content'],
-                              writeTime: e.data()['writeTime'],
-                              commentId: e.id,
-                              post: post,
-                              authorUid: e.data()['userInfo']['uid'],
-                            ),
-                          )
-                          .toList()
-                      : [],
-            ),
+                children: controller.commentCardList.value != null
+                    ? [...controller.commentCardList.value!]
+                    : []),
           ),
         ]),
       ),

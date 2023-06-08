@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:saessak_flutter/model/user_model.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 class Post {
 
-final Map userInfo;
+final String userUid;
 final String title; 
 final String content;
 final List imgUrlList;
@@ -16,9 +17,10 @@ final Timestamp writeTime;
 final String tag;
 final String postId; 
 final int commentsNum;
+UserModel? user;
 
   Post({
-    required this.userInfo,
+    required this.userUid,
     required this.title,
     required this.content,
     required this.imgUrlList,
@@ -27,13 +29,14 @@ final int commentsNum;
     required this.writeTime,
     required this.tag,
     required this.postId,
-    required this.commentsNum
+    required this.commentsNum,
+    this.user
   });
 
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'userInfo': userInfo,
+      'userUid': userUid,
       'title': title,
       'content': content,
       'imgUrlList': imgUrlList,
@@ -47,7 +50,7 @@ final int commentsNum;
 
   factory Post.fromMap(Map<String, dynamic> map) {
     return Post(
-      userInfo: map['userInfo'] as Map,
+      userUid: map['userUid'] as String,
       title: map['title'] as String,
       content: map['content'] as String,
       imgUrlList: map['imgUrlList'] as List,
