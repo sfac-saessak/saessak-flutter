@@ -74,16 +74,9 @@ class AuthController extends GetxController {
     await Future.delayed(2500.milliseconds); // 스플래시 화면 기다림
     FirebaseAuth.instance.authStateChanges().listen((value) {
       user(value);
-
       if (value != null) {
-        print('유저 $user');
         // 유저가 있는 상태
-        if (user.value!.metadata.creationTime!
-            .add(Duration(seconds: 1))
-            .isAfter(user.value!.metadata.lastSignInTime!)) {
-          // 계정 생성 후 첫 로그인
-
-          print('원래 코드 : ${user.value!}');
+        if (user.value!.displayName == null) {
           Get.offAllNamed(AppRoutes.setName);
         } else {
           Get.offNamed(AppRoutes.main);
