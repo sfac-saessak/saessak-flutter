@@ -11,6 +11,13 @@ class SignupController extends GetxController {
   RxnString pwErrorText = RxnString(); // 비밀번호 입력란 에러메세지
   RxnString pwConfirmErrorText = RxnString(); // 비밀번호 입력란 에러메세지
   RxBool isValidSignUp = false.obs; // 회원가입 버튼 활성화 위한 bool
+  RxBool isObscured = true.obs; // 옵스큐어 버튼 활성화 위한 bool
+
+   changeObscure(){
+    isObscured.value = !isObscured.value;
+    print(isObscured.value);
+
+   }
 
   // 이메일 입력란 onChanged 함수
   emailOnChanged() {

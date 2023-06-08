@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/controller/community/community_controller.dart';
 import 'package:saessak_flutter/model/community/post.dart';
+import 'package:saessak_flutter/util/app_color.dart';
+import 'package:saessak_flutter/util/app_text_style.dart';
 import 'package:saessak_flutter/view/page/community/post_detail_page.dart';
 
 class PostCard extends StatelessWidget {
@@ -22,45 +24,72 @@ class PostCard extends StatelessWidget {
         },
         child: SizedBox(
             height: 240,
-            child: Card(
-              child: Column(children: [
-                Row(
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColor.white,
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Chip(label: Text(post.tag)),
-                    Text(post.title),
-                  ],
-                ),
-                Divider(),
-                Row(
-                  children: [
-                    Text(
-                      post.content,
-                      maxLines: 7,
-                    ),
-                    if (post.imgUrlList.isNotEmpty)
-                      Container(
-                        child: Image.network(
-                          post.imgUrlList[0],
-                          fit: BoxFit.cover,
-                        ),
-                        color: Colors.grey,
-                        height: Get.height * 0.1,
-                        width: Get.height * 0.1,
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(post.title, style: AppTextStyle.body2_m()),
                       ),
-                  ],
-                ),
-                Divider(),
-                Text('작성자: ${post.userInfo['nickName']}'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(Get.find<CommunityController>()
-                        .convertTime(post.writeTime)),
-                    Text('조회수${post.views}'),
-                    Text('댓글수${post.commentsNum}'),
-                  ],
-                )
-              ]),
+                    ],
+                  ),
+                  Divider(color: AppColor.primary, thickness: 1),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              post.content,
+                              maxLines: 5,
+                              style: AppTextStyle.body2_r().copyWith(color: AppColor.darkGrey),
+                            ),
+                          ),
+                          if (post.imgUrlList.isNotEmpty)
+                            AspectRatio(
+                              aspectRatio: 1.0,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: Image.network(
+                                  post.imgUrlList[0],
+                                  fit: BoxFit.cover,                                
+                                ),
+                               
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  Text(post.user != null ? post.user!.name : '작성자이름', style: AppTextStyle.body4_m(),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(Get.find<CommunityController>()
+                            .convertTime(post.writeTime), style: AppTextStyle.body4_m().copyWith(color: AppColor.primary,),),
+                      ),
+                      Icon(Icons.remove_red_eye_outlined),
+                      Text(post.views.toString()),
+                      SizedBox(width: 10,),
+                      Icon(Icons.message_sharp),
+                      Text(post.commentsNum.toString()),
+                    ],
+                  )
+                ]),
+              ),
             )),
       ),
     );

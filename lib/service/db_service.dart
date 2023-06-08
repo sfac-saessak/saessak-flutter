@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../model/challenge.dart';
 import '../model/message.dart';
+import '../model/plant.dart';
 
 class DBService {
   final String? uid;
@@ -13,6 +14,7 @@ class DBService {
 
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
   final CollectionReference challengeCollection = FirebaseFirestore.instance.collection("challenges");
+  final CollectionReference plantsCollection = FirebaseFirestore.instance.collection("plants");
 
   // 사용자 정보 저장
   saveUserInfoToFirestore(User user) async {
@@ -37,6 +39,7 @@ class DBService {
     }
   }
 
+  // uid로 유저 정보 가져오기
   getUserInfoById(String uid) {
     final userDocRef = userCollection.doc(uid);
     final userDoc = userDocRef.get().then((snapshot) {
@@ -44,6 +47,25 @@ class DBService {
     });
     return userDoc;
   }
+
+  // 식물 저장
+  Future addPlant(Plant plant) async {
+    DocumentReference plantDocRef = await plantsCollection.doc(uid).collection("plant").add(plant.toMap());
+
+    await plantDocRef.update({
+      'plantId': plantDocRef.id,
+    });
+  }
+
+  // 식물 가져오기
+  Future getPlants() async {
+    return plantsCollection.doc(uid).collection("plant").orderBy('createdAt', descending: true).get();
+  }
+
+  Future deletePlant(String plantId) async {
+    await plantsCollection.doc(uid).collection("plant").doc(plantId).delete();
+  }
+
 
   // 챌린지 생성
   Future createChallenge(Challenge challenge) async {

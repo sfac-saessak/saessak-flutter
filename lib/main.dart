@@ -7,6 +7,8 @@ import 'package:saessak_flutter/controller/schedule_journal/schedule_controller.
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
 import 'controller/challenge/challenge_controller.dart';
 import 'controller/challenge/chat_controller.dart';
+import 'controller/follow/friends_controller.dart';
+import 'controller/plant/plant_controller.dart';
 import 'controller/reset_password_controller.dart';
 import 'firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => ChallengeController(), fenix: true);
         Get.lazyPut(() => ChatController(), fenix: true);
         Get.lazyPut(() => ResetPasswordController(), fenix: true);
+        Get.lazyPut(() => PlantController(), fenix: true);
+        Get.lazyPut(() => FriendsController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.splash,

@@ -11,7 +11,8 @@ class CustomTextField extends StatelessWidget {
       this.onChanged,
       this.errorText,
       this.formKey,
-      this.validator});
+      this.validator,
+      this.isObscured});
 
   final TextEditingController controller;
   final String hintText;
@@ -20,10 +21,12 @@ class CustomTextField extends StatelessWidget {
   final String? errorText;
   final GlobalKey<FormState>? formKey;
   final String? Function(String?)? validator;
+  final bool? isObscured;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: isObscured??false,
       key: formKey ?? null,
       validator: validator,
       controller: controller,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,10 +7,10 @@ import '../view/screen/schedule_journal_screen.dart';
 import '../view/screen/setting_screen.dart';
 import '../view/screen/challenge/challenge_screen.dart';
 
-
 class MainController extends GetxController {
   var pageController = PageController();
-  RxInt curPage = 0.obs;
+  RxInt _curPage = 0.obs;
+  int get curPage => _curPage.value;
 
   List<Widget> screens = [
     HomeScreen(),
@@ -22,14 +21,13 @@ class MainController extends GetxController {
   ];
 
   onPageTapped(int v) {
-    pageController.jumpToPage(v);
-    curPage(v);
+    _curPage(v);
   }
 
   @override
   void onClose() {
     super.onClose();
     pageController.dispose();
-    curPage(0);
+    _curPage(0);
   }
 }
