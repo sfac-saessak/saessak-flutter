@@ -7,6 +7,7 @@ import 'package:saessak_flutter/controller/schedule_journal/schedule_controller.
 import 'package:saessak_flutter/view/screen/splash_screen.dart';
 import 'controller/challenge/challenge_controller.dart';
 import 'controller/challenge/chat_controller.dart';
+import 'controller/follow/friend_detail_controller.dart';
 import 'controller/follow/friends_controller.dart';
 import 'controller/plant/plant_controller.dart';
 import 'controller/reset_password_controller.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => ResetPasswordController(), fenix: true);
         Get.lazyPut(() => PlantController(), fenix: true);
         Get.lazyPut(() => FriendsController(), fenix: true);
+        Get.lazyPut(() => FriendDetailController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.splash,

@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +14,7 @@ class SearchFriendScreen extends GetView<FriendsController> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       padding: EdgeInsets.all(20),
       child: Column(
@@ -40,8 +43,20 @@ class SearchFriendScreen extends GetView<FriendsController> {
             ),
           ),
           SizedBox(height: 20),
-          Obx(() => controller.searchResult.value != null
-            ? FriendTile(user: controller.searchResult.value!) : Container(),
+          Obx(()
+            {
+              if (controller.searchResult.value != null) {
+                RxBool isFollowed = RxBool(false);
+                controller.isUserFollowed(controller.searchResult.value!.uid).then((value) {
+                  log('$value');
+                  isFollowed(value);
+                });
+                return FriendTile(
+                  user: controller.searchResult.value!, isFollowed: isFollowed);
+              } else {
+                return Container();
+              }
+            },
           )
         ],
       ),

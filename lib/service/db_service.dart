@@ -17,6 +17,7 @@ class DBService {
   final CollectionReference challengeCollection = FirebaseFirestore.instance.collection("challenges");
   final CollectionReference plantsCollection = FirebaseFirestore.instance.collection("plants");
   final CollectionReference followCollection = FirebaseFirestore.instance.collection("follow");
+  final CollectionReference communityCollection = FirebaseFirestore.instance.collection("community");
 
   // 사용자 정보 저장
   saveUserInfoToFirestore(User user) async {
@@ -117,13 +118,27 @@ class DBService {
     }
   }
 
-  // 팔로우중인 유저 가져오기
-  Future getFollowing() async {
-    final userFollowDocRef = followCollection.doc(this.uid);
+  // 팔로잉 가져오기
+  Future getFollowing(String uid) async {
+    final userFollowDocRef = followCollection.doc(uid);
     DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
 
     List<dynamic> following = await documentSnapshot['following'];
     return following;
+  }
+
+  // 팔로워 가져오기
+  Future getFollower(String uid) async {
+    final userFollowDocRef = followCollection.doc(uid);
+    DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
+
+    List<dynamic> follower = await documentSnapshot['follower'];
+    return follower;
+  }
+
+  // 유저 게시글 가져오기
+  getUserPosts(String uid) async {
+    return communityCollection.where('userUid', isEqualTo: uid).get();
   }
 
   // 챌린지 생성

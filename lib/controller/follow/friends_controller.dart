@@ -43,7 +43,7 @@ class FriendsController extends GetxController with GetSingleTickerProviderState
   // 팔로우중인 유저 가져오기
   getFollowing() async {
     isLoading(true);
-    var uidList = await DBService(uid: user.uid).getFollowing();
+    var uidList = await DBService().getFollowing(user.uid);
     List<UserModel> following = [];
     for (var uid in uidList) {
       var userInfo = await getUserInfoById(uid);
