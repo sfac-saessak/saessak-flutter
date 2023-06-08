@@ -35,9 +35,7 @@ class FriendTile extends StatelessWidget {
               ),
               elevation: 0
           ),
-          onPressed: () async {
-            await DBService(uid: FirebaseAuth.instance.currentUser!.uid).toggleUserFollow(user.uid);
-          },
+          onPressed: () => controller.toggleUserFollow(user.uid),
           child: Text('팔로우'),
         ),
       ),

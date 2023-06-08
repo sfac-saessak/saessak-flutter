@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 import '../model/challenge.dart';
 import '../model/message.dart';
@@ -101,6 +102,28 @@ class DBService {
         'follower': FieldValue.arrayUnion([this.uid])
       });
     }
+  }
+
+  // 팔로우중인 유저인지 판별
+  Future<bool> isUserFollowed(String uid) async {
+    final userFollowDocRef = followCollection.doc(this.uid);
+    DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
+
+    List<dynamic> following = await documentSnapshot['following'];
+    if (following.contains(uid)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // 팔로우중인 유저 가져오기
+  Future getFollowing() async {
+    final userFollowDocRef = followCollection.doc(this.uid);
+    DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
+
+    List<dynamic> following = await documentSnapshot['following'];
+    return following;
   }
 
   // 챌린지 생성
