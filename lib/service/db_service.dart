@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 import '../model/challenge.dart';
 import '../model/message.dart';
@@ -15,11 +16,14 @@ class DBService {
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
   final CollectionReference challengeCollection = FirebaseFirestore.instance.collection("challenges");
   final CollectionReference plantsCollection = FirebaseFirestore.instance.collection("plants");
+  final CollectionReference followCollection = FirebaseFirestore.instance.collection("follow");
+  final CollectionReference communityCollection = FirebaseFirestore.instance.collection("community");
 
   // 사용자 정보 저장
   saveUserInfoToFirestore(User user) async {
     final userDocRef = userCollection.doc(user.uid);
     final userDocSnapshot = await userDocRef.get();
+    final userFollowDocRef = followCollection.doc(user.uid);
 
     if (userDocSnapshot.exists) {
       // 문서가 이미 존재하는 경우 업데이트
@@ -35,6 +39,10 @@ class DBService {
         "challenges": [],
         'name': user.displayName,
         'profileImg': user.photoURL,
+      });
+      await userFollowDocRef.set({
+        'following': [],
+        'follower': [],
       });
     }
   }
@@ -62,10 +70,76 @@ class DBService {
     return plantsCollection.doc(uid).collection("plant").orderBy('createdAt', descending: true).get();
   }
 
+  // 식물 삭제
   Future deletePlant(String plantId) async {
     await plantsCollection.doc(uid).collection("plant").doc(plantId).delete();
   }
 
+  // 친구 검색
+  Future searchFriend(String email) async {
+    return userCollection.where('email', isEqualTo: email).get();
+  }
+
+  // 팔로우/팔로우 취소
+  Future toggleUserFollow(String uid) async {
+    final userFollowDocRef = followCollection.doc(this.uid);
+    final friendFollowDocRef = followCollection.doc(uid);
+
+    DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
+    List<dynamic> following = await documentSnapshot['following'];
+
+    if (following.contains(uid)) {
+      await userFollowDocRef.update({
+        'following': FieldValue.arrayRemove([uid])
+      });
+      await friendFollowDocRef.update({
+        'follower': FieldValue.arrayRemove([this.uid])
+      });
+    } else {
+      await userFollowDocRef.update({
+        'following': FieldValue.arrayUnion([uid])
+      });
+      await friendFollowDocRef.update({
+        'follower': FieldValue.arrayUnion([this.uid])
+      });
+    }
+  }
+
+  // 팔로우중인 유저인지 판별
+  Future<bool> isUserFollowed(String uid) async {
+    final userFollowDocRef = followCollection.doc(this.uid);
+    DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
+
+    List<dynamic> following = await documentSnapshot['following'];
+    if (following.contains(uid)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // 팔로잉 가져오기
+  Future getFollowing(String uid) async {
+    final userFollowDocRef = followCollection.doc(uid);
+    DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
+
+    List<dynamic> following = await documentSnapshot['following'];
+    return following;
+  }
+
+  // 팔로워 가져오기
+  Future getFollower(String uid) async {
+    final userFollowDocRef = followCollection.doc(uid);
+    DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
+
+    List<dynamic> follower = await documentSnapshot['follower'];
+    return follower;
+  }
+
+  // 유저 게시글 가져오기
+  getUserPosts(String uid) async {
+    return communityCollection.where('userUid', isEqualTo: uid).get();
+  }
 
   // 챌린지 생성
   Future createChallenge(Challenge challenge) async {
