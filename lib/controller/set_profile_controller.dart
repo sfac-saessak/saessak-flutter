@@ -36,7 +36,6 @@ class SetProfileController extends GetxController {
       var ref = FirebaseStorage.instance.ref('profile/${user!.uid}');
       await ref.putFile(selectedImage.value!);
       var downloadUrl = await ref.getDownloadURL();
-      print(downloadUrl);
       user!.updatePhotoURL(downloadUrl);
     }
 
