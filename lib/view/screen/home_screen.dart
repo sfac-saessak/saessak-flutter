@@ -22,15 +22,15 @@ class HomeScreen extends GetView<PlantController> {
           ),
           Expanded(
             child: Obx(
-              () => controller.isLoading.value
-                ? Center(child: CircularProgressIndicator())
-                : PageView.builder(
-                  controller: controller.pageController,
-                  itemCount: controller.plantList.length,
-                  itemBuilder: (context, index) {
-                    return PlantTile(plant: controller.plantList[index]);
-                  }
-                ),
+              () => PageView.builder(
+                controller: controller.pageController,
+                itemCount: controller.plantList.length,
+                itemBuilder: (context, index) {
+                  return controller.isLoading.value
+                    ? Center(child: CircularProgressIndicator())
+                    : PlantTile(plant: controller.plantList[index]);
+                }
+              ),
             )
           )
         ],
