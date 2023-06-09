@@ -34,11 +34,16 @@ class Journal {
   factory Journal.fromMap(Map<String, dynamic> map) {
     return Journal(
       journalId: map['journalId'] as String?,
-      plant: Plant.fromMap(map['plant']),
+      plant: map['plant'] as Plant,
       writeTime: map['writeTime'] as Timestamp,
       bookmark: map['bookmark'] as bool,
       content: map['content'] as String,
       imageUrl: map['imageUrl'] as String?,
     );
+  }
+
+  @override
+  String toString() {
+    return 'Journal{plant: $plant, content: $content}';
   }
 }
