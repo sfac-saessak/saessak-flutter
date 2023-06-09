@@ -2,9 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/schedule_journal/journal_controller.dart';
 import '../../page/schedule_journal/journal/add_journal_page.dart';
 
-class JournalScreen extends StatelessWidget {
+class JournalScreen extends GetView<JournalController> {
   const JournalScreen({super.key});
 
   @override
@@ -13,7 +14,11 @@ class JournalScreen extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: (){
-            Get.to(() => AddJournalPage());
+            if (controller.plantList.length <= 0) {
+              Get.snackbar('식물없음', '식물추가부터해라');
+            } else {
+              Get.to(() => AddJournalPage());
+            }
           },
           child: Text('일지 등록'),
         )

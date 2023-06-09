@@ -55,4 +55,9 @@ class Plant {
       imageUrl: map['imageUrl'] as String?,
     );
   }
+
+  @override
+  String toString() {
+    return 'Plant{name: $name}';
+  }
 }
