@@ -269,6 +269,7 @@ class CommunityController extends GetxController
       []; // List<Xfile> 형식을 firestore에 업로드 후, 다운로드url을 받아 imgDownloadUrlList에 넣어준 뒤, 해당 리스트를 DB > post의 field에 넣어주는 방식
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
+  PageController photoPageController = PageController(); // 사진첨부 페이지 컨트롤러
 
   // 사진 첨부 버튼 함수
   addPhoto() async {
