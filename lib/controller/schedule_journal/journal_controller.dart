@@ -47,6 +47,7 @@ class JournalController extends GetxController {
 
     Journal journal = Journal(
       plant: selectedPlant.value,
+      uid: user.uid,
       writeTime: Timestamp.now(),
       bookmark: false,
       content: contentController.text,
@@ -65,7 +66,7 @@ class JournalController extends GetxController {
   // 일지 가져오기
   void readJournal() async {
     isLoading(true);
-    QuerySnapshot snapshot = await DBService(uid: user.uid).readJournal();
+    QuerySnapshot snapshot = await DBService().readJournal(user.uid);
 
     var futureJournals = snapshot.docs.map((doc) async {
       var journal = doc.data() as Map<String, dynamic>;
@@ -73,6 +74,7 @@ class JournalController extends GetxController {
       var plant = Plant.fromMap(plantInfo);
       return Journal(
         plant: plant,
+        uid: journal['uid'],
         writeTime: journal['writeTime'],
         bookmark: journal['bookmark'],
         content: journal['content'],
@@ -89,7 +91,7 @@ class JournalController extends GetxController {
 
   // 식물id로 식물 정보 가져오기
   Future<Map<String, dynamic>> getPlantById(String plantId) async {
-    var plantInfo = await DBService(uid: user.uid).getPlantById(plantId);
+    var plantInfo = await DBService().getPlantById(user.uid, plantId);
     return plantInfo;
   }
 

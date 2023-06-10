@@ -161,12 +161,12 @@ class DBService {
   }
 
   // 일지 가져오기
-  Future readJournal() async {
+  Future readJournal(String uid) async {
     return journalsCollection.doc(uid).collection("journal").orderBy('writeTime', descending: true).get();
   }
 
   // plantId로 식물 정보 가져오기
-  getPlantById(String plantId) {
+  getPlantById(String uid, String plantId) {
     final plantDocRef = plantsCollection.doc(uid).collection("plant").doc(plantId);
     final plantDoc = plantDocRef.get().then((snapshot) {
       return snapshot.data() as Map<String, dynamic>;
