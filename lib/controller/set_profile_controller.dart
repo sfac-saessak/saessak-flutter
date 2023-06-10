@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -17,10 +16,12 @@ class SetProfileController extends GetxController {
   Rxn<File> selectedImage = Rxn();
   RxBool isEnableButton = false.obs; // 버튼 활성화 위한 bool
 
-  onChanged () {
-    if(nameController.text != null && nameController.text != ''){
+  onChanged() {
+    if (nameController.text != null && nameController.text != '') {
       isEnableButton.value = true;
-    } else { isEnableButton.value = false;}
+    } else {
+      isEnableButton.value = false;
+    }
   }
 
   addProfilePhoto() async {

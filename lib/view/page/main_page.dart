@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,14 +15,14 @@ class MainPage extends GetView<MainController> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        automaticallyImplyLeading: false,   // 자동 뒤로가기 버튼 생성 비활성화
+        automaticallyImplyLeading: false, // 자동 뒤로가기 버튼 생성 비활성화
         backgroundColor: Colors.white,
         foregroundColor: AppColor.black,
         elevation: 0,
         actions: [
           Obx(
             () {
-              if (controller.curPage.value == 0) {
+              if (controller.curPage == 0) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
@@ -31,7 +30,7 @@ class MainPage extends GetView<MainController> {
                     onPressed: () => Get.to(() => FriendsPage()),
                   ),
                 );
-              } else if(controller.curPage.value == 3) {
+              } else if (controller.curPage == 3) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
@@ -47,13 +46,12 @@ class MainPage extends GetView<MainController> {
         ],
       ),
       body: PageView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        controller: controller.pageController,
-        itemCount: controller.screens.length,
-        itemBuilder: (context, index) {
-          return controller.screens[index];
-        }
-      ),
+          physics: NeverScrollableScrollPhysics(),
+          controller: controller.pageController,
+          itemCount: controller.screens.length,
+          itemBuilder: (context, index) {
+            return Obx(() => controller.screens[controller.curPage]);
+          }),
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
           backgroundColor: Colors.white,
@@ -61,12 +59,14 @@ class MainPage extends GetView<MainController> {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.green,
           onTap: controller.onPageTapped,
-          currentIndex: controller.curPage.value,
+          currentIndex: controller.curPage,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '일정일지'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_month), label: '일정일지'),
             BottomNavigationBarItem(icon: Icon(Icons.chat), label: '게시판'),
-            BottomNavigationBarItem(icon: Icon(Icons.emoji_events), label: '챌린지'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.emoji_events), label: '챌린지'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
           ],
         ),

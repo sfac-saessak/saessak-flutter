@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,12 +21,11 @@ class SettingScreen extends StatelessWidget {
               height: 150,
               child: CircleAvatar(
                 backgroundColor: AppColor.black20,
-                backgroundImage:
-                  FirebaseAuth.instance.currentUser!.photoURL != null
+                backgroundImage: FirebaseAuth.instance.currentUser!.photoURL !=
+                        null
                     ? NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!)
                     : null,
-                child:
-                  FirebaseAuth.instance.currentUser!.photoURL != null
+                child: FirebaseAuth.instance.currentUser!.photoURL != null
                     ? null
                     : Icon(Icons.person, color: AppColor.white),
               ),
@@ -36,17 +34,19 @@ class SettingScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${FirebaseAuth.instance.currentUser!.displayName}'),
-                Text('${FirebaseAuth.instance.currentUser!.email}'),
+                Text(
+                  '${FirebaseAuth.instance.currentUser!.email}',
+                  style: TextStyle(color: AppColor.black50),
+                ),
               ],
             ),
             Spacer(),
             IconButton(
-              onPressed: (){
-                // Get.toNamed(AppRoutes.setName);
+              onPressed: () {
+                Get.toNamed(AppRoutes.setName);
               },
               icon: Icon(Icons.edit),
             ),
-            SizedBox(width: 30),
           ],
         ),
         Padding(
@@ -59,8 +59,7 @@ class SettingScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                   elevation: 0,
-                  backgroundColor: Colors.red
-              ),
+                  backgroundColor: Colors.red),
               onPressed: Get.find<AuthController>().logout,
               child: Text('로그아웃'),
             ),
