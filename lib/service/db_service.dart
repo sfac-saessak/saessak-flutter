@@ -174,6 +174,11 @@ class DBService {
     return plantDoc;
   }
 
+  // 일지 삭제
+  Future deleteJournal(String journalId) async {
+    await journalsCollection.doc(uid).collection("journal").doc(journalId).delete();
+  }
+
 
   /* ############################## 챌린지 ############################## */
   // 챌린지 생성

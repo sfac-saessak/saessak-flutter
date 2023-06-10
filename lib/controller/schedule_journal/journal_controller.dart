@@ -131,6 +131,15 @@ class JournalController extends GetxController {
     readJournal();
   }
 
+  // 일지 삭제
+  deleteJournal(String journalId) async {
+    isLoading(true);
+    await DBService(uid: user.uid).deleteJournal(journalId);
+    isLoading(false);
+    Get.back();
+    readJournal();
+  }
+
   // 식물id로 식물 정보 가져오기
   Future<Map<String, dynamic>> getPlantById(String plantId) async {
     var plantInfo = await DBService().getPlantById(user.uid, plantId);

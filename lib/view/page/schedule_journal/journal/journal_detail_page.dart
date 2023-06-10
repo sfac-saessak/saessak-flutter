@@ -25,13 +25,15 @@ class JournalDetailPage extends StatelessWidget {
         actions: journal.uid == controller.user.uid
           ? [
             IconButton(
-              onPressed: (){
+              onPressed: () {
                 Get.off(() => AddJournalPage(journal: journal));
               },
               icon: Icon(Icons.edit)
             ),
             IconButton(
-              onPressed: (){},
+              onPressed: () {
+                controller.deleteJournal(journal.journalId!);
+              },
               icon: Icon(Icons.delete)
             ),
           ]: null,
