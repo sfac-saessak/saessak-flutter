@@ -1,17 +1,21 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'plant.dart';
+
 class Journal {
-  String journalId;     // 일지 식별자
-  String plantId;       // 대상 식물 id
+  String? journalId;    // 일지 식별자
+  Plant plant;          // 대상 식물
+  String uid;           // 작성자 uid
   Timestamp writeTime;  // 작성 날짜
   bool bookmark;        // 북마크 여부
   String content;       // 일지 내용
   String? imageUrl;     // 이미지
 
   Journal({
-    required this.journalId,
-    required this.plantId,
+    this.journalId,
+    required this.plant,
+    required this.uid,
     required this.writeTime,
     required this.bookmark,
     required this.content,
@@ -21,7 +25,8 @@ class Journal {
   Map<String, dynamic> toMap() {
     return {
       'journalId': this.journalId,
-      'plantId': this.plantId,
+      'plant': plant.plantId,
+      'uid': this.uid,
       'writeTime': this.writeTime,
       'bookmark': this.bookmark,
       'content': this.content,
@@ -31,12 +36,18 @@ class Journal {
 
   factory Journal.fromMap(Map<String, dynamic> map) {
     return Journal(
-      journalId: map['journalId'] as String,
-      plantId: map['plantId'] as String,
+      journalId: map['journalId'] as String?,
+      plant: map['plant'] as Plant,
+      uid: map['uid'] as String,
       writeTime: map['writeTime'] as Timestamp,
       bookmark: map['bookmark'] as bool,
       content: map['content'] as String,
       imageUrl: map['imageUrl'] as String?,
     );
+  }
+
+  @override
+  String toString() {
+    return 'Journal{plant: $plant, content: $content}';
   }
 }

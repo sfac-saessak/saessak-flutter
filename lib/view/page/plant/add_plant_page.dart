@@ -59,12 +59,12 @@ class AddPlantPage extends GetView<PlantController> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
-                child: GestureDetector(
-                  onTap: controller.selectImage,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: controller.selectImage,
+                      child: Container(
                         width: 150,
                         height: 150,
                         decoration: BoxDecoration(
@@ -79,84 +79,84 @@ class AddPlantPage extends GetView<PlantController> {
                                 ? Image.network(plant!.imageUrl!, fit: BoxFit.cover)
                                 : Icon(Icons.add, color: AppColor.black60, size: 30),
                       ),
-                      Row(
-                        children: [
-                          Text('애칭', style: AppTextStyle.body3_m()),
-                          SizedBox(width: 24),
-                          Expanded(child: AppTextField(hintText: '애칭', controller: controller.nameController)),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text('종류', style: AppTextStyle.body3_m()),
-                          SizedBox(width: 24),
-                          Expanded(child: AppTextField(hintText: '종류', controller: controller.speciesController)),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text('기간', style: AppTextStyle.body3_m()),
-                          SizedBox(width: 24),
-                          GestureDetector(
-                            onTap: controller.selectDate,
-                            child: Container(
-                              padding: EdgeInsets.only(left: 2, right: 2, bottom: 3),
-                              width: 110,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: AppColor.black20,
-                                    width: 1.0,
-                                  ),
+                    ),
+                    Row(
+                      children: [
+                        Text('애칭', style: AppTextStyle.body3_m()),
+                        SizedBox(width: 24),
+                        Expanded(child: AppTextField(hintText: '애칭', controller: controller.nameController)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('종류', style: AppTextStyle.body3_m()),
+                        SizedBox(width: 24),
+                        Expanded(child: AppTextField(hintText: '종류', controller: controller.speciesController)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('기간', style: AppTextStyle.body3_m()),
+                        SizedBox(width: 24),
+                        GestureDetector(
+                          onTap: controller.selectDate,
+                          child: Container(
+                            padding: EdgeInsets.only(left: 2, right: 2, bottom: 3),
+                            width: 110,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: AppColor.black20,
+                                  width: 1.0,
                                 ),
                               ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    controller.plantingDate.value != null
-                                        ? '${DateFormat("yyyy-MM-dd").format(controller.plantingDate.value!.toDate())}'
-                                        : '선택',
-                                    style: AppTextStyle.body3_m(),
-                                  ),
-                                  Spacer(),
-                                  Icon(Icons.calendar_today, size: 16, color: AppColor.primary60),
-                                ],
-                              ),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  controller.plantingDate.value != null
+                                      ? '${DateFormat("yyyy-MM-dd").format(controller.plantingDate.value!.toDate())}'
+                                      : '선택',
+                                  style: AppTextStyle.body3_m(),
+                                ),
+                                Spacer(),
+                                Icon(Icons.calendar_today, size: 16, color: AppColor.primary60),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text('급수주기', style: AppTextStyle.body3_m()),
-                          SizedBox(width: 24),
-                          Expanded(child: AppTextField(hintText: '00일', controller: controller.wateringCycleController)),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text('최적온도', style: AppTextStyle.body3_m()),
-                          SizedBox(width: 24),
-                          Expanded(child: AppTextField(hintText: '00~00°', controller: controller.optimalTemperatureController)),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text('빛 요구도', style: AppTextStyle.body3_m()),
-                          SizedBox(width: 24),
-                          Expanded(child: AppTextField(hintText: '00~00°', controller: controller.lightRequirementController)),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text('메모', style: AppTextStyle.body3_m()),
-                          SizedBox(width: 24),
-                          Expanded(child: AppTextField(hintText: '간단한 메모', controller: controller.memoController)),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('급수주기', style: AppTextStyle.body3_m()),
+                        SizedBox(width: 24),
+                        Expanded(child: AppTextField(hintText: '00일', controller: controller.wateringCycleController)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('최적온도', style: AppTextStyle.body3_m()),
+                        SizedBox(width: 24),
+                        Expanded(child: AppTextField(hintText: '00~00°', controller: controller.optimalTemperatureController)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('빛 요구도', style: AppTextStyle.body3_m()),
+                        SizedBox(width: 24),
+                        Expanded(child: AppTextField(hintText: '00~00°', controller: controller.lightRequirementController)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('메모', style: AppTextStyle.body3_m()),
+                        SizedBox(width: 24),
+                        Expanded(child: AppTextField(hintText: '간단한 메모', controller: controller.memoController)),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],

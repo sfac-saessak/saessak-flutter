@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../model/challenge.dart';
+import '../model/journal.dart';
 import '../model/message.dart';
 import '../model/plant.dart';
 
@@ -18,7 +19,10 @@ class DBService {
   final CollectionReference plantsCollection = FirebaseFirestore.instance.collection("plants");
   final CollectionReference followCollection = FirebaseFirestore.instance.collection("follow");
   final CollectionReference communityCollection = FirebaseFirestore.instance.collection("community");
+  final CollectionReference journalsCollection = FirebaseFirestore.instance.collection("journals");
 
+
+  /* ############################## 유저 정보 ############################## */
   // 사용자 정보 저장
   saveUserInfoToFirestore(User user) async {
     final userDocRef = userCollection.doc(user.uid);
@@ -56,6 +60,8 @@ class DBService {
     return userDoc;
   }
 
+
+  /* ############################## 식물 관리 ############################## */
   // 식물 저장
   Future addPlant(Plant plant) async {
     DocumentReference plantDocRef = await plantsCollection.doc(uid).collection("plant").add(plant.toMap());
@@ -75,6 +81,8 @@ class DBService {
     await plantsCollection.doc(uid).collection("plant").doc(plantId).delete();
   }
 
+
+  /* ############################## 친구 관리 ############################## */
   // 친구 검색
   Future searchFriend(String email) async {
     return userCollection.where('email', isEqualTo: email).get();
@@ -141,6 +149,38 @@ class DBService {
     return communityCollection.where('userUid', isEqualTo: uid).get();
   }
 
+
+  /* ############################## 일지 ############################## */
+  // 일지 저장
+  Future addJournal(Journal journal) async {
+    DocumentReference journalDocRef = await journalsCollection.doc(uid).collection("journal").add(journal.toMap());
+
+    await journalDocRef.update({
+      'journalId': journalDocRef.id,
+    });
+  }
+
+  // 일지 가져오기
+  Future readJournal(String uid) async {
+    return journalsCollection.doc(uid).collection("journal").orderBy('writeTime', descending: true).get();
+  }
+
+  // plantId로 식물 정보 가져오기
+  getPlantById(String uid, String plantId) {
+    final plantDocRef = plantsCollection.doc(uid).collection("plant").doc(plantId);
+    final plantDoc = plantDocRef.get().then((snapshot) {
+      return snapshot.data() as Map<String, dynamic>;
+    });
+    return plantDoc;
+  }
+
+  // 일지 삭제
+  Future deleteJournal(String journalId) async {
+    await journalsCollection.doc(uid).collection("journal").doc(journalId).delete();
+  }
+
+
+  /* ############################## 챌린지 ############################## */
   // 챌린지 생성
   Future createChallenge(Challenge challenge) async {
     DocumentReference challengeDocumentReference = await challengeCollection.add({
