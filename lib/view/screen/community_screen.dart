@@ -15,13 +15,16 @@ class CommunityScreen extends GetView<CommunityController> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            controller.titleController.text = '';
-            controller.contentController.text = '';
-            controller.imgXfileList.value = [];
-            Get.to(() => PostWritePage());
-          },
-          child: Text('글쓰기')),
+        onPressed: () {
+          controller.titleController.text = '';
+          controller.contentController.text = '';
+          controller.imgXfileList.value = [];
+          Get.to(() => PostWritePage());
+        },
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: Image.asset('assets/images/Icons_pen.png'),
+      ),
       body: Column(
         children: [
           // 상단 탭 바
@@ -67,7 +70,7 @@ class CommunityScreen extends GetView<CommunityController> {
                           controller.getMoreTalkPosts();
                         }
                       }
-              
+
                       return PostCard(post: controller.postList.value![index]);
                     }),
               ),
