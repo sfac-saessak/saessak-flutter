@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:saessak_flutter/view/page/schedule_journal/journal/add_journal_page.dart';
 
 import '../../../../controller/schedule_journal/journal_controller.dart';
 import '../../../../model/journal.dart';
@@ -23,13 +24,22 @@ class JournalDetailPage extends StatelessWidget {
         elevation: 0,
         actions: journal.uid == controller.user.uid
           ? [
-            IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.delete)),
+            IconButton(
+              onPressed: (){
+                Get.off(() => AddJournalPage(journal: journal));
+              },
+              icon: Icon(Icons.edit)
+            ),
+            IconButton(
+              onPressed: (){},
+              icon: Icon(Icons.delete)
+            ),
           ]: null,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -49,10 +59,9 @@ class JournalDetailPage extends StatelessWidget {
             ),
             Text('${journal.content}'),
             Container(
-              width: double.infinity,
+              width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: AppColor.black20,
                 image: journal.imageUrl != null ? DecorationImage(image: NetworkImage(journal.imageUrl!)) : null,
               ),
             ),

@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:saessak_flutter/view/page/schedule_journal/journal/journal_detail_page.dart';
 
 import '../../model/journal.dart';
 import '../../model/plant.dart';
@@ -74,6 +75,7 @@ class JournalController extends GetxController {
       var plant = Plant.fromMap(plantInfo);
       return Journal(
         plant: plant,
+        journalId: journal['journalId'],
         uid: journal['uid'],
         writeTime: journal['writeTime'],
         bookmark: journal['bookmark'],
@@ -89,6 +91,46 @@ class JournalController extends GetxController {
     isLoading(false);
   }
 
+  // 일지 수정
+  editJournal(Journal journal) async {
+    log('journalId => ${journal.journalId}');
+    final journalDocRef = DBService().journalsCollection.doc(user.uid).collection("journal").doc(journal.journalId);
+
+    if (selectedImage.value != null) {
+      await FirebaseStorage.instance.refFromURL(journal.imageUrl!).delete();
+      var ref = FirebaseStorage.instance.ref('journals/${user.uid}/${DateTime.now()}');
+      await ref.putFile(selectedImage.value!);
+      var downloadUrl = await ref.getDownloadURL();
+      journal.imageUrl = downloadUrl;
+    }
+
+    await journalDocRef.update({
+      'content': contentController.text,
+      'imageUrl': journal.imageUrl,
+    });
+
+    var data = await journalDocRef.get();
+
+    var journalData = data.data() as Map<String, dynamic>;
+    var plantInfo = await getPlantById(journalData['plant']);
+    var plant = Plant.fromMap(plantInfo);
+    journal = Journal(
+      plant: plant,
+      journalId: journalData['journalId'],
+      uid: journalData['uid'],
+      writeTime: journalData['writeTime'],
+      bookmark: journalData['bookmark'],
+      content: journalData['content'],
+      imageUrl: journalData['imageUrl'],
+    );
+
+    contentController.clear();
+    selectedImage(null);
+
+    Get.off(JournalDetailPage(journal: journal));
+    readJournal();
+  }
+
   // 식물id로 식물 정보 가져오기
   Future<Map<String, dynamic>> getPlantById(String plantId) async {
     var plantInfo = await DBService().getPlantById(user.uid, plantId);
@@ -99,7 +141,6 @@ class JournalController extends GetxController {
   void onInit() {
     super.onInit();
     readJournal();
-    log('journalList => ${journalList}');
     try {
       selectedPlant = plantList[0].obs;
     } catch (e) {
