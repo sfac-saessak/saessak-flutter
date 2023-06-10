@@ -33,16 +33,24 @@ class ScheduleScreen extends GetView<ScheduleController> {
                 // leftChevronIcon: ,
                 // rightChevronIcon: ,
               ),
+              daysOfWeekStyle: DaysOfWeekStyle(
+                // weekendStyle: ,
+                // weekdayStyle: 
+              ),
+              onPageChanged: (focusedDay) {
+                controller.focusedDay.value = focusedDay;
+                controller.getMonthSchedule(focusedDay.month);
+              },
               calendarStyle: CalendarStyle(
                 defaultTextStyle: AppTextStyle.body4_b(),
                 todayTextStyle: AppTextStyle.body4_b(),
-                holidayTextStyle:
-                    AppTextStyle.body4_b().copyWith(color: Colors.blue),
                 weekendTextStyle:
                     AppTextStyle.body4_b().copyWith(color: Color(0xffFF2525)),
                 selectedTextStyle: AppTextStyle.body4_b(),
                 markersAlignment: Alignment.bottomRight,
+
               ),
+
               calendarBuilders: CalendarBuilders(
                 markerBuilder: (context, day, _) {
                   if (controller.monthScheduleList.value
@@ -51,8 +59,6 @@ class ScheduleScreen extends GetView<ScheduleController> {
                       .isEmpty) {
                     return null;
                   }
-                  print(
-                      'day: ${controller.monthScheduleList.value.where((scdl) => scdl.day == day.day).toList()}');
                   return Text(
                     controller.monthScheduleList.value
                         .where((scdl) => scdl.day == day.day)
@@ -72,7 +78,7 @@ class ScheduleScreen extends GetView<ScheduleController> {
               },
               onDaySelected: (selectedDay, focusedDay) async {
                 controller.selectedDay.value = selectedDay;
-                controller.focusedDay.value = selectedDay;
+                controller.focusedDay.value = focusedDay;
               },
             ),
           ),

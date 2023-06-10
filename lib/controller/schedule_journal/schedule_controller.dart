@@ -70,7 +70,7 @@ class ScheduleController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getMonthSchedule(selectedDay.value.month); // 일정 탭 선택시 월단위 일정 가져오기
+    getMonthSchedule(focusedDay.value.month); // 일정 탭 선택시 월단위 일정 가져오기
     FlutterLocalNotification.init();
     Future.delayed(const Duration(seconds: 3),
         FlutterLocalNotification.requestNotificationPermission());

@@ -36,6 +36,7 @@ class ScheduleContainer extends StatelessWidget {
               CustomDialog(
                 e: e,
                 child: Column(children: [
+                  Text('날짜: ${e.year}년 ${e.month}월 ${e.day}일'),
                   Text('시간: ${e.time} 시'),
                   Text('내용: ${e.content}'),
                 ]),
