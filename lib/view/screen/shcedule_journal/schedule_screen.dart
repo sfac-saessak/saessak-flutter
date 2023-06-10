@@ -18,7 +18,6 @@ class ScheduleScreen extends GetView<ScheduleController> {
   Widget build(BuildContext context) {
     return Center(
         child: Obx(
-      // Rx값 변경시 전체 컬럼 리빌드. (컬럼 = 상단부 캘린더 + 하단부 선택일 일정)
       () => Column(
         children: [
           // 상단부 캘린더

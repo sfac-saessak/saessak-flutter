@@ -45,12 +45,13 @@ class ResistScheduleDialog extends GetView<ScheduleController> {
         ),
         leftButtonOnTap: () => Get.back(),
         rightButtonOnTap: () {
-          if(e != null){
+          if (e != null) {
             controller.modifySchedule(e!);
             Get.back();
-          }else{controller.addSchedule();
-          Get.back();}
-          
+          } else {
+            controller.addSchedule();
+            Get.back();
+          }
         });
   }
 }

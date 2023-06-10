@@ -44,7 +44,8 @@ class ScheduleContainer extends StatelessWidget {
                 ]),
                 leftButtonText: '일정수정',
                 rightButtonText: '일정삭제',
-                leftButtonOnTap: () => Get.find<ScheduleController>().modifyScheduleDialog(e),
+                leftButtonOnTap: () =>
+                    Get.find<ScheduleController>().modifyScheduleDialog(e),
                 rightButtonOnTap: () {
                   Get.find<ScheduleController>().deleteSchedule(e.id);
                   Get.back();
