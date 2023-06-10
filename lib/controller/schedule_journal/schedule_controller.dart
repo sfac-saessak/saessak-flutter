@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:saessak_flutter/database/database.dart';
 import 'package:drift/drift.dart' as drift;
 import '../../service/local_notification.dart';
+import '../../view/widget/resist_schedule_dialog.dart';
 
 class ScheduleController extends GetxController {
   final localDb = LocalDatabase();
@@ -32,7 +33,7 @@ class ScheduleController extends GetxController {
 
 // 일정추가 - 임시구현, 단순히 events에 Event 인스턴스 추가. 임시 구현시 물주기(알림 주기 15초? 로 설정할 것임)
   addSchedule() async {
-  // 디비에 추가
+    // 디비에 추가
     await localDb.createSchedule(
       ScheduleCompanion(
         year: drift.Value(selectedDay.value.year),
@@ -58,11 +59,37 @@ class ScheduleController extends GetxController {
     getMonthSchedule(selectedDay.value.month);
   }
 
-  // 일정 수정 - 구현 예정
+  // 일정 수정 다이얼로그 띄우기
+  modifyScheduleDialog(ScheduleData e) {
+    Get.back();
+    Get.find<ScheduleController>().plantDropdownValue.value = e.plant;
+    Get.find<ScheduleController>().timeDropdownValue.value = e.time.toString();
+    Get.find<ScheduleController>().eventDropdownValue.value = e.content;
+    Get.dialog(ResistScheduleDialog(
+      e: e,
+    ));
+  }
+
+  // 일정 수정
+  modifySchedule(ScheduleData e) async {
+    await localDb.updateSchedule(
+      e.id,
+      ScheduleCompanion(
+        year: drift.Value(selectedDay.value.year),
+        month: drift.Value(selectedDay.value.month),
+        day: drift.Value(selectedDay.value.day),
+        plant: drift.Value(plantDropdownValue.value),
+        isExecuted: drift.Value(false),
+        content: drift.Value(eventDropdownValue.value),
+        time: drift.Value(int.parse(timeDropdownValue.value)),
+      ),
+    );
+    getMonthSchedule(selectedDay.value.month); // 수정된 데이터로 다시 데이터 가져오기
+  }
 
   // 체크박스 누르기(일정 수정)
   tapCheckBox(int id, ScheduleCompanion data) async {
-    await localDb.updateIsExecuted(id, data); // 체크 여부 db에 업데이트
+    await localDb.updateSchedule(id, data); // 체크 여부 db에 업데이트
     getMonthSchedule(selectedDay.value.month); // 업데이트 반영된 전체일정 가져오기
   }
 

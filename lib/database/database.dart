@@ -18,8 +18,9 @@ class LocalDatabase extends _$LocalDatabase {
   Future deleteAll() => delete(schedule).go(); // 전체 스케줄 삭제
   Future deleteSchedule(int id) => // 선택한 id의 단일 스케줄 가져오기
       (delete(schedule)..where((tbl) => tbl.id.equals(id))).go();
-  Future updateIsExecuted(int id, ScheduleCompanion data) => // 체크박스(수행여부) 업데이트
+  Future updateSchedule(int id, ScheduleCompanion data) => // 업데이트
       (update(schedule)..where((tbl) => tbl.id.equals(id))).write(data);
+  
 
   @override
   int get schemaVersion => 1;

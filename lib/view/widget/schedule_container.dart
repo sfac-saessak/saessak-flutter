@@ -4,6 +4,8 @@ import 'package:saessak_flutter/controller/schedule_journal/schedule_controller.
 import 'package:saessak_flutter/util/app_color.dart';
 import 'package:saessak_flutter/util/app_text_style.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:saessak_flutter/view/screen/shcedule_journal/schedule_screen.dart';
+import 'package:saessak_flutter/view/widget/resist_schedule_dialog.dart';
 
 import '../../database/database.dart';
 import 'custom_dialog.dart';
@@ -34,17 +36,15 @@ class ScheduleContainer extends StatelessWidget {
           GestureDetector(
             onTap: () => Get.dialog(
               CustomDialog(
-                e: e,
                 child: Column(children: [
+                  Text('이름: ${e.plant}'),
                   Text('날짜: ${e.year}년 ${e.month}월 ${e.day}일'),
                   Text('시간: ${e.time} 시'),
                   Text('내용: ${e.content}'),
                 ]),
                 leftButtonText: '일정수정',
                 rightButtonText: '일정삭제',
-                leftButtonOnTap: () {
-                  print('일정수정');
-                },
+                leftButtonOnTap: () => Get.find<ScheduleController>().modifyScheduleDialog(e),
                 rightButtonOnTap: () {
                   Get.find<ScheduleController>().deleteSchedule(e.id);
                   Get.back();

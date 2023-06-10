@@ -6,14 +6,12 @@ import '../../util/app_text_style.dart';
 class CustomDialog extends StatelessWidget {
   const CustomDialog(
       {super.key,
-      required this.e,
       required this.leftButtonText,
       required this.rightButtonText,
       required this.child,
       required this.leftButtonOnTap,
       required this.rightButtonOnTap});
 
-  final ScheduleData e;
   final Widget child;
   final String leftButtonText;
   final String rightButtonText;

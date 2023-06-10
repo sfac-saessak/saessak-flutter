@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:saessak_flutter/util/app_color.dart';
 import 'package:saessak_flutter/util/app_text_style.dart';
+import 'package:saessak_flutter/view/widget/custom_dialog.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../controller/schedule_journal/schedule_controller.dart';
 import '../../widget/custom_dropdown_button.dart';
+import '../../widget/resist_schedule_dialog.dart';
 import '../../widget/schedule_container.dart';
 
 class ScheduleScreen extends GetView<ScheduleController> {
@@ -34,9 +36,9 @@ class ScheduleScreen extends GetView<ScheduleController> {
                 // rightChevronIcon: ,
               ),
               daysOfWeekStyle: DaysOfWeekStyle(
-                // weekendStyle: ,
-                // weekdayStyle: 
-              ),
+                  // weekendStyle: ,
+                  // weekdayStyle:
+                  ),
               onPageChanged: (focusedDay) {
                 controller.focusedDay.value = focusedDay;
                 controller.getMonthSchedule(focusedDay.month);
@@ -48,9 +50,7 @@ class ScheduleScreen extends GetView<ScheduleController> {
                     AppTextStyle.body4_b().copyWith(color: Color(0xffFF2525)),
                 selectedTextStyle: AppTextStyle.body4_b(),
                 markersAlignment: Alignment.bottomRight,
-
               ),
-
               calendarBuilders: CalendarBuilders(
                 markerBuilder: (context, day, _) {
                   if (controller.monthScheduleList.value
@@ -102,49 +102,7 @@ class ScheduleScreen extends GetView<ScheduleController> {
                                   .copyWith(color: AppColor.black80)),
                           IconButton(
                               onPressed: () {
-                                Get.defaultDialog(
-                                  title: '일정추가',
-                                  content: Obx(
-                                    () => Column(
-                                      children: [
-                                        CustomDropDownButton(
-                                            value: controller
-                                                .plantDropdownValue.value,
-                                            items:
-                                                controller.registeredPlantList,
-                                            onChanged: (String? value) {
-                                              controller.plantDropdownValue
-                                                  .value = value!;
-                                            }),
-                                        Text(
-                                            '날짜: ${DateFormat('yyyy년 M월 d일').format(controller.selectedDay.value)}'),
-                                        CustomDropDownButton(
-                                            value: controller
-                                                .timeDropdownValue.value
-                                                .toString(),
-                                            items: controller.selectTimeList,
-                                            onChanged: (String? value) {
-                                              controller.timeDropdownValue
-                                                  .value = value!;
-                                            }),
-                                        CustomDropDownButton(
-                                            value: controller
-                                                .eventDropdownValue.value,
-                                            items: controller.eventList,
-                                            onChanged: (String? value) {
-                                              controller.eventDropdownValue
-                                                  .value = value!;
-                                            }),
-                                        TextButton(
-                                            onPressed: () {
-                                              controller.addSchedule();
-                                              Get.back();
-                                            },
-                                            child: Text('저장'))
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                Get.dialog(ResistScheduleDialog());
                               },
                               icon: Image.asset(
                                   'assets/images/icon_material_add.png'))
@@ -191,3 +149,5 @@ class ScheduleScreen extends GetView<ScheduleController> {
     ));
   }
 }
+
+
