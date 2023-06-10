@@ -49,8 +49,8 @@ class SignupPage extends GetView<SignupController> {
                           suffixIcon: IconButton(
                             onPressed: controller.changeObscure,
                             icon: Image.asset(color: AppColor.black40,controller.isObscured.value
-                                ? '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeoff.png'
-                                : '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeon.png'),
+                                ? 'assets/images/eyeoff.png'
+                                : 'assets/images/eyeon.png'),
                           ),
                       controller: controller.pwController,
                       hintText: '비밀번호',
@@ -66,8 +66,8 @@ class SignupPage extends GetView<SignupController> {
                           suffixIcon: IconButton(
                             onPressed: controller.changeObscure,
                             icon: Image.asset(color: AppColor.black40,controller.isObscured.value
-                                ? '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeoff.png'
-                                : '/Users/anjongjun/VScodeProjects/team_project/saessak-flutter/assets/images/eyeon.png'),
+                                ? 'assets/images/eyeoff.png'
+                                : 'assets/images/eyeon.png'),
                           ),
                       controller: controller.pwConfirmController,
                       hintText: '비밀번호 확인',
