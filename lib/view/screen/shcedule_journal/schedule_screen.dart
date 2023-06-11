@@ -99,12 +99,14 @@ class ScheduleScreen extends GetView<ScheduleController> {
                           Text('오늘의 일정',
                               style: AppTextStyle.body2_m()
                                   .copyWith(color: AppColor.black80)),
+                          // 일정등록 버튼
                           IconButton(
                               onPressed: () {
+                                // 일정등록 다이얼로그
                                 Get.dialog(ResistScheduleDialog());
                               },
                               icon: Image.asset(
-                                  'assets/images/icon_material_add.png'))
+                                  'assets/images/icon_material_add.png')),
                         ],
                       ),
                     ),
@@ -148,5 +150,3 @@ class ScheduleScreen extends GetView<ScheduleController> {
     ));
   }
 }
-
-

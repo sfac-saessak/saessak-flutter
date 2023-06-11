@@ -4,18 +4,15 @@ import 'package:saessak_flutter/controller/schedule_journal/schedule_controller.
 import 'package:saessak_flutter/util/app_color.dart';
 import 'package:saessak_flutter/util/app_text_style.dart';
 import 'package:drift/drift.dart' as drift;
-import 'package:saessak_flutter/view/screen/shcedule_journal/schedule_screen.dart';
-import 'package:saessak_flutter/view/widget/resist_schedule_dialog.dart';
 
 import '../../database/database.dart';
+import 'custom_check_box.dart';
 import 'custom_dialog.dart';
 
 class ScheduleContainer extends StatelessWidget {
   const ScheduleContainer({super.key, required this.e});
 
   final ScheduleData e;
-  final String unChecked = 'assets/images/check_box_empty.png';
-  final String checked = 'assets/images/check_box_checked.png';
   @override
   Widget build(BuildContext context) {
     print(e.runtimeType);
@@ -25,14 +22,11 @@ class ScheduleContainer extends StatelessWidget {
           border: Border(bottom: BorderSide(color: AppColor.primary70))),
       child: Row(
         children: [
-          GestureDetector(
-              child:
-                  e.isExecuted ? Image.asset(checked) : Image.asset(unChecked),
-              onTap: () async {
-                print(e);
-                Get.find<ScheduleController>().tapCheckBox(e.id,
-                    ScheduleCompanion(isExecuted: drift.Value(!e.isExecuted)));
-              }),
+          CustomCheckBox(
+            e: e,
+            ischecked: e.isExecuted,
+            data: ScheduleCompanion(isExecuted: drift.Value(!e.isExecuted)),
+          ),
           GestureDetector(
             onTap: () => Get.dialog(
               CustomDialog(
@@ -64,6 +58,21 @@ class ScheduleContainer extends StatelessWidget {
                   style: AppTextStyle.body2_m()
                       .copyWith(color: e.isExecuted ? AppColor.black30 : null),
                 ),
+                // 알림설정 켜고 끄는 버튼
+                IconButton(
+                    onPressed: () {
+                      // 디비에 다시 저장 후 불러와 화면 리빌드하기
+                      Get.find<ScheduleController>().onTapNotifyButton(
+                          e,
+                          ScheduleCompanion(
+                              isDoNotify: drift.Value(!e.isDoNotify)));
+                    },
+                    icon: e.isDoNotify
+                        ? Icon(Icons.notifications)
+                        : Icon(
+                            Icons.notifications_off,
+                            color: AppColor.black30,
+                          ))
               ],
             ),
           )
