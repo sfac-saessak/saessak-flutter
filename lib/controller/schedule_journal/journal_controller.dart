@@ -25,6 +25,7 @@ class JournalController extends GetxController {
   RxBool isLoading = false.obs;                     // 로딩중 상태
   late Rx<Plant> selectedPlant;                     // 선택된 식물
   RxList<Journal> journalList = <Journal>[].obs;    // 일지 리스트
+  RxList<Journal> bookmarkList = <Journal>[].obs;   // 북마크 리스트
 
   // 이미지 선택
   void selectImage() async {
@@ -50,7 +51,7 @@ class JournalController extends GetxController {
       plant: selectedPlant.value,
       uid: user.uid,
       writeTime: Timestamp.now(),
-      bookmark: false,
+      bookmark: false.obs,
       content: contentController.text,
       imageUrl: imageUrl,
     );
@@ -73,12 +74,13 @@ class JournalController extends GetxController {
       var journal = doc.data() as Map<String, dynamic>;
       var plantInfo = await getPlantById(journal['plant']);
       var plant = Plant.fromMap(plantInfo);
+      bool bookmark = journal['bookmark'];
       return Journal(
         plant: plant,
         journalId: journal['journalId'],
         uid: journal['uid'],
         writeTime: journal['writeTime'],
-        bookmark: journal['bookmark'],
+        bookmark: bookmark.obs,
         content: journal['content'],
         imageUrl: journal['imageUrl'],
       );
@@ -88,6 +90,7 @@ class JournalController extends GetxController {
     journalList(journals);
 
     log('journalList => ${journalList}');
+    getBookmark();
     isLoading(false);
   }
 
@@ -144,6 +147,21 @@ class JournalController extends GetxController {
   Future<Map<String, dynamic>> getPlantById(String plantId) async {
     var plantInfo = await DBService().getPlantById(user.uid, plantId);
     return plantInfo;
+  }
+
+  // 북마크/북마크 취소
+  toggleBookmark(String journalId) async {
+    await DBService(uid: user.uid).toggleBookmark(journalId);
+    getBookmark();
+  }
+
+  // 북마크 리스트 가져오기
+  getBookmark() {
+    List<Journal> bookmarkList = [];
+    for (Journal journal in journalList) {
+      if (journal.bookmark.value) bookmarkList.add(journal);
+    }
+    this.bookmarkList(bookmarkList);
   }
 
   @override

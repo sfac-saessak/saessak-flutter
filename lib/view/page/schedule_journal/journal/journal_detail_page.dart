@@ -57,6 +57,16 @@ class JournalDetailPage extends StatelessWidget {
                     Text('${DateFormat("yyyy-MM-dd").format(journal.writeTime.toDate())}'),
                   ],
                 ),
+                Spacer(),
+                Obx(
+                  () => IconButton(
+                    onPressed: (){
+                      journal.bookmark.toggle();
+                      controller.toggleBookmark(journal.journalId!);
+                    },
+                    icon: Icon(journal.bookmark.value ? Icons.bookmark : Icons.bookmark_outline, color: AppColor.primary)
+                  ),
+                )
               ],
             ),
             Text('${journal.content}'),

@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
 import 'plant.dart';
 
@@ -8,7 +9,7 @@ class Journal {
   Plant plant;          // 대상 식물
   String uid;           // 작성자 uid
   Timestamp writeTime;  // 작성 날짜
-  bool bookmark;        // 북마크 여부
+  RxBool bookmark;        // 북마크 여부
   String content;       // 일지 내용
   String? imageUrl;     // 이미지
 
@@ -28,7 +29,7 @@ class Journal {
       'plant': plant.plantId,
       'uid': this.uid,
       'writeTime': this.writeTime,
-      'bookmark': this.bookmark,
+      'bookmark': this.bookmark.value,
       'content': this.content,
       'imageUrl': this.imageUrl,
     };
@@ -40,7 +41,7 @@ class Journal {
       plant: map['plant'] as Plant,
       uid: map['uid'] as String,
       writeTime: map['writeTime'] as Timestamp,
-      bookmark: map['bookmark'] as bool,
+      bookmark: map['bookmark'] as RxBool,
       content: map['content'] as String,
       imageUrl: map['imageUrl'] as String?,
     );

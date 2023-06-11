@@ -180,7 +180,19 @@ class DBService {
   }
 
   // 북마크
+  Future toggleBookmark(String journalId) async {
+    DocumentReference journalDocRef = journalsCollection.doc(uid).collection("journal").doc(journalId);
+    DocumentSnapshot snapshot = await journalDocRef.get();
+    var journalData = snapshot.data() as Map<String, dynamic>;
 
+    bool currentValue = journalData['bookmark'];
+    bool updatedValue = !currentValue;
+
+    Map<String, dynamic> updatedData = {'bookmark': updatedValue};
+
+    // Firestore 문서 업데이트
+    await journalDocRef.update(updatedData);
+  }
 
 
   /* ############################## 챌린지 ############################## */
