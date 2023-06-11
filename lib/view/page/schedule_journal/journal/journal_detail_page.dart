@@ -58,7 +58,8 @@ class JournalDetailPage extends StatelessWidget {
                   ],
                 ),
                 Spacer(),
-                Obx(
+                journal.uid == controller.user.uid
+                ? Obx(
                   () => IconButton(
                     onPressed: (){
                       journal.bookmark.toggle();
@@ -67,6 +68,7 @@ class JournalDetailPage extends StatelessWidget {
                     icon: Icon(journal.bookmark.value ? Icons.bookmark : Icons.bookmark_outline, color: AppColor.primary)
                   ),
                 )
+                : Container()
               ],
             ),
             Text('${journal.content}'),

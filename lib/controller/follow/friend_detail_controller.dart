@@ -71,11 +71,12 @@ class FriendDetailController extends GetxController with GetSingleTickerProvider
       var journal = doc.data() as Map<String, dynamic>;
       var plantInfo = await getPlantById(journal['plant']);
       var plant = Plant.fromMap(plantInfo);
+      bool bookmark = journal['bookmark'];
       return Journal(
         plant: plant,
         uid: journal['uid'],
         writeTime: journal['writeTime'],
-        bookmark: journal['bookmark'],
+        bookmark: bookmark.obs,
         content: journal['content'],
         imageUrl: journal['imageUrl'],
       );
