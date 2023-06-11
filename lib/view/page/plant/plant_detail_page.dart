@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +13,7 @@ class PlantDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('플랜트 상세 : ${plant}');
     var controller = Get.find<PlantController>();
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +24,7 @@ class PlantDetailPage extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: (){
+            onPressed: () {
               Get.off(() => AddPlantPage(plant: plant));
             },
             icon: Icon(Icons.edit),
@@ -46,8 +46,12 @@ class PlantDetailPage extends StatelessWidget {
                 height: 200,
                 child: CircleAvatar(
                   backgroundColor: AppColor.black20,
-                  backgroundImage: plant.imageUrl != null ? NetworkImage(plant.imageUrl!) : null,
-                  child: plant.imageUrl != null ? null : Icon(Icons.person, color: AppColor.white),
+                  backgroundImage: plant.imageUrl != null
+                      ? NetworkImage(plant.imageUrl!)
+                      : null,
+                  child: plant.imageUrl != null
+                      ? null
+                      : Icon(Icons.person, color: AppColor.white),
                 ),
               ),
               Column(
@@ -56,10 +60,10 @@ class PlantDetailPage extends StatelessWidget {
                   Text('${plant.species}'),
                   Row(
                     children: [
-                      Text('${DateFormat("yyyy-MM-dd").format(plant.plantingDate.toDate())}'),
                       Text(
-                        '(D+${controller.getDaysSincePlanting(plant.plantingDate)})'
-                      ),
+                          '${DateFormat("yyyy-MM-dd").format(plant.plantingDate.toDate())}'),
+                      Text(
+                          '(D+${controller.getDaysSincePlanting(plant.plantingDate)})'),
                     ],
                   ),
                 ],
@@ -95,4 +99,3 @@ class PlantDetailPage extends StatelessWidget {
     );
   }
 }
-
