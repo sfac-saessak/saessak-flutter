@@ -63,10 +63,7 @@ class SetProfilePage extends GetView<SetProfileController> {
                             child: CircleAvatar(
                               radius: 36,
                               child: Icon(Icons.edit, color: Colors.white),
-                              backgroundColor:
-                                  controller.selectedImage.value == null
-                                      ? AppColor.lightGrey
-                                      : AppColor.primary,
+                              backgroundColor: AppColor.primary,
                             ),
                           ),
                         ),

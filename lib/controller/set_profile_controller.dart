@@ -17,16 +17,19 @@ class SetProfileController extends GetxController {
   RxBool isEnableButton = false.obs; // 버튼 활성화 위한 bool
 
   onChanged() {
-    if (nameController.text != null && nameController.text != '') {
-      isEnableButton.value = true;
-    } else {
+    if (user!.displayName == nameController.text) {
       isEnableButton.value = false;
+    } else if (nameController.text == '') {
+      isEnableButton.value = false;
+    } else {
+      isEnableButton.value = true;
     }
   }
 
   addProfilePhoto() async {
     var picker = ImagePicker();
     var res = await picker.pickImage(source: ImageSource.gallery);
+    isEnableButton.value = true;
     if (res != null) {
       selectedImage(File(res.path));
     }
