@@ -179,6 +179,9 @@ class DBService {
     await journalsCollection.doc(uid).collection("journal").doc(journalId).delete();
   }
 
+  // 북마크
+
+
 
   /* ############################## 챌린지 ############################## */
   // 챌린지 생성

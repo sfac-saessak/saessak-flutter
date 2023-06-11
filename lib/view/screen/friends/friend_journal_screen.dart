@@ -12,13 +12,16 @@ class FriendJournalScreen extends GetView<FriendDetailController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColor.primary5,
+      color: AppColor.black10,
       child: Obx(
-        () => ListView.builder(
-          itemCount: controller.journalList.length,
-          itemBuilder: (context, index) {
-            return JournalTile(journal: controller.journalList[index]);
-          },
+        () => Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: ListView.builder(
+            itemCount: controller.journalList.length,
+            itemBuilder: (context, index) {
+              return JournalTile(journal: controller.journalList[index]);
+            },
+          ),
         ),
       ),
     );

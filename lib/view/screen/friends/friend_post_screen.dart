@@ -12,7 +12,7 @@ class FriendPostScreen extends GetView<FriendDetailController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColor.primary5,
+      color: AppColor.black10,
       child: Obx(
         () => ListView.builder(
           itemCount: controller.postList.length,
