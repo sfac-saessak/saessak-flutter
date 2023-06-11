@@ -61,9 +61,37 @@ class $ScheduleTable extends Schedule
             SqlDialect.mysql: '',
             SqlDialect.postgres: '',
           }));
+  static const VerificationMeta _userUidMeta =
+      const VerificationMeta('userUid');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, year, month, day, time, plant, content, isExecuted];
+  late final GeneratedColumn<String> userUid = GeneratedColumn<String>(
+      'user_uid', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _isDoNotifyMeta =
+      const VerificationMeta('isDoNotify');
+  @override
+  late final GeneratedColumn<bool> isDoNotify =
+      GeneratedColumn<bool>('is_do_notify', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("is_do_notify" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        year,
+        month,
+        day,
+        time,
+        plant,
+        content,
+        isExecuted,
+        userUid,
+        isDoNotify
+      ];
   @override
   String get aliasedName => _alias ?? 'schedule';
   @override
@@ -120,6 +148,20 @@ class $ScheduleTable extends Schedule
     } else if (isInserting) {
       context.missing(_isExecutedMeta);
     }
+    if (data.containsKey('user_uid')) {
+      context.handle(_userUidMeta,
+          userUid.isAcceptableOrUnknown(data['user_uid']!, _userUidMeta));
+    } else if (isInserting) {
+      context.missing(_userUidMeta);
+    }
+    if (data.containsKey('is_do_notify')) {
+      context.handle(
+          _isDoNotifyMeta,
+          isDoNotify.isAcceptableOrUnknown(
+              data['is_do_notify']!, _isDoNotifyMeta));
+    } else if (isInserting) {
+      context.missing(_isDoNotifyMeta);
+    }
     return context;
   }
 
@@ -145,6 +187,10 @@ class $ScheduleTable extends Schedule
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
       isExecuted: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}is_executed'])!,
+      userUid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_uid'])!,
+      isDoNotify: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_do_notify'])!,
     );
   }
 
@@ -163,6 +209,8 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
   final String plant;
   final String content;
   final bool isExecuted;
+  final String userUid;
+  final bool isDoNotify;
   const ScheduleData(
       {required this.id,
       required this.year,
@@ -171,7 +219,9 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
       required this.time,
       required this.plant,
       required this.content,
-      required this.isExecuted});
+      required this.isExecuted,
+      required this.userUid,
+      required this.isDoNotify});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -183,6 +233,8 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
     map['plant'] = Variable<String>(plant);
     map['content'] = Variable<String>(content);
     map['is_executed'] = Variable<bool>(isExecuted);
+    map['user_uid'] = Variable<String>(userUid);
+    map['is_do_notify'] = Variable<bool>(isDoNotify);
     return map;
   }
 
@@ -196,6 +248,8 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
       plant: Value(plant),
       content: Value(content),
       isExecuted: Value(isExecuted),
+      userUid: Value(userUid),
+      isDoNotify: Value(isDoNotify),
     );
   }
 
@@ -211,6 +265,8 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
       plant: serializer.fromJson<String>(json['plant']),
       content: serializer.fromJson<String>(json['content']),
       isExecuted: serializer.fromJson<bool>(json['isExecuted']),
+      userUid: serializer.fromJson<String>(json['userUid']),
+      isDoNotify: serializer.fromJson<bool>(json['isDoNotify']),
     );
   }
   @override
@@ -225,6 +281,8 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
       'plant': serializer.toJson<String>(plant),
       'content': serializer.toJson<String>(content),
       'isExecuted': serializer.toJson<bool>(isExecuted),
+      'userUid': serializer.toJson<String>(userUid),
+      'isDoNotify': serializer.toJson<bool>(isDoNotify),
     };
   }
 
@@ -236,7 +294,9 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
           int? time,
           String? plant,
           String? content,
-          bool? isExecuted}) =>
+          bool? isExecuted,
+          String? userUid,
+          bool? isDoNotify}) =>
       ScheduleData(
         id: id ?? this.id,
         year: year ?? this.year,
@@ -246,6 +306,8 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
         plant: plant ?? this.plant,
         content: content ?? this.content,
         isExecuted: isExecuted ?? this.isExecuted,
+        userUid: userUid ?? this.userUid,
+        isDoNotify: isDoNotify ?? this.isDoNotify,
       );
   @override
   String toString() {
@@ -257,14 +319,16 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
           ..write('time: $time, ')
           ..write('plant: $plant, ')
           ..write('content: $content, ')
-          ..write('isExecuted: $isExecuted')
+          ..write('isExecuted: $isExecuted, ')
+          ..write('userUid: $userUid, ')
+          ..write('isDoNotify: $isDoNotify')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, year, month, day, time, plant, content, isExecuted);
+  int get hashCode => Object.hash(id, year, month, day, time, plant, content,
+      isExecuted, userUid, isDoNotify);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -276,7 +340,9 @@ class ScheduleData extends DataClass implements Insertable<ScheduleData> {
           other.time == this.time &&
           other.plant == this.plant &&
           other.content == this.content &&
-          other.isExecuted == this.isExecuted);
+          other.isExecuted == this.isExecuted &&
+          other.userUid == this.userUid &&
+          other.isDoNotify == this.isDoNotify);
 }
 
 class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
@@ -288,6 +354,8 @@ class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
   final Value<String> plant;
   final Value<String> content;
   final Value<bool> isExecuted;
+  final Value<String> userUid;
+  final Value<bool> isDoNotify;
   const ScheduleCompanion({
     this.id = const Value.absent(),
     this.year = const Value.absent(),
@@ -297,6 +365,8 @@ class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
     this.plant = const Value.absent(),
     this.content = const Value.absent(),
     this.isExecuted = const Value.absent(),
+    this.userUid = const Value.absent(),
+    this.isDoNotify = const Value.absent(),
   });
   ScheduleCompanion.insert({
     this.id = const Value.absent(),
@@ -307,13 +377,17 @@ class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
     required String plant,
     required String content,
     required bool isExecuted,
+    required String userUid,
+    required bool isDoNotify,
   })  : year = Value(year),
         month = Value(month),
         day = Value(day),
         time = Value(time),
         plant = Value(plant),
         content = Value(content),
-        isExecuted = Value(isExecuted);
+        isExecuted = Value(isExecuted),
+        userUid = Value(userUid),
+        isDoNotify = Value(isDoNotify);
   static Insertable<ScheduleData> custom({
     Expression<int>? id,
     Expression<int>? year,
@@ -323,6 +397,8 @@ class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
     Expression<String>? plant,
     Expression<String>? content,
     Expression<bool>? isExecuted,
+    Expression<String>? userUid,
+    Expression<bool>? isDoNotify,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -333,6 +409,8 @@ class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
       if (plant != null) 'plant': plant,
       if (content != null) 'content': content,
       if (isExecuted != null) 'is_executed': isExecuted,
+      if (userUid != null) 'user_uid': userUid,
+      if (isDoNotify != null) 'is_do_notify': isDoNotify,
     });
   }
 
@@ -344,7 +422,9 @@ class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
       Value<int>? time,
       Value<String>? plant,
       Value<String>? content,
-      Value<bool>? isExecuted}) {
+      Value<bool>? isExecuted,
+      Value<String>? userUid,
+      Value<bool>? isDoNotify}) {
     return ScheduleCompanion(
       id: id ?? this.id,
       year: year ?? this.year,
@@ -354,6 +434,8 @@ class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
       plant: plant ?? this.plant,
       content: content ?? this.content,
       isExecuted: isExecuted ?? this.isExecuted,
+      userUid: userUid ?? this.userUid,
+      isDoNotify: isDoNotify ?? this.isDoNotify,
     );
   }
 
@@ -384,6 +466,12 @@ class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
     if (isExecuted.present) {
       map['is_executed'] = Variable<bool>(isExecuted.value);
     }
+    if (userUid.present) {
+      map['user_uid'] = Variable<String>(userUid.value);
+    }
+    if (isDoNotify.present) {
+      map['is_do_notify'] = Variable<bool>(isDoNotify.value);
+    }
     return map;
   }
 
@@ -397,7 +485,9 @@ class ScheduleCompanion extends UpdateCompanion<ScheduleData> {
           ..write('time: $time, ')
           ..write('plant: $plant, ')
           ..write('content: $content, ')
-          ..write('isExecuted: $isExecuted')
+          ..write('isExecuted: $isExecuted, ')
+          ..write('userUid: $userUid, ')
+          ..write('isDoNotify: $isDoNotify')
           ..write(')'))
         .toString();
   }

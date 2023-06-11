@@ -5,6 +5,7 @@ import 'package:saessak_flutter/util/app_color.dart';
 import 'package:saessak_flutter/util/app_text_style.dart';
 import '../../../model/community/post.dart';
 import '../../../model/user_model.dart';
+import '../friends/friend_detail_page.dart';
 
 enum SampleItem { itemOne, itemTwo, itemThree }
 
@@ -51,11 +52,14 @@ class PostDetailPage extends GetView<CommunityController> {
                 Expanded(
                   child: Row(
                     children: [
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundImage: user.profileImg != null
-                            ? NetworkImage(user.profileImg!)
-                            : null,
+                      GestureDetector(
+                        onTap: () => Get.to(() => FriendDetailPage(), arguments: [user]), // 
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundImage: user.profileImg != null
+                              ? NetworkImage(user.profileImg!)
+                              : null,
+                        ),
                       ),
                       SizedBox(
                         width: 10,
