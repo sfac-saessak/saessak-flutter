@@ -18,23 +18,26 @@ class FriendsPage extends GetView<FriendsController> {
         foregroundColor: AppColor.black,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          TabBar(
-            controller: controller.tabController,
-            tabs: controller.tabs,
-            labelColor: AppColor.primary, // 선택된 탭의 색상
-            unselectedLabelColor: AppColor.black20, // 선택되지 않은 탭의 색상
-            indicatorColor: AppColor.primary,
-          ),
-          Expanded(
-            child: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
+      body: Container(
+        color: AppColor.white,
+        child: Column(
+          children: [
+            TabBar(
               controller: controller.tabController,
-              children: controller.tabViews,
+              tabs: controller.tabs,
+              labelColor: AppColor.primary, // 선택된 탭의 색상
+              unselectedLabelColor: AppColor.black20, // 선택되지 않은 탭의 색상
+              indicatorColor: AppColor.primary,
             ),
-          ),
-        ],
+            Expanded(
+              child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
+                controller: controller.tabController,
+                children: controller.tabViews,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

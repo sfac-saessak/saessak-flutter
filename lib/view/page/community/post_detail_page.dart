@@ -25,15 +25,21 @@ class PostDetailPage extends GetView<CommunityController> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ListView(
-          children: [
+        child: ListView(children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
-                  child: Chip(label: Text(post.tag, style: AppTextStyle.body4_m().copyWith(color: AppColor.white),), backgroundColor: AppColor.primary,)),
+                    child: Chip(
+                  label: Text(
+                    post.tag,
+                    style:
+                        AppTextStyle.body4_m().copyWith(color: AppColor.white),
+                  ),
+                  backgroundColor: AppColor.primary,
+                )),
               ],
             ),
           ),
@@ -47,10 +53,19 @@ class PostDetailPage extends GetView<CommunityController> {
                     children: [
                       CircleAvatar(
                         radius: 25,
-                        backgroundImage: user.profileImg != null ? NetworkImage(user.profileImg!) : null,
+                        backgroundImage: user.profileImg != null
+                            ? NetworkImage(user.profileImg!)
+                            : null,
                       ),
-                      SizedBox(width: 10,),
-                      Text(user.name, style: AppTextStyle.body1_m(), maxLines: 1, overflow: TextOverflow.ellipsis,),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        user.name,
+                        style: AppTextStyle.body1_m(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
                 ),
@@ -82,7 +97,9 @@ class PostDetailPage extends GetView<CommunityController> {
               ],
             ),
           ),
-          Divider(color: AppColor.black,),
+          Divider(
+            color: AppColor.black,
+          ),
 
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -93,7 +110,9 @@ class PostDetailPage extends GetView<CommunityController> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          Divider(color: AppColor.black,),
+          Divider(
+            color: AppColor.black,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -101,7 +120,9 @@ class PostDetailPage extends GetView<CommunityController> {
               Text('조회수 ${post.views}'),
             ],
           ),
-          SizedBox(height: 15,),
+          SizedBox(
+            height: 15,
+          ),
 
           ...post.imgUrlList.map((e) {
             return Padding(
@@ -109,12 +130,14 @@ class PostDetailPage extends GetView<CommunityController> {
               child: Container(
                 width: Get.width * 0.76,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Image.network('$e')),
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.network('$e')),
               ),
             );
           }).toList(),
-          SizedBox(height: 15,),
+          SizedBox(
+            height: 15,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(post.content),
@@ -127,23 +150,78 @@ class PostDetailPage extends GetView<CommunityController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('댓글 ${post.commentsNum}', style: AppTextStyle.body4_b(),),
-              TextButton(
-                child: Text('댓글 작성'),
+              Text(
+                '댓글 ${post.commentsNum}',
+                style: AppTextStyle.body4_b(),
+              ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(color: AppColor.primary),
+                      borderRadius: BorderRadius.circular(20)),
+                ),
+                child: Text(
+                  '댓글 작성',
+                  style: AppTextStyle.body4_b().copyWith(
+                    color: AppColor.primary,
+                  ),
+                ),
                 onPressed: () async {
-                  Get.defaultDialog(
-                    content: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextField(
-                          controller: controller.commentTextController,
+                  Get.dialog(
+                    Dialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(17)
                         ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () => controller.completeComment(post),
-                          child: const Text('완료'),
-                        )
-                      ],
+                        height: 525,
+                        width: 300,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration:
+                                      BoxDecoration(color: AppColor.black10,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextField(
+                                      controller:
+                                          controller.commentTextController,
+                                      decoration: InputDecoration(
+                                          hintText: '댓글 내용을 입력해주세요.',
+                                          hintStyle: AppTextStyle.body3_r()
+                                              .copyWith(color: AppColor.black50),
+                                          border: InputBorder.none),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: OutlinedButton(
+                                onPressed: () => controller.completeComment(post),
+                                style: OutlinedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      side: BorderSide(color: AppColor.primary),
+                                      borderRadius: BorderRadius.circular(20)),
+                                ),
+                                child: Text(
+                                  '작성 완료',
+                                  style: AppTextStyle.body4_b().copyWith(
+                                    color: AppColor.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 },

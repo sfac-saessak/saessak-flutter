@@ -26,7 +26,9 @@ class HomeScreen extends GetView<PlantController> {
                 controller: controller.pageController,
                 itemCount: controller.plantList.length,
                 itemBuilder: (context, index) {
-                  return PlantTile(plant: controller.plantList[index]);
+                  return controller.isLoading.value
+                    ? Center(child: CircularProgressIndicator())
+                    : PlantTile(plant: controller.plantList[index]);
                 }
               ),
             )

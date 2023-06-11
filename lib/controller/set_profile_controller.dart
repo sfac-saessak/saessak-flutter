@@ -27,6 +27,7 @@ class SetProfileController extends GetxController {
   addProfilePhoto() async {
     var picker = ImagePicker();
     var res = await picker.pickImage(source: ImageSource.gallery);
+    isEnableButton.value = true;
     if (res != null) {
       selectedImage(File(res.path));
     }
@@ -37,7 +38,6 @@ class SetProfileController extends GetxController {
       var ref = FirebaseStorage.instance.ref('profile/${user!.uid}');
       await ref.putFile(selectedImage.value!);
       var downloadUrl = await ref.getDownloadURL();
-      print(downloadUrl);
       user!.updatePhotoURL(downloadUrl);
     }
 
