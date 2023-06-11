@@ -6,32 +6,30 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../model/community/post.dart';
+import '../model/user_model.dart';
 import '../service/db_service.dart';
+import 'follow/friends_controller.dart';
 import 'schedule_journal/journal_controller.dart';
 
 class SettingController extends GetxController {
   User get user => FirebaseAuth.instance.currentUser!;
 
-  RxList journalList = Get.find<JournalController>().journalList;  // 일지 리스트
-  RxList followingList = [].obs;            // 팔로잉 리스트
-  RxList followerList = [].obs;             // 팔로잉 리스트
-  RxList myPostList = [].obs;                 // 게시글 리스트
+  RxList journalList = Get.find<JournalController>().journalList;      // 일지 리스트
+  RxList followingList = Get.find<FriendsController>().followingList;  // 팔로잉 리스트
+  RxList followerList = [].obs;             // 팔로워 리스트
+  RxList myPostList = [].obs;               // 게시글 리스트
   RxBool isLoading = false.obs;             // 로딩중 상태
-
-  // 팔로잉 가져오기
-  getFollowing() async {
-    isLoading(true);
-    var uidList = await DBService().getFollowing(user.uid);
-    followingList(uidList);
-    isLoading(false);
-    log('${followingList}');
-  }
 
   // 팔로워 가져오기
   getFollower() async {
     isLoading(true);
     var uidList = await DBService().getFollower(user.uid);
-    followerList(uidList);
+    List<UserModel> follower = [];
+    for (var uid in uidList) {
+      var userInfo = await getUserInfoById(uid);
+      follower.add(UserModel.fromMap(userInfo));
+    }
+    followerList(follower);
     log('${followerList}');
     isLoading(false);
   }
@@ -46,9 +44,14 @@ class SettingController extends GetxController {
     isLoading(false);
   }
 
+  // uid로 유저 정보 가져오기
+  getUserInfoById(String uid) async {
+    var userInfo = await DBService().getUserInfoById(uid);
+    return userInfo;
+  }
+
   @override
   void onInit() {
-    getFollowing();
     getFollower();
     readPost();
     super.onInit();

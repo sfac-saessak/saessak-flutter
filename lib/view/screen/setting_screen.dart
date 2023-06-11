@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saessak_flutter/view/page/friends/friends_list_page.dart';
 
 import '../../controller/auth_controller.dart';
 import '../../controller/setting_controller.dart';
@@ -43,44 +44,62 @@ class SettingScreen extends GetView<SettingController> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Column(
-                            children: [
-                              Text('${controller.followerList.length}', style: AppTextStyle.body1_m()),
-                              SizedBox(height: 6),
-                              Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.symmetric(vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: AppColor.black10,
-                                  borderRadius: BorderRadius.circular(5),
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(() => FriendsListPage(
+                                userName: controller.user.displayName!,
+                                followingList: controller.followingList,
+                                followerList: controller.followerList)
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Text('${controller.followerList.length}', style: AppTextStyle.body1_m()),
+                                SizedBox(height: 6),
+                                Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.symmetric(vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.black10,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text('팔로워', style: AppTextStyle.body5_r()),
+                                  ),
                                 ),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text('팔로워', style: AppTextStyle.body5_r()),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(width: 10),
                         Expanded(
-                          child: Column(
-                            children: [
-                              Text('${controller.followingList.length}', style: AppTextStyle.body1_m()),
-                              SizedBox(height: 6),
-                              Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.symmetric(vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: AppColor.black10,
-                                  borderRadius: BorderRadius.circular(5),
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(() => FriendsListPage(
+                                userName: controller.user.displayName!,
+                                followingList: controller.followingList,
+                                followerList: controller.followerList)
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Text('${controller.followingList.length}', style: AppTextStyle.body1_m()),
+                                SizedBox(height: 6),
+                                Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.symmetric(vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.black10,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text('팔로잉', style: AppTextStyle.body5_r()),
+                                  ),
                                 ),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text('팔로잉', style: AppTextStyle.body5_r()),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(width: 10),

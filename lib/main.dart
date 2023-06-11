@@ -8,6 +8,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'controller/challenge/challenge_controller.dart';
 import 'controller/challenge/chat_controller.dart';
 import 'controller/community/community_controller.dart';
+import 'controller/follow/friends_list_controller.dart';
 import 'controller/follow/friend_detail_controller.dart';
 import 'controller/follow/friends_controller.dart';
 import 'controller/plant/plant_controller.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => FriendDetailController(), fenix: true);
         Get.lazyPut(() => JournalController(), fenix: true);
         Get.lazyPut(() => SettingController(), fenix: true);
+        Get.lazyPut(() => FriendsListController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.splash,
