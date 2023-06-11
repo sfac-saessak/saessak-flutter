@@ -1,71 +1,165 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controller/auth_controller.dart';
+import '../../controller/setting_controller.dart';
 import '../../util/app_color.dart';
-import '../../util/app_routes.dart';
+import '../../util/app_text_style.dart';
 
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends GetView<SettingController> {
   const SettingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
+    return Container(
+      color: AppColor.black10,
+      child: Obx(
+        () => Column(
           children: [
             Container(
-              width: 150,
-              height: 150,
-              child: CircleAvatar(
-                backgroundColor: AppColor.black20,
-                backgroundImage: FirebaseAuth.instance.currentUser!.photoURL !=
-                        null
-                    ? NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!)
-                    : null,
-                child: FirebaseAuth.instance.currentUser!.photoURL != null
-                    ? null
-                    : Icon(Icons.person, color: AppColor.white),
+              width: Get.width,
+              color: AppColor.white,
+              child: Column(
+                children: [
+                  Container(
+                    width: 110,
+                    height: 110,
+                    child: CircleAvatar(
+                      radius: 36,
+                      backgroundColor: Colors.grey,
+                      child: controller.user.photoURL == null ? Icon(Icons.person, color: Colors.white) : null,
+                      backgroundImage: controller.user.photoURL != null
+                          ? NetworkImage(controller.user.photoURL!)
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(controller.user.displayName!, style: AppTextStyle.body2_m()),
+                  Text(controller.user.email!, style: AppTextStyle.body4_r(color: AppColor.black40)),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text('${controller.followerList.length}', style: AppTextStyle.body1_m()),
+                              SizedBox(height: 6),
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColor.black10,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text('팔로워', style: AppTextStyle.body5_r()),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text('${controller.followingList.length}', style: AppTextStyle.body1_m()),
+                              SizedBox(height: 6),
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColor.black10,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text('팔로잉', style: AppTextStyle.body5_r()),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text('${controller.journalList.length}', style: AppTextStyle.body1_m()),
+                              SizedBox(height: 6),
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColor.black10,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text('일지', style: AppTextStyle.body5_r()),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text('${controller.myPostList.length}', style: AppTextStyle.body1_m()),
+                              SizedBox(height: 6),
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColor.black10,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text('게시글', style: AppTextStyle.body5_r()),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20)
+                ],
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('${FirebaseAuth.instance.currentUser!.displayName}'),
-                Text(
-                  '${FirebaseAuth.instance.currentUser!.email}',
-                  style: TextStyle(color: AppColor.black50),
-                ),
-              ],
-            ),
-            Spacer(),
-            IconButton(
-              onPressed: () {
-                Get.toNamed(AppRoutes.setName);
-              },
-              icon: Icon(Icons.edit),
+            Expanded(
+              child: Column(
+                children: [
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 20),
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 0,
+                          backgroundColor: AppColor.primary,
+                        ),
+                        onPressed: Get.find<AuthController>().logout,
+                        child: Text('로그아웃'),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 100),
-          child: Container(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  elevation: 0,
-                  backgroundColor: Colors.red),
-              onPressed: Get.find<AuthController>().logout,
-              child: Text('로그아웃'),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

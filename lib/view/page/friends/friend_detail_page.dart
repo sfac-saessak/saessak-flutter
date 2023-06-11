@@ -50,14 +50,14 @@ class FriendDetailPage extends GetView<FriendDetailController> {
                           SizedBox(height: 6),
                           Container(
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(vertical: 3),
+                            padding: EdgeInsets.symmetric(vertical: 6),
                             decoration: BoxDecoration(
                               color: AppColor.black10,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Align(
                               alignment: Alignment.center,
-                              child: Text('팔로워'),
+                              child: Text('팔로워', style: AppTextStyle.body5_r()),
                             ),
                           ),
                         ],
@@ -71,14 +71,14 @@ class FriendDetailPage extends GetView<FriendDetailController> {
                           SizedBox(height: 6),
                           Container(
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(vertical: 3),
+                            padding: EdgeInsets.symmetric(vertical: 6),
                             decoration: BoxDecoration(
                               color: AppColor.black10,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Align(
                               alignment: Alignment.center,
-                              child: Text('팔로잉'),
+                              child: Text('팔로잉', style: AppTextStyle.body5_r()),
                             ),
                           ),
                         ],
@@ -92,14 +92,14 @@ class FriendDetailPage extends GetView<FriendDetailController> {
                           SizedBox(height: 6),
                           Container(
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(vertical: 3),
+                            padding: EdgeInsets.symmetric(vertical: 6),
                             decoration: BoxDecoration(
                               color: AppColor.black10,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Align(
                               alignment: Alignment.center,
-                              child: Text('일지'),
+                              child: Text('일지', style: AppTextStyle.body5_r()),
                             ),
                           ),
                         ],
@@ -113,14 +113,14 @@ class FriendDetailPage extends GetView<FriendDetailController> {
                           SizedBox(height: 6),
                           Container(
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(vertical: 3),
+                            padding: EdgeInsets.symmetric(vertical: 6),
                             decoration: BoxDecoration(
                               color: AppColor.black10,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Align(
                               alignment: Alignment.center,
-                              child: Text('게시글'),
+                              child: Text('게시글', style: AppTextStyle.body5_r()),
                             ),
                           ),
                         ],

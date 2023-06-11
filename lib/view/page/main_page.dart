@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../controller/main_controller.dart';
 import '../../util/app_color.dart';
+import '../../util/app_routes.dart';
 import 'challenge/search_challenge_page.dart';
 import 'friends/friends_page.dart';
 
@@ -38,6 +39,14 @@ class MainPage extends GetView<MainController> {
                     onPressed: () => Get.to(() => SearchChallengePage()),
                   ),
                 );
+              } else if (controller.curPage == 4) {
+                return
+                  IconButton(
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.setName);
+                    },
+                    icon: Icon(Icons.edit),
+                  );
               } else {
                 return Container();
               }
