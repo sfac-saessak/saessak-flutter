@@ -8,6 +8,7 @@ import '../../controller/setting_controller.dart';
 import '../../util/app_color.dart';
 import '../../util/app_text_style.dart';
 import '../page/friends/friends_list_page.dart';
+import '../page/notice_page.dart';
 
 class SettingScreen extends GetView<SettingController> {
   const SettingScreen({Key? key}) : super(key: key);
@@ -157,6 +158,9 @@ class SettingScreen extends GetView<SettingController> {
                 children: [
                   SizedBox(height: 10),
                   GestureDetector(
+                    onTap: () {
+                      Get.to(() => NoticePage());
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
                       decoration: BoxDecoration(
