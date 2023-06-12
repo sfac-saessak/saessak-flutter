@@ -16,7 +16,7 @@ class HomeScreen extends GetView<PlantController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
-        color: AppColor.black10,
+        color: AppColor.white,
         child: Column(
           children: [
             Padding(

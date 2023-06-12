@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../controller/main_controller.dart';
 import '../../util/app_color.dart';
 import '../../util/app_routes.dart';
+import '../../util/app_text_style.dart';
 import 'challenge/search_challenge_page.dart';
 import 'friends/friends_page.dart';
 
@@ -15,7 +16,22 @@ class MainPage extends GetView<MainController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: false,
+        title: Obx(
+          () {
+            if (controller.curPage == 0) {
+              return Text("식물 관리", style: AppTextStyle.body2_m());
+            } else if (controller.curPage == 1) {
+              return Text("관리", style: AppTextStyle.body2_m());
+            } else if (controller.curPage == 2) {
+              return Text("게시판", style: AppTextStyle.body2_m());
+            } else if (controller.curPage == 3) {
+              return Text("챌린지", style: AppTextStyle.body2_m());
+            } else {
+              return Text('');
+            }
+          },
+        ),
+        centerTitle: true,
         automaticallyImplyLeading: false, // 자동 뒤로가기 버튼 생성 비활성화
         backgroundColor: Colors.white,
         foregroundColor: AppColor.black,
