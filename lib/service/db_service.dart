@@ -77,6 +77,16 @@ class DBService {
   // 식물 삭제
   Future deletePlant(String plantId) async {
     await plantsCollection.doc(uid).collection("plant").doc(plantId).delete();
+
+    final journalQuerySnapshot = await journalsCollection
+        .doc(uid)
+        .collection("journal")
+        .where("plant", isEqualTo: plantId)
+        .get();
+
+    for (var document in journalQuerySnapshot.docs) {
+      await document.reference.delete();
+    }
   }
 
 

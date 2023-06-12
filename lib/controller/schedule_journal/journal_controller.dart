@@ -61,37 +61,8 @@ class JournalController extends GetxController {
 
     contentController.clear();
     selectedImage(null);
-    readJournal();
+    // readJournal();
     Get.back();
-  }
-
-  // 일지 가져오기
-  void readJournal() async {
-    isLoading(true);
-    QuerySnapshot snapshot = await DBService().readJournal(user.uid);
-
-    var futureJournals = snapshot.docs.map((doc) async {
-      var journal = doc.data() as Map<String, dynamic>;
-      var plantInfo = await getPlantById(journal['plant']);
-      var plant = Plant.fromMap(plantInfo);
-      bool bookmark = journal['bookmark'];
-      return Journal(
-        plant: plant,
-        journalId: journal['journalId'],
-        uid: journal['uid'],
-        writeTime: journal['writeTime'],
-        bookmark: bookmark.obs,
-        content: journal['content'],
-        imageUrl: journal['imageUrl'],
-      );
-    }).toList();
-
-    var journals = await Future.wait(futureJournals);
-    journalList(journals);
-
-    log('journalList => ${journalList}');
-    getBookmark();
-    isLoading(false);
   }
 
   // 일지 수정
@@ -131,7 +102,7 @@ class JournalController extends GetxController {
     selectedImage(null);
 
     Get.off(JournalDetailPage(journal: journal));
-    readJournal();
+    // readJournal();
   }
 
   // 일지 삭제
@@ -140,7 +111,7 @@ class JournalController extends GetxController {
     await DBService(uid: user.uid).deleteJournal(journalId);
     isLoading(false);
     Get.back();
-    readJournal();
+    // readJournal();
   }
 
   // 식물id로 식물 정보 가져오기
@@ -164,10 +135,34 @@ class JournalController extends GetxController {
     this.bookmarkList(bookmarkList);
   }
 
+  // 일지 업데이트
+  void updateJournals(List<QueryDocumentSnapshot> docs) async {
+    isLoading(true);
+    var futureJournals = docs.map((doc) async {
+      var journal = doc.data() as Map<String, dynamic>;
+      var plantInfo = await getPlantById(journal['plant']);
+      var plant = Plant.fromMap(plantInfo);
+      bool bookmark = journal['bookmark'];
+      return Journal(
+        plant: plant,
+        journalId: journal['journalId'],
+        uid: journal['uid'],
+        writeTime: journal['writeTime'],
+        bookmark: bookmark.obs,
+        content: journal['content'],
+        imageUrl: journal['imageUrl'],
+      );
+    }).toList();
+
+    var journals = await Future.wait(futureJournals);
+    journalList(journals);
+    getBookmark();
+    isLoading(false);
+  }
+
   @override
   void onInit() {
     super.onInit();
-    readJournal();
     try {
       selectedPlant = plantList[0].obs;
     } catch (e) {
@@ -180,5 +175,17 @@ class JournalController extends GetxController {
         selectedPlant = plantList[0].obs;
       }
     });
+    DBService().journalsCollection
+        .doc(user.uid).collection("journal")
+        .orderBy('writeTime', descending: true)
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        updateJournals(snapshot.docs);
+      } else {
+        journalList([]);
+      }
+    });
+    update();
   }
 }
