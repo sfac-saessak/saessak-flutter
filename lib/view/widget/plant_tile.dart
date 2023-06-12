@@ -12,40 +12,29 @@ class PlantTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(30),
-      child: GestureDetector(
-        onTap: () {
-          Get.to(() => PlantDetailPage(plant: plant));
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-          decoration: BoxDecoration(
-            color: AppColor.white,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  width: 200,
-                  height: 200,
-                  child: CircleAvatar(
-                    backgroundColor: AppColor.black20,
-                    backgroundImage: plant.imageUrl != null
-                        ? NetworkImage(plant.imageUrl!)
-                        : null,
-                    child: plant.imageUrl != null
-                        ? null
-                        : Icon(Icons.person, color: AppColor.white),
-                  ),
-                ),
-                Text('${plant.name}'),
-                Text('${plant.species}',
-                    style: AppTextStyle.body3_m(color: AppColor.primary)),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => PlantDetailPage(plant: plant));
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 150,
+            height: 150,
+            child: CircleAvatar(
+              backgroundColor: AppColor.black20,
+              backgroundImage: plant.imageUrl != null
+                ? NetworkImage(plant.imageUrl!)
+                : null,
+              child: plant.imageUrl != null
+                ? null
+                : Icon(Icons.person, color: AppColor.white),
             ),
           ),
-        ),
+          Text('${plant.name}'),
+          Text('${plant.species}',
+              style: AppTextStyle.body3_m(color: AppColor.primary)),
+        ],
       ),
     );
   }

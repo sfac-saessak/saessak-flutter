@@ -1,9 +1,6 @@
 
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 
 import '../model/challenge.dart';
 import '../model/journal.dart';
@@ -20,6 +17,7 @@ class DBService {
   final CollectionReference followCollection = FirebaseFirestore.instance.collection("follow");
   final CollectionReference communityCollection = FirebaseFirestore.instance.collection("community");
   final CollectionReference journalsCollection = FirebaseFirestore.instance.collection("journals");
+  final CollectionReference noticeCollection = FirebaseFirestore.instance.collection("notice");
 
 
   /* ############################## 유저 정보 ############################## */
@@ -79,6 +77,16 @@ class DBService {
   // 식물 삭제
   Future deletePlant(String plantId) async {
     await plantsCollection.doc(uid).collection("plant").doc(plantId).delete();
+
+    final journalQuerySnapshot = await journalsCollection
+        .doc(uid)
+        .collection("journal")
+        .where("plant", isEqualTo: plantId)
+        .get();
+
+    for (var document in journalQuerySnapshot.docs) {
+      await document.reference.delete();
+    }
   }
 
 
@@ -279,5 +287,12 @@ class DBService {
       "recentMessageSender": message.sender.name,
       "recentMessageTime": message.time,
     });
+  }
+
+
+  /* ############################## 공지 ############################## */
+  // 공지 가져오기
+  Future readNotice() async {
+    return noticeCollection.get();
   }
 }
