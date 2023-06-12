@@ -96,7 +96,7 @@ class AddPlantPage extends GetView<PlantController> {
                     ),
                     Row(
                       children: [
-                        Text('기간', style: AppTextStyle.body3_m()),
+                        Text('심은 날짜', style: AppTextStyle.body3_m()),
                         SizedBox(width: 24),
                         GestureDetector(
                           onTap: controller.selectDate,

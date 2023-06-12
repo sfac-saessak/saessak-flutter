@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,7 +45,7 @@ class PlantController extends GetxController {
       context: Get.context!,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime(2050),
+      lastDate: DateTime.now(),
       helpText: '심은 날짜',
       cancelText: '취소',
       confirmText: '선택',
@@ -164,6 +164,11 @@ class PlantController extends GetxController {
     DateTime plantingDate = time.toDate();
     int daysSincePlanting = DateTime.now().difference(plantingDate).inDays;
     return daysSincePlanting;
+  }
+
+  // 갤러리 가져오기
+  getGallery(String plantId) {
+
   }
 
   @override

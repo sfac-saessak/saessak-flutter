@@ -59,7 +59,7 @@ class HomeScreen extends GetView<PlantController> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 12.0),
                               decoration: BoxDecoration(
-                                color: AppColor.primary,
+                                color: AppColor.black20,
                                 borderRadius: BorderRadius.circular(15),
                                 image: plant.imageUrl != null
                                   ? DecorationImage(
