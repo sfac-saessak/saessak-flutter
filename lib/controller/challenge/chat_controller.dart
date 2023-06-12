@@ -99,8 +99,8 @@ class ChatController extends GetxController {
 
   @override
   void onClose() {
-    scrollController.dispose();
     Get.find<ChallengeController>().getJoinedChallenges();
+    scrollController.dispose();
     log('onClose');
     super.onClose();
   }

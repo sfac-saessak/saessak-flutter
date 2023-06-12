@@ -27,6 +27,5 @@ class FriendsListController extends GetxController with GetSingleTickerProviderS
   @override
   void onClose() {
     super.onClose();
-    tabController.dispose();
   }
 }

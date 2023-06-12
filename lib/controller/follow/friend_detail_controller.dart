@@ -108,7 +108,6 @@ class FriendDetailController extends GetxController with GetSingleTickerProvider
   @override
   void onClose() {
     super.onClose();
-    tabController.dispose();
     log('onClose');
   }
 }
