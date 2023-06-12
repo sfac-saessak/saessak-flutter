@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../database/database.dart';
+import 'package:get/get.dart';
 import '../../util/app_color.dart';
 import '../../util/app_text_style.dart';
 
@@ -22,8 +22,8 @@ class CustomDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        height: 300,
-        width: 300,
+        height: Get.height*0.36,
+        width: Get.width*0.7,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
