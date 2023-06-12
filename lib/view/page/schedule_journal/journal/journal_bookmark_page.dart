@@ -25,8 +25,27 @@ class JournalBookmarkPage extends GetView<JournalController> {
         () => ListView.builder(
           itemCount: controller.bookmarkList.length,
           itemBuilder: (context, index) {
-            return JournalTile(journal: controller.bookmarkList[index]);
-          }
+            final journal = controller.bookmarkList[index];
+            final currentJournalDate = journal.writeTime.toDate();
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (index == 0 ||
+                    currentJournalDate.year != controller.bookmarkList[index - 1].writeTime.toDate().year ||
+                    currentJournalDate.month != controller.bookmarkList[index - 1].writeTime.toDate().month ||
+                    currentJournalDate.day != controller.bookmarkList[index - 1].writeTime.toDate().day)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Text(
+                      '${currentJournalDate.year}.${currentJournalDate.month}.${currentJournalDate.day}',
+                      style: AppTextStyle.body3_b(),
+                    ),
+                  ),
+                JournalTile(journal: journal),
+              ],
+            );
+          },
         ),
       ),
     );
