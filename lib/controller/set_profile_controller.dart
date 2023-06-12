@@ -15,6 +15,8 @@ class SetProfileController extends GetxController {
   User? get user => FirebaseAuth.instance.currentUser;
   Rxn<File> selectedImage = Rxn();
   RxBool isEnableButton = false.obs; // 버튼 활성화 위한 bool
+  // RxString? _userImage = FirebaseAuth.instance.currentUser!.photoURL?.obs;
+  // String? get userImage => _userImage?.value;
 
   onChanged() {
     if (user!.displayName == nameController.text) {

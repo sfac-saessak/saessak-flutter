@@ -12,6 +12,7 @@ class SetProfilePage extends GetView<SetProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    print(controller.user?.photoURL);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -35,22 +36,28 @@ class SetProfilePage extends GetView<SetProfileController> {
                               width: Get.width * 0.48,
                               height: Get.width * 0.5,
                               decoration: BoxDecoration(
-                                  color: AppColor.lightGrey,
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                      image: controller.selectedImage.value ==
-                                              null
-                                          ? AssetImage('assets/images/logo.png')
-                                          : AssetImage(controller
-                                              .selectedImage.value!.path),
-                                      opacity:
-                                          controller.selectedImage.value == null
-                                              ? 0.2
-                                              : 1.0,
-                                      fit:
-                                          controller.selectedImage.value == null
-                                              ? null
-                                              : BoxFit.cover)),
+                                color: AppColor.lightGrey,
+                                borderRadius: BorderRadius.circular(15),
+                                image: DecorationImage(
+                                  image: controller.selectedImage.value != null
+                                      ? AssetImage(
+                                          controller.selectedImage.value!.path)
+                                      : controller.user!.photoURL != null
+                                          ? NetworkImage(
+                                                  controller.user!.photoURL!)
+                                              as ImageProvider
+                                          : AssetImage(
+                                              'assets/images/logo.png'),
+                                  opacity: controller.user!.photoURL != null ||
+                                          controller.selectedImage.value != null
+                                      ? 1.0
+                                      : 0.2,
+                                  fit: controller.user!.photoURL != null ||
+                                          controller.selectedImage.value != null
+                                      ? BoxFit.cover
+                                      : null,
+                                ),
+                              ),
                             ),
                           ),
                         ),
