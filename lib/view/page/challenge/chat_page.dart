@@ -25,7 +25,9 @@ class ChatPage extends GetView<ChatController> {
         actions: [
           IconButton(
             onPressed: () {
-              Get.to(() => ChatDetailPage(challenge: controller.challenge, members: controller.memberList));
+              Get.to(() => ChatDetailPage(
+                  challenge: controller.challenge,
+                  members: controller.memberList));
             },
             icon: const Icon(Icons.info_outline),
           )

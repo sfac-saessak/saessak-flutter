@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,20 +33,26 @@ class JournalTile extends StatelessWidget {
                       height: 50,
                       child: CircleAvatar(
                         backgroundColor: AppColor.black20,
-                        backgroundImage: journal.plant.imageUrl != null ? NetworkImage(journal.plant.imageUrl!) : null,
-                        child: journal.plant.imageUrl != null ? null : Icon(Icons.person, color: AppColor.white),
+                        backgroundImage: journal.plant.imageUrl != null
+                            ? NetworkImage(journal.plant.imageUrl!)
+                            : null,
+                        child: journal.plant.imageUrl != null
+                            ? null
+                            : Icon(Icons.person, color: AppColor.white),
                       ),
                     ),
                     SizedBox(height: 5),
                     Container(
-                      constraints: BoxConstraints(maxWidth: 50),
-                      child: Text('${journal.plant.name}', style: AppTextStyle.body4_m(), overflow: TextOverflow.ellipsis)
-                    ),
+                        constraints: BoxConstraints(maxWidth: 50),
+                        child: Text('${journal.plant.name}',
+                            style: AppTextStyle.body4_m(),
+                            overflow: TextOverflow.ellipsis)),
                     SizedBox(height: 2),
                     Container(
-                      constraints: BoxConstraints(maxWidth: 50),
-                      child: Text('${journal.plant.species}', style: AppTextStyle.body5_r(color: AppColor.black40))
-                    ),
+                        constraints: BoxConstraints(maxWidth: 50),
+                        child: Text('${journal.plant.species}',
+                            style:
+                                AppTextStyle.body5_r(color: AppColor.black40))),
                   ],
                 ),
                 SizedBox(width: 10),
@@ -55,40 +60,48 @@ class JournalTile extends StatelessWidget {
                   child: Container(
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      color: AppColor.white,
-                      borderRadius: BorderRadius.circular(10)
-                    ),
+                        color: AppColor.white,
+                        borderRadius: BorderRadius.circular(10)),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 10, top: 20),
                           child: Container(
-                            width: 160,
-                            child: Text('${journal.content}', style: AppTextStyle.body4_r(), maxLines: 3, overflow: TextOverflow.ellipsis)
-                          ),
+                              width: 160,
+                              child: Text('${journal.content}',
+                                  style: AppTextStyle.body4_r(),
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis)),
                         ),
                         Spacer(),
                         journal.uid == controller.user.uid
-                        ? Obx(
-                          () => IconButton(
-                            onPressed: (){
-                              journal.bookmark.toggle();
-                              controller.toggleBookmark(journal.journalId!);
-                            },
-                            icon: Icon(journal.bookmark.value ? Icons.bookmark : Icons.bookmark_outline, color: AppColor.primary)
-                          ),
-                        ) : Container(),
+                            ? Obx(
+                                () => IconButton(
+                                    onPressed: () {
+                                      journal.bookmark.toggle();
+                                      controller
+                                          .toggleBookmark(journal.journalId!);
+                                    },
+                                    icon: Icon(
+                                        journal.bookmark.value
+                                            ? Icons.bookmark
+                                            : Icons.bookmark_outline,
+                                        color: AppColor.primary)),
+                              )
+                            : Container(),
                         journal.imageUrl != null
-                          ? Container(
-                            width: 90,
-                            height: 90,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(image: NetworkImage(journal.imageUrl!), fit: BoxFit.cover),
-                            ),
-                          )
-                          : Container()
+                            ? Container(
+                                width: 90,
+                                height: 90,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(journal.imageUrl!),
+                                      fit: BoxFit.cover),
+                                ),
+                              )
+                            : Container()
                       ],
                     ),
                   ),

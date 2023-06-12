@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,7 +42,9 @@ class ChatController extends GetxController {
 
     ever(chats, (_) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+        if (scrollController.hasClients) {
+          scrollController.jumpTo(scrollController.position.maxScrollExtent);
+        }
       });
     });
   }
@@ -71,7 +72,10 @@ class ChatController extends GetxController {
     if (messageController.text.isNotEmpty) {
       var userInfo = await getUserInfoById(user.uid);
       var userModel = UserModel.fromMap(userInfo);
-      Message message = Message(message: messageController.text, sender: userModel, time: Timestamp.now());
+      Message message = Message(
+          message: messageController.text,
+          sender: userModel,
+          time: Timestamp.now());
       DBService().sendMessage(challengeId, message);
       messageController.clear();
     }
