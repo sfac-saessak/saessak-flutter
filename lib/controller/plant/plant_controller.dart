@@ -14,9 +14,6 @@ import '../../service/db_service.dart';
 
 class PlantController extends GetxController {
   User get user => FirebaseAuth.instance.currentUser!;
-
-  PageController pageController = PageController(initialPage: 0);
-
   TextEditingController nameController = TextEditingController(); // 애칭
   TextEditingController speciesController = TextEditingController(); // 종
   TextEditingController wateringCycleController =
@@ -67,8 +64,6 @@ class PlantController extends GetxController {
         .map((doc) => Plant.fromMap(doc.data() as Map<String, dynamic>))
         .toList());
     isLoading(false);
-
-    pageController.jumpToPage(0);
   }
 
   // 식물 추가
