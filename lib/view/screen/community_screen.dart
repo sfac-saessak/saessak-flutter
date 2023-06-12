@@ -14,6 +14,7 @@ class CommunityScreen extends GetView<CommunityController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.black10,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           controller.titleController.text = '';
