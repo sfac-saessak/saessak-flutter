@@ -1,12 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saessak_flutter/view/page/friends/friends_list_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../controller/auth_controller.dart';
 import '../../controller/setting_controller.dart';
 import '../../util/app_color.dart';
 import '../../util/app_text_style.dart';
+import '../page/friends/friends_list_page.dart';
 
 class SettingScreen extends GetView<SettingController> {
   const SettingScreen({Key? key}) : super(key: key);
@@ -154,6 +155,52 @@ class SettingScreen extends GetView<SettingController> {
             Expanded(
               child: Column(
                 children: [
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+                      decoration: BoxDecoration(
+                        color: AppColor.white,
+                        border: Border(
+                          bottom: BorderSide(
+                            color: AppColor.black20,
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Text('공지사항', style: AppTextStyle.body2_r()),
+                          Spacer(),
+                          Icon(Icons.navigate_next, color: AppColor.primary, size: 30),
+                        ],
+                      )
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      launch('mailto: kongdo114@gmail.com');
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+                      decoration: BoxDecoration(
+                        color: AppColor.white,
+                        border: Border(
+                          bottom: BorderSide(
+                            color: AppColor.black20,
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Text('문의하기', style: AppTextStyle.body2_r()),
+                          Spacer(),
+                          Icon(Icons.navigate_next, color: AppColor.primary, size: 30),
+                        ],
+                      )
+                    ),
+                  ),
                   Spacer(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 20),
