@@ -39,17 +39,40 @@ class ChatPage extends GetView<ChatController> {
         child: Column(
           children: <Widget>[
             Obx(() => Expanded(
-                  child: ListView.builder(
-                    controller: controller.scrollController,
-                    itemCount: controller.chats.length,
-                    itemBuilder: (context, index) {
-                      Message chat = controller.chats[index];
-                      return MessageTile(
-                          message: chat,
-                          sentByMe: controller.user.uid == chat.sender.uid);
-                    },
-                  ),
-                )),
+              child: ListView.builder(
+                controller: controller.scrollController,
+                itemCount: controller.chats.length,
+                itemBuilder: (context, index) {
+                  Message chat = controller.chats[index];
+                  final currentChatDate = chat.time.toDate();
+                  return Column(
+                    children: [
+                      if (index == 0 ||
+                          currentChatDate.year != controller.chats[index - 1].time.toDate().year ||
+                          currentChatDate.month != controller.chats[index - 1].time.toDate().month ||
+                          currentChatDate.day != controller.chats[index - 1].time.toDate().day)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: AppColor.black40,
+                              borderRadius: BorderRadius.circular(15)
+                            ),
+                            child: Text(
+                              '${currentChatDate.year}.${currentChatDate.month}.${currentChatDate.day}',
+                              style: AppTextStyle.body4_r(color: AppColor.white),
+                            ),
+                          ),
+                        ),
+                      MessageTile(
+                        message: chat,
+                        sentByMe: controller.user.uid == chat.sender.uid),
+                    ],
+                  );
+                },
+              ),
+            )),
             Container(
               alignment: Alignment.bottomCenter,
               width: Get.width,
