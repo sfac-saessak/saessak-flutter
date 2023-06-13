@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +14,7 @@ import '../../model/plant.dart';
 import '../../service/db_service.dart';
 import '../schedule_journal/journal_controller.dart';
 
-class PlantController extends GetxController with GetTickerProviderStateMixin {
+class PlantController extends GetxController {
   User get user => FirebaseAuth.instance.currentUser!;
   TextEditingController nameController = TextEditingController(); // 애칭
   TextEditingController speciesController = TextEditingController(); // 종
@@ -30,7 +31,7 @@ class PlantController extends GetxController with GetTickerProviderStateMixin {
   RxBool isLoading = false.obs; // 로딩중 상태
 
   RxList<Plant> plantList = <Plant>[].obs; // 식물 리스트
-  // RxList<Journal> journalList = Get.find<JournalController>().journalList;
+  RxList<Plant> reversedPlantList = <Plant>[].obs; // 식물 리스트
 
   // 이미지 선택
   void selectImage() async {
@@ -65,6 +66,7 @@ class PlantController extends GetxController with GetTickerProviderStateMixin {
     plantList(snapshot.docs
         .map((doc) => Plant.fromMap(doc.data() as Map<String, dynamic>))
         .toList());
+    reversedPlantList(plantList.reversed.toList());
     isLoading(false);
   }
 
@@ -185,11 +187,5 @@ class PlantController extends GetxController with GetTickerProviderStateMixin {
   void onInit() {
     super.onInit();
     getPlants();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
   }
 }

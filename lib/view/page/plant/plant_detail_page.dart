@@ -5,35 +5,35 @@ import 'package:intl/intl.dart';
 import 'package:saessak_flutter/view/page/schedule_journal/journal/journal_detail_page.dart';
 
 import '../../../controller/plant/plant_controller.dart';
+import '../../../controller/plant/plant_detail_controller.dart';
 import '../../../controller/schedule_journal/journal_controller.dart';
 import '../../../model/journal.dart';
 import '../../../model/plant.dart';
 import '../../../util/app_color.dart';
 import 'add_plant_page.dart';
 
-class PlantDetailPage extends StatelessWidget {
+class PlantDetailPage extends GetView<PlantDetailController> {
   const PlantDetailPage({Key? key, required this.plant}) : super(key: key);
   final Plant plant;
 
   @override
   Widget build(BuildContext context) {
     print('플랜트 상세 : ${plant}');
-    var controller = Get.find<PlantController>();
-    var journalController = Get.find<JournalController>();
-    
-    RxList<Journal> journalList = journalController.journalList;
-    List galleryJournal = [];
-    for (Journal journal in journalList) {
-      if (plant.plantId == journal.plant.plantId) {
-        if (journal.imageUrl != null) {
-          galleryJournal.add(journal);
-        }
-      }
-    }
+    // var journalController = Get.find<JournalController>();
+    //
+    // RxList<Journal> journalList = journalController.journalList;
+    // List galleryJournal = [];
+    // for (Journal journal in journalList) {
+    //   if (plant.plantId == journal.plant.plantId) {
+    //     if (journal.imageUrl != null) {
+    //       galleryJournal.add(journal);
+    //     }
+    //   }
+    // }
     
     return WillPopScope(
       onWillPop: () {
-        journalController.onDelete();
+        controller.onClose();
         return Future.value(true);
       },
       child: Scaffold(
@@ -52,7 +52,7 @@ class PlantDetailPage extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                controller.deletePlant(plant.plantId!);
+                controller.deletePlant();
               },
               icon: Icon(Icons.delete),
             ),
@@ -118,20 +118,22 @@ class PlantDetailPage extends StatelessWidget {
 
             Text('갤러리'),
             Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 16,
+              child: Obx(
+                () => GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemCount: controller.galleryJournal.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(() => JournalDetailPage(journal: controller.galleryJournal[index]));
+                      },
+                      child: Image.network(controller.galleryJournal[index].imageUrl!),
+                    );
+                  },
                 ),
-                itemCount: galleryJournal.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(() => JournalDetailPage(journal: galleryJournal[index]));
-                    },
-                    child: Image.network(galleryJournal[index].imageUrl),
-                  );
-                },
               ),
             )
           ],

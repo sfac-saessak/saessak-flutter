@@ -14,7 +14,7 @@ class PlantTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => PlantDetailPage(plant: plant));
+        Get.to(() => PlantDetailPage(plant: plant), arguments: [plant]);
       },
       child: Column(
         children: [

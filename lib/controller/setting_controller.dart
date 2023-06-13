@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../model/community/post.dart';
 import '../model/notice.dart';
@@ -58,6 +59,26 @@ class SettingController extends GetxController {
     QuerySnapshot snapshot = await DBService().readNotice();
     noticeList(snapshot.docs.map((doc) => Notice.fromMap(doc.data() as Map<String, dynamic>)).toList());
     isLoading(false);
+  }
+
+  void launchEmail() async {
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: 'kongdo114@gmail.com',
+      queryParameters: {
+        'subject': 'title',
+        // 'body': 'How are you?',
+      },
+    );
+
+    final String url = params.toString();
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print(url);
+      throw 'Could not launch $url';
+    }
   }
 
   @override

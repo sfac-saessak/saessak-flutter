@@ -95,6 +95,7 @@ class JournalTile extends StatelessWidget {
                            height: 90,
                            clipBehavior: Clip.antiAlias,
                            decoration: BoxDecoration(
+                             color: AppColor.black20,
                              image: journal.imageUrl != null
                                ? DecorationImage(
                                image: NetworkImage(journal.imageUrl!),

@@ -183,7 +183,7 @@ class SettingScreen extends GetView<SettingController> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      launch('mailto: kongdo114@gmail.com');
+                      controller.launchEmail();
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
