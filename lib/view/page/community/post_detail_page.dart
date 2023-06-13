@@ -53,7 +53,8 @@ class PostDetailPage extends GetView<CommunityController> {
                   child: Row(
                     children: [
                       GestureDetector(
-                        onTap: () => Get.to(() => FriendDetailPage(), arguments: [user]), // 
+                        onTap: () => Get.to(() => FriendDetailPage(),
+                            arguments: [user]), //
                         child: CircleAvatar(
                           radius: 25,
                           backgroundImage: user.profileImg != null
@@ -173,11 +174,11 @@ class PostDetailPage extends GetView<CommunityController> {
                 onPressed: () async {
                   Get.dialog(
                     Dialog(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(17)),
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(17)
-                        ),
+                            borderRadius: BorderRadius.circular(17)),
                         height: 525,
                         width: 300,
                         child: Column(
@@ -188,18 +189,20 @@ class PostDetailPage extends GetView<CommunityController> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
-                                  decoration:
-                                      BoxDecoration(color: AppColor.black10,
+                                  decoration: BoxDecoration(
+                                      color: AppColor.black10,
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextField(
+                                      maxLines: 27,
                                       controller:
                                           controller.commentTextController,
                                       decoration: InputDecoration(
                                           hintText: '댓글 내용을 입력해주세요.',
                                           hintStyle: AppTextStyle.body3_r()
-                                              .copyWith(color: AppColor.black50),
+                                              .copyWith(
+                                                  color: AppColor.black50),
                                           border: InputBorder.none),
                                     ),
                                   ),
@@ -209,7 +212,8 @@ class PostDetailPage extends GetView<CommunityController> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: OutlinedButton(
-                                onPressed: () => controller.completeComment(post),
+                                onPressed: () =>
+                                    controller.completeComment(post),
                                 style: OutlinedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                       side: BorderSide(color: AppColor.primary),
