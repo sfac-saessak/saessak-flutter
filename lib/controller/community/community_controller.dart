@@ -10,8 +10,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:saessak_flutter/component/community/comment_card.dart';
 import 'package:saessak_flutter/model/community/post.dart';
 import 'package:saessak_flutter/model/user_model.dart';
+import 'package:saessak_flutter/util/app_color.dart';
+import 'package:saessak_flutter/util/app_text_style.dart';
 import 'package:saessak_flutter/view/page/community/post_detail_page.dart';
 import 'package:saessak_flutter/view/page/community/post_write_page.dart';
+
+import '../../view/widget/loading_dialog.dart';
+
 
 class CommunityController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -285,10 +290,7 @@ class CommunityController extends GetxController
   // 작성하기 버튼
   writePost() async {
     // 로딩중 시작, 함수 종료시 로딩중 끝
-    Get.defaultDialog(
-        backgroundColor: Colors.transparent,
-        title: '업로드중입니다.',
-        content: CircularProgressIndicator());
+    Get.dialog(LoadingDialog(text: '업로드중입니다.',));
 
     // modify
     var userRes = await db
@@ -544,3 +546,4 @@ class CommunityController extends GetxController
     communityTabController.dispose();
   }
 }
+

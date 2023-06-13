@@ -122,6 +122,7 @@ class PostDetailPage extends GetView<CommunityController> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(controller.convertTime(post.writeTime)),
+              Text('·'),
               Text('조회수 ${post.views}'),
             ],
           ),
