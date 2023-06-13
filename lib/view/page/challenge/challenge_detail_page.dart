@@ -62,7 +62,8 @@ class ChallengeDetailPage extends StatelessWidget {
                   child: Text('${challenge.plant}'),
                 ),
                 Icon(Icons.people),
-                Text('${challenge.members!.length}/${challenge.memberLimit}'),
+                Text(
+                    '${challenge.members!.length} / ${challenge.memberLimit != null ? challenge.memberLimit : '제한없음'}'),
                 Spacer(),
                 challengeEnd
                     ? Text('모집 마감')
