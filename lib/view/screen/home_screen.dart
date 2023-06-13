@@ -54,7 +54,7 @@ class HomeScreen extends GetView<PlantController> {
                             padding: const EdgeInsets.all(8.0),
                             child: GestureDetector(
                               onTap: () {
-                                Get.to(() => PlantDetailPage(plant: plant));
+                                Get.to(() => PlantDetailPage(plant: plant), arguments: [plant]);
                               },
                               child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12.0),

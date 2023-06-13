@@ -161,7 +161,7 @@ class JournalController extends GetxController {
   }
 
   // 일지 가져오기
-  void readJournal() async {
+  Future readJournal() async {
     isLoading(true);
     QuerySnapshot snapshot = await DBService().readJournal(user.uid);
 
@@ -184,7 +184,6 @@ class JournalController extends GetxController {
     var journals = await Future.wait(futureJournals);
     journalList(journals);
 
-    log('journalList => ${journalList}');
     getBookmark();
     isLoading(false);
   }

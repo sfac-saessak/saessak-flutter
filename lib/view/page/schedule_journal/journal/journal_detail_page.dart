@@ -91,6 +91,7 @@ class JournalDetailPage extends StatelessWidget {
             SizedBox(height: 20),
             Container(
               width: double.infinity,
+              height: 100,
               decoration: BoxDecoration(
                 image: journal.imageUrl != null ? DecorationImage(image: NetworkImage(journal.imageUrl!)) : null,
               ),
