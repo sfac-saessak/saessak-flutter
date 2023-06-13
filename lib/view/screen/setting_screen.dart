@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,15 +30,19 @@ class SettingScreen extends GetView<SettingController> {
                     child: CircleAvatar(
                       radius: 36,
                       backgroundColor: Colors.grey,
-                      child: controller.user.photoURL == null ? Icon(Icons.person, color: Colors.white) : null,
+                      child: controller.user.photoURL == null
+                          ? Icon(Icons.person, color: Colors.white)
+                          : null,
                       backgroundImage: controller.user.photoURL != null
                           ? NetworkImage(controller.user.photoURL!)
                           : null,
                     ),
                   ),
                   SizedBox(height: 6),
-                  Text(controller.user.displayName!, style: AppTextStyle.body2_m()),
-                  Text(controller.user.email!, style: AppTextStyle.body4_r(color: AppColor.black40)),
+                  Text(controller.user.displayName!,
+                      style: AppTextStyle.body2_m()),
+                  Text(controller.user.email!,
+                      style: AppTextStyle.body4_r(color: AppColor.black40)),
                   SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -49,14 +52,14 @@ class SettingScreen extends GetView<SettingController> {
                           child: GestureDetector(
                             onTap: () {
                               Get.to(() => FriendsListPage(
-                                userName: controller.user.displayName!,
-                                followingList: controller.followingList,
-                                followerList: controller.followerList)
-                              );
+                                  userName: controller.user.displayName!,
+                                  followingList: controller.followingList,
+                                  followerList: controller.followerList));
                             },
                             child: Column(
                               children: [
-                                Text('${controller.followerList.length}', style: AppTextStyle.body1_m()),
+                                Text('${controller.followerList.length}',
+                                    style: AppTextStyle.body1_m()),
                                 SizedBox(height: 6),
                                 Container(
                                   width: double.infinity,
@@ -67,7 +70,8 @@ class SettingScreen extends GetView<SettingController> {
                                   ),
                                   child: Align(
                                     alignment: Alignment.center,
-                                    child: Text('팔로워', style: AppTextStyle.body5_r()),
+                                    child: Text('팔로워',
+                                        style: AppTextStyle.body5_r()),
                                   ),
                                 ),
                               ],
@@ -79,14 +83,14 @@ class SettingScreen extends GetView<SettingController> {
                           child: GestureDetector(
                             onTap: () {
                               Get.to(() => FriendsListPage(
-                                userName: controller.user.displayName!,
-                                followingList: controller.followingList,
-                                followerList: controller.followerList)
-                              );
+                                  userName: controller.user.displayName!,
+                                  followingList: controller.followingList,
+                                  followerList: controller.followerList));
                             },
                             child: Column(
                               children: [
-                                Text('${controller.followingList.length}', style: AppTextStyle.body1_m()),
+                                Text('${controller.followingList.length}',
+                                    style: AppTextStyle.body1_m()),
                                 SizedBox(height: 6),
                                 Container(
                                   width: double.infinity,
@@ -97,7 +101,8 @@ class SettingScreen extends GetView<SettingController> {
                                   ),
                                   child: Align(
                                     alignment: Alignment.center,
-                                    child: Text('팔로잉', style: AppTextStyle.body5_r()),
+                                    child: Text('팔로잉',
+                                        style: AppTextStyle.body5_r()),
                                   ),
                                 ),
                               ],
@@ -108,7 +113,8 @@ class SettingScreen extends GetView<SettingController> {
                         Expanded(
                           child: Column(
                             children: [
-                              Text('${controller.journalList.length}', style: AppTextStyle.body1_m()),
+                              Text('${controller.journalList.length}',
+                                  style: AppTextStyle.body1_m()),
                               SizedBox(height: 6),
                               Container(
                                 width: double.infinity,
@@ -119,7 +125,8 @@ class SettingScreen extends GetView<SettingController> {
                                 ),
                                 child: Align(
                                   alignment: Alignment.center,
-                                  child: Text('일지', style: AppTextStyle.body5_r()),
+                                  child:
+                                      Text('일지', style: AppTextStyle.body5_r()),
                                 ),
                               ),
                             ],
@@ -129,7 +136,8 @@ class SettingScreen extends GetView<SettingController> {
                         Expanded(
                           child: Column(
                             children: [
-                              Text('${controller.myPostList.length}', style: AppTextStyle.body1_m()),
+                              Text('${controller.myPostList.length}',
+                                  style: AppTextStyle.body1_m()),
                               SizedBox(height: 6),
                               Container(
                                 width: double.infinity,
@@ -140,7 +148,8 @@ class SettingScreen extends GetView<SettingController> {
                                 ),
                                 child: Align(
                                   alignment: Alignment.center,
-                                  child: Text('게시글', style: AppTextStyle.body5_r()),
+                                  child: Text('게시글',
+                                      style: AppTextStyle.body5_r()),
                                 ),
                               ),
                             ],
@@ -162,52 +171,55 @@ class SettingScreen extends GetView<SettingController> {
                       Get.to(() => NoticePage());
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                      decoration: BoxDecoration(
-                        color: AppColor.white,
-                        border: Border(
-                          bottom: BorderSide(
-                            color: AppColor.black20,
-                            width: 1.0,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 18),
+                        decoration: BoxDecoration(
+                          color: AppColor.white,
+                          border: Border(
+                            bottom: BorderSide(
+                              color: AppColor.black20,
+                              width: 1.0,
+                            ),
                           ),
                         ),
-                      ),
-                      child: Row(
-                        children: [
-                          Text('공지사항', style: AppTextStyle.body2_r()),
-                          Spacer(),
-                          Icon(Icons.navigate_next, color: AppColor.primary, size: 30),
-                        ],
-                      )
-                    ),
+                        child: Row(
+                          children: [
+                            Text('공지사항', style: AppTextStyle.body2_r()),
+                            Spacer(),
+                            Icon(Icons.navigate_next,
+                                color: AppColor.primary, size: 30),
+                          ],
+                        )),
                   ),
                   GestureDetector(
                     onTap: () {
                       controller.launchEmail();
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                      decoration: BoxDecoration(
-                        color: AppColor.white,
-                        border: Border(
-                          bottom: BorderSide(
-                            color: AppColor.black20,
-                            width: 1.0,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 18),
+                        decoration: BoxDecoration(
+                          color: AppColor.white,
+                          border: Border(
+                            bottom: BorderSide(
+                              color: AppColor.black20,
+                              width: 1.0,
+                            ),
                           ),
                         ),
-                      ),
-                      child: Row(
-                        children: [
-                          Text('문의하기', style: AppTextStyle.body2_r()),
-                          Spacer(),
-                          Icon(Icons.navigate_next, color: AppColor.primary, size: 30),
-                        ],
-                      )
-                    ),
+                        child: Row(
+                          children: [
+                            Text('문의하기', style: AppTextStyle.body2_r()),
+                            Spacer(),
+                            Icon(Icons.navigate_next,
+                                color: AppColor.primary, size: 30),
+                          ],
+                        )),
                   ),
                   Spacer(),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 45, vertical: 20),
                     child: Container(
                       width: double.infinity,
                       height: 50,
