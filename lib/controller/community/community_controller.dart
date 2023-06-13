@@ -350,6 +350,7 @@ class CommunityController extends GetxController
 
   // #### post_detail_page controll
   TextEditingController commentTextController = TextEditingController();
+  ScrollController scrollController = ScrollController();
 
   // 게시글 수정 1 - 기존 작성한 게시글을 post로 받아 게시글 작성페이지로 이동하는 함수
   moveToModifyPostPage(Post post) {
@@ -494,6 +495,11 @@ class CommunityController extends GetxController
     await getComments(post);
     commentTextController.text = '';
     Get.back();
+     scrollController.animateTo(
+    scrollController.position.maxScrollExtent+100,
+    duration: Duration(milliseconds: 300),
+    curve: Curves.easeOut,
+  );
   }
 
 // 시간 변환 함수

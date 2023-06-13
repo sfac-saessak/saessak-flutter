@@ -26,7 +26,9 @@ class PostDetailPage extends GetView<CommunityController> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ListView(children: [
+        child: ListView(
+          controller: controller.scrollController,
+          children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
