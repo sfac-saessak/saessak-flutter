@@ -1,8 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:saessak_flutter/view/page/schedule_journal/journal/journal_detail_page.dart';
 
 import '../../../controller/plant/plant_controller.dart';
+import '../../../controller/schedule_journal/journal_controller.dart';
+import '../../../model/journal.dart';
 import '../../../model/plant.dart';
 import '../../../util/app_color.dart';
 import 'add_plant_page.dart';
@@ -15,6 +19,17 @@ class PlantDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     print('플랜트 상세 : ${plant}');
     var controller = Get.find<PlantController>();
+    
+    RxList<Journal> journalList = Get.find<JournalController>().journalList;
+    List galleryJournal = [];
+    for (Journal journal in journalList) {
+      if (plant.plantId == journal.plant.plantId) {
+        if (journal.imageUrl != null) {
+          galleryJournal.add(journal);
+        }
+      }
+    }
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('${plant.name}'),
@@ -94,6 +109,25 @@ class PlantDetailPage extends StatelessWidget {
               Text('${plant.memo}'),
             ],
           ),
+
+          Text('갤러리'),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 16,
+              ),
+              itemCount: galleryJournal.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => JournalDetailPage(journal: galleryJournal[index]));
+                  },
+                  child: Image.network(galleryJournal[index].imageUrl),
+                );
+              },
+            ),
+          )
         ],
       ),
     );

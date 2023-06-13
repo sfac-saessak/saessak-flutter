@@ -9,8 +9,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:saessak_flutter/view/page/plant/plant_detail_page.dart';
 
+import '../../model/journal.dart';
 import '../../model/plant.dart';
 import '../../service/db_service.dart';
+import '../schedule_journal/journal_controller.dart';
 
 class PlantController extends GetxController {
   User get user => FirebaseAuth.instance.currentUser!;
@@ -29,6 +31,7 @@ class PlantController extends GetxController {
   RxBool isLoading = false.obs; // 로딩중 상태
 
   RxList<Plant> plantList = <Plant>[].obs; // 식물 리스트
+  // RxList<Journal> journalList = Get.find<JournalController>().journalList;
 
   // 이미지 선택
   void selectImage() async {
@@ -168,7 +171,15 @@ class PlantController extends GetxController {
 
   // 갤러리 가져오기
   getGallery(String plantId) {
-
+    List gallery = [];
+    // for (Journal journal in journalList) {
+    //   if (plantId == journal.plant.plantId) {
+    //     if (journal.imageUrl != null) {
+    //       gallery.add(journal.imageUrl);
+    //     }
+    //   }
+    // }
+    // return gallery;
   }
 
   @override
