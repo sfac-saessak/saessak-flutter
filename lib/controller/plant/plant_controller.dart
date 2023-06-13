@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +11,7 @@ import 'package:saessak_flutter/view/page/plant/plant_detail_page.dart';
 import '../../model/plant.dart';
 import '../../service/db_service.dart';
 
-class PlantController extends GetxController {
+class PlantController extends GetxController with GetTickerProviderStateMixin {
   User get user => FirebaseAuth.instance.currentUser!;
   TextEditingController nameController = TextEditingController(); // 애칭
   TextEditingController speciesController = TextEditingController(); // 종
@@ -167,13 +166,29 @@ class PlantController extends GetxController {
   }
 
   // 갤러리 가져오기
-  getGallery(String plantId) {
+  getGallery(String plantId) {}
 
-  }
+// ##### test
+  late final AnimationController controller_a = AnimationController(
+    duration: const Duration(seconds: 10),
+    vsync: this,
+  )..repeat();
+  late final AnimationController controller_b = AnimationController(
+    duration: const Duration(seconds: 30),
+    vsync: this,
+  )..repeat();
 
   @override
   void onInit() {
     super.onInit();
     getPlants();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    controller_a.dispose();
+    controller_b.dispose();
   }
 }

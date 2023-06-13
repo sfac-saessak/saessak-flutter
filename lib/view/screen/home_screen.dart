@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/util/app_text_style.dart';
@@ -8,6 +7,7 @@ import '../../controller/plant/plant_controller.dart';
 import '../../util/app_color.dart';
 import '../page/plant/add_plant_page.dart';
 import '../page/plant/plant_detail_page.dart';
+import 'dart:math' as math;
 
 class HomeScreen extends GetView<PlantController> {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,14 +21,39 @@ class HomeScreen extends GetView<PlantController> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                width: double.infinity,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: AppColor.black40,
-                  borderRadius: BorderRadius.circular(15),
+              child: Stack(children: [
+                Container(
+                  width: double.infinity,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: AppColor.black40,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: 10,
+                  child: AnimatedBuilder(
+                    animation: controller.controller_a,
+                    child: Text('새'),
+                    builder: (BuildContext context, Widget? child) {
+                      return Transform.translate(
+                        offset: Offset(controller.controller_a.value * 400, 0),
+                        child: child,
+                      );
+                    },
+                  ),
+                ),
+                AnimatedBuilder(
+                  animation: controller.controller_b,
+                  child: Text('구름'),
+                  builder: (BuildContext context, Widget? child) {
+                    return Transform.translate(
+                      offset: Offset(controller.controller_b.value * 500, 0),
+                      child: child,
+                    );
+                  },
+                ),
+              ]),
             ),
             SizedBox(height: 12),
             Container(
@@ -46,35 +71,41 @@ class HomeScreen extends GetView<PlantController> {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.plantList.length,
-                      itemBuilder: (context, index) {
-                        var plant = controller.plantList[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.to(() => PlantDetailPage(plant: plant));
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                              decoration: BoxDecoration(
-                                color: AppColor.black20,
-                                borderRadius: BorderRadius.circular(15),
-                                image: plant.imageUrl != null
-                                  ? DecorationImage(
-                                      image: NetworkImage(plant.imageUrl!),
-                                      fit: BoxFit.fitWidth,
-                                      colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.darken),
-                                    )
-                                  : null,
-                              ),
-                              child: Center(child: Text('${controller.plantList[index].name}', style: AppTextStyle.body3_r(color: AppColor.white)))
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.plantList.length,
+                        itemBuilder: (context, index) {
+                          var plant = controller.plantList[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.to(() => PlantDetailPage(plant: plant));
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.black20,
+                                    borderRadius: BorderRadius.circular(15),
+                                    image: plant.imageUrl != null
+                                        ? DecorationImage(
+                                            image:
+                                                NetworkImage(plant.imageUrl!),
+                                            fit: BoxFit.fitWidth,
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.black.withOpacity(0.2),
+                                                BlendMode.darken),
+                                          )
+                                        : null,
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                          '${controller.plantList[index].name}',
+                                          style: AppTextStyle.body3_r(
+                                              color: AppColor.white)))),
                             ),
-                          ),
-                        );
-                      }
-                    ),
+                          );
+                        }),
                   )
                 ],
               ),
@@ -85,8 +116,8 @@ class HomeScreen extends GetView<PlantController> {
                 itemCount: controller.plantList.length,
                 itemBuilder: (context, index) {
                   return controller.isLoading.value
-                    ? Center(child: CircularProgressIndicator())
-                    : PlantTile(plant: controller.plantList[index]);
+                      ? Center(child: CircularProgressIndicator())
+                      : PlantTile(plant: controller.plantList[index]);
                 },
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
