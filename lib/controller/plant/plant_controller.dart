@@ -8,8 +8,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:saessak_flutter/view/page/plant/plant_detail_page.dart';
 
+import '../../model/journal.dart';
 import '../../model/plant.dart';
 import '../../service/db_service.dart';
+import '../schedule_journal/journal_controller.dart';
 
 class PlantController extends GetxController with GetTickerProviderStateMixin {
   User get user => FirebaseAuth.instance.currentUser!;
@@ -28,6 +30,7 @@ class PlantController extends GetxController with GetTickerProviderStateMixin {
   RxBool isLoading = false.obs; // 로딩중 상태
 
   RxList<Plant> plantList = <Plant>[].obs; // 식물 리스트
+  // RxList<Journal> journalList = Get.find<JournalController>().journalList;
 
   // 이미지 선택
   void selectImage() async {
@@ -166,17 +169,17 @@ class PlantController extends GetxController with GetTickerProviderStateMixin {
   }
 
   // 갤러리 가져오기
-  getGallery(String plantId) {}
-
-// ##### test
-  late final AnimationController controller_a = AnimationController(
-    duration: const Duration(seconds: 10),
-    vsync: this,
-  )..repeat();
-  late final AnimationController controller_b = AnimationController(
-    duration: const Duration(seconds: 30),
-    vsync: this,
-  )..repeat();
+  getGallery(String plantId) {
+    List gallery = [];
+    // for (Journal journal in journalList) {
+    //   if (plantId == journal.plant.plantId) {
+    //     if (journal.imageUrl != null) {
+    //       gallery.add(journal.imageUrl);
+    //     }
+    //   }
+    // }
+    // return gallery;
+  }
 
   @override
   void onInit() {
@@ -188,7 +191,5 @@ class PlantController extends GetxController with GetTickerProviderStateMixin {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    controller_a.dispose();
-    controller_b.dispose();
   }
 }
