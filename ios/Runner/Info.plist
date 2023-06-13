@@ -53,7 +53,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-<key>CFBundleURLTypes</key>
+	<key>CFBundleURLTypes</key>
 	<array>
 	    <dict>
 	        <key>CFBundleTypeRole</key>
@@ -64,6 +64,10 @@
 	        </array>
 	    </dict>
 	</array>
-	
+	<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>mailto</string>
+		</array>
+
 </dict>
 </plist>
