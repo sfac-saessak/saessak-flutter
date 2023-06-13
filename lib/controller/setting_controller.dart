@@ -74,6 +74,7 @@ class SettingController extends GetxController {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
+      print(url);
       throw 'Could not launch $url';
     }
   }

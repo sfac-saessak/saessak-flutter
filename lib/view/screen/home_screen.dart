@@ -46,34 +46,34 @@ class HomeScreen extends GetView<PlantController> {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.plantList.length,
-                      itemBuilder: (context, index) {
-                        var plant = controller.plantList[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.to(() => PlantDetailPage(plant: plant));
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                              decoration: BoxDecoration(
-                                color: AppColor.black20,
-                                borderRadius: BorderRadius.circular(15),
-                                image: plant.imageUrl != null
-                                  ? DecorationImage(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.reversedPlantList.length,
+                        itemBuilder: (context, index) {
+                          var plant = controller.reversedPlantList[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.to(() => PlantDetailPage(plant: plant));
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.black20,
+                                    borderRadius: BorderRadius.circular(15),
+                                    image: plant.imageUrl != null
+                                        ? DecorationImage(
                                       image: NetworkImage(plant.imageUrl!),
                                       fit: BoxFit.fitWidth,
                                       colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.darken),
                                     )
-                                  : null,
+                                        : null,
+                                  ),
+                                  child: Center(child: Text('${controller.reversedPlantList[index].name}', style: AppTextStyle.body3_r(color: AppColor.white)))
                               ),
-                              child: Center(child: Text('${controller.plantList[index].name}', style: AppTextStyle.body3_r(color: AppColor.white)))
                             ),
-                          ),
-                        );
-                      }
+                          );
+                        }
                     ),
                   )
                 ],
@@ -84,9 +84,7 @@ class HomeScreen extends GetView<PlantController> {
               child: GridView.builder(
                 itemCount: controller.plantList.length,
                 itemBuilder: (context, index) {
-                  return controller.isLoading.value
-                    ? Center(child: CircularProgressIndicator())
-                    : PlantTile(plant: controller.plantList[index]);
+                  return PlantTile(plant: controller.plantList[index]);
                 },
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,

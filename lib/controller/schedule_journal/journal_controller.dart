@@ -160,9 +160,39 @@ class JournalController extends GetxController {
     isLoading(false);
   }
 
+  // 일지 가져오기
+  void readJournal() async {
+    isLoading(true);
+    QuerySnapshot snapshot = await DBService().readJournal(user.uid);
+
+    var futureJournals = snapshot.docs.map((doc) async {
+      var journal = doc.data() as Map<String, dynamic>;
+      var plantInfo = await getPlantById(journal['plant']);
+      var plant = Plant.fromMap(plantInfo);
+      bool bookmark = journal['bookmark'];
+      return Journal(
+        plant: plant,
+        journalId: journal['journalId'],
+        uid: journal['uid'],
+        writeTime: journal['writeTime'],
+        bookmark: bookmark.obs,
+        content: journal['content'],
+        imageUrl: journal['imageUrl'],
+      );
+    }).toList();
+
+    var journals = await Future.wait(futureJournals);
+    journalList(journals);
+
+    log('journalList => ${journalList}');
+    getBookmark();
+    isLoading(false);
+  }
+
   @override
   void onInit() {
     super.onInit();
+    readJournal();
     try {
       selectedPlant = plantList[0].obs;
     } catch (e) {

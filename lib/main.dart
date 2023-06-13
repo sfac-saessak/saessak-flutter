@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'controller/plant/plant_detail_controller.dart';
 import 'firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => JournalController(), fenix: true);
         Get.lazyPut(() => SettingController(), fenix: true);
         Get.lazyPut(() => FriendsListController(), fenix: true);
+        Get.lazyPut(() => PlantDetailController(), fenix: true);
       }),
       getPages: AppPages.pages,
       initialRoute: AppRoutes.splash,

@@ -7,6 +7,7 @@ import 'package:saessak_flutter/view/page/schedule_journal/journal/add_journal_p
 import '../../../../controller/schedule_journal/journal_controller.dart';
 import '../../../../model/journal.dart';
 import '../../../../util/app_color.dart';
+import '../../../../util/app_text_style.dart';
 
 class JournalDetailPage extends StatelessWidget {
   const JournalDetailPage({Key? key, required this.journal}) : super(key: key);
@@ -16,8 +17,9 @@ class JournalDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<JournalController>();
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: AppBar(
-        title: Text('${journal.plant.name}'),
+        title: Text("일지", style: AppTextStyle.body2_m()),
         centerTitle: true,
         backgroundColor: AppColor.white,
         foregroundColor: AppColor.black,
@@ -45,16 +47,29 @@ class JournalDetailPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: AppColor.black20,
-                  backgroundImage: journal.plant.imageUrl != null ? NetworkImage(journal.plant.imageUrl!) : null,
-                  child: journal.plant.imageUrl != null ? null : Icon(Icons.person, color: AppColor.white),
+                Container(
+                  width: 50,
+                  height: 50,
+                  child: CircleAvatar(
+                    backgroundColor: AppColor.black20,
+                    backgroundImage: journal.plant.imageUrl != null ? NetworkImage(journal.plant.imageUrl!) : null,
+                    child: journal.plant.imageUrl != null ? null : Icon(Icons.person, color: AppColor.white),
+                  ),
                 ),
+                SizedBox(width: 10),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('${journal.plant.name}'),
-                    Text('${DateFormat("yyyy-MM-dd").format(journal.writeTime.toDate())}'),
+                    Row(
+                      children: [
+                        Text('${journal.plant.name}', style: AppTextStyle.body3_m()),
+                        SizedBox(width: 2),
+                        Text('${journal.plant.species}', style: AppTextStyle.body4_r(color: AppColor.black40)),
+                      ],
+                    ),
+                    SizedBox(height: 6),
+                    Text('${DateFormat("yyyy-MM-dd").format(journal.writeTime.toDate())}', style: AppTextStyle.body4_r(color: AppColor.black40)),
                   ],
                 ),
                 Spacer(),
@@ -71,10 +86,11 @@ class JournalDetailPage extends StatelessWidget {
                 : Container()
               ],
             ),
+            SizedBox(height: 10),
             Text('${journal.content}'),
+            SizedBox(height: 20),
             Container(
-              width: 100,
-              height: 100,
+              width: double.infinity,
               decoration: BoxDecoration(
                 image: journal.imageUrl != null ? DecorationImage(image: NetworkImage(journal.imageUrl!)) : null,
               ),

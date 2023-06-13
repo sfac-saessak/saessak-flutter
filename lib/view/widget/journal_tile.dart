@@ -65,43 +65,53 @@ class JournalTile extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, top: 20),
-                          child: Container(
-                              width: 160,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, top: 20),
+                            child: Container(
                               child: Text('${journal.content}',
-                                  style: AppTextStyle.body4_r(),
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis)),
+                                style: AppTextStyle.body4_r(),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis)),
+                          ),
                         ),
-                        Spacer(),
                         journal.uid == controller.user.uid
-                            ? Obx(
-                                () => IconButton(
-                                    onPressed: () {
-                                      journal.bookmark.toggle();
-                                      controller
-                                          .toggleBookmark(journal.journalId!);
-                                    },
-                                    icon: Icon(
-                                        journal.bookmark.value
-                                            ? Icons.bookmark
-                                            : Icons.bookmark_outline,
-                                        color: AppColor.primary)),
-                              )
-                            : Container(),
-                        journal.imageUrl != null
-                            ? Container(
-                                width: 90,
-                                height: 90,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(journal.imageUrl!),
-                                      fit: BoxFit.cover),
-                                ),
-                              )
-                            : Container()
+                          ? Obx(
+                            () => IconButton(
+                              onPressed: () {
+                                journal.bookmark.toggle();
+                                controller.toggleBookmark(journal.journalId!);
+                              },
+                              icon: Icon(
+                                journal.bookmark.value
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_outline,
+                                color: AppColor.primary)
+                            ),
+                          )
+                          : Container(),
+                         Container(
+                           width: 90,
+                           height: 90,
+                           clipBehavior: Clip.antiAlias,
+                           decoration: BoxDecoration(
+                             color: AppColor.black20,
+                             image: journal.imageUrl != null
+                               ? DecorationImage(
+                               image: NetworkImage(journal.imageUrl!),
+                                  fit: BoxFit.cover
+                             )
+                             : null,
+                           ),
+                           child: journal.imageUrl == null
+                             ? Center (
+                               child: Container(
+                                 width: 30,
+                                 height: 30,
+                                 child: Image.asset('assets/images/logo.png'),
+                               ),
+                             ) : null,
+                         )
                       ],
                     ),
                   ),

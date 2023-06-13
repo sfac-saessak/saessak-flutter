@@ -10,8 +10,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:saessak_flutter/component/community/comment_card.dart';
 import 'package:saessak_flutter/model/community/post.dart';
 import 'package:saessak_flutter/model/user_model.dart';
+import 'package:saessak_flutter/util/app_color.dart';
+import 'package:saessak_flutter/util/app_text_style.dart';
 import 'package:saessak_flutter/view/page/community/post_detail_page.dart';
 import 'package:saessak_flutter/view/page/community/post_write_page.dart';
+
+import '../../view/widget/loading_dialog.dart';
+
 
 class CommunityController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -83,6 +88,20 @@ class CommunityController extends GetxController
     }
   }
 
+// post에 user 넣어주고 List<Post> 반환하는 함수
+  Future<List<Post>> addUserToPost(
+      QuerySnapshot<Map<String, dynamic>> documentSnapshots) async {
+    List<Post> postList =
+        await Future.wait(documentSnapshots.docs.map((e) async {
+      var resUser = await db.collection('users').doc(e.data()['userUid']).get();
+      UserModel user = UserModel.fromMap(resUser.data()!);
+      Post post = Post.fromMap(e.data());
+      post.user = user;
+      return post;
+    }).toList());
+    return postList;
+  }
+
   // 전체글 가져와서 postList 구성
   getPosts() async {
     await db
@@ -92,14 +111,7 @@ class CommunityController extends GetxController
         .get()
         .then((documentSnapshots) async {
       lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
-      postList.value = await Future.wait(documentSnapshots.docs.map((e) async {
-        var resUser =
-            await db.collection('users').doc(e.data()['userUid']).get();
-        UserModel user = UserModel.fromMap(resUser.data()!);
-        Post post = Post.fromMap(e.data());
-        post.user = user;
-        return post;
-      }).toList());
+      postList.value = await addUserToPost(documentSnapshots);
     });
   }
 
@@ -112,10 +124,9 @@ class CommunityController extends GetxController
           .startAfterDocument(lastVisible!)
           .limit(5)
           .get()
-          .then((documentSnapshots) {
+          .then((documentSnapshots) async {
         lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
-        postList.value!.addAll(
-            documentSnapshots.docs.map((e) => Post.fromMap(e.data())).toList());
+        postList.value!.addAll(await addUserToPost(documentSnapshots));
         postList.refresh();
       });
     } catch (e) {
@@ -132,11 +143,9 @@ class CommunityController extends GetxController
         .orderBy('writeTime', descending: true)
         .limit(5)
         .get()
-        .then((documentSnapshots) {
+        .then((documentSnapshots) async {
       lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
-      postList.value =
-          documentSnapshots.docs.map((e) => Post.fromMap(e.data())).toList();
-      postList.refresh();
+      postList.value = await addUserToPost(documentSnapshots);
     });
   }
 
@@ -150,10 +159,9 @@ class CommunityController extends GetxController
           .startAfterDocument(lastVisible!)
           .limit(5)
           .get()
-          .then((documentSnapshots) {
+          .then((documentSnapshots) async {
         lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
-        postList.value!.addAll(
-            documentSnapshots.docs.map((e) => Post.fromMap(e.data())).toList());
+        postList.value!.addAll(await addUserToPost(documentSnapshots));
         postList.refresh();
       });
     } catch (e) {
@@ -169,10 +177,9 @@ class CommunityController extends GetxController
         .orderBy('writeTime', descending: true)
         .limit(5)
         .get()
-        .then((documentSnapshots) {
+        .then((documentSnapshots) async {
       lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
-      postList.value =
-          documentSnapshots.docs.map((e) => Post.fromMap(e.data())).toList();
+      postList.value = await addUserToPost(documentSnapshots);
       postList.refresh();
     });
   }
@@ -187,10 +194,9 @@ class CommunityController extends GetxController
           .startAfterDocument(lastVisible!)
           .limit(5)
           .get()
-          .then((documentSnapshots) {
+          .then((documentSnapshots) async {
         lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
-        postList.value!.addAll(
-            documentSnapshots.docs.map((e) => Post.fromMap(e.data())).toList());
+        postList.value!.addAll(await addUserToPost(documentSnapshots));
         postList.refresh();
       });
     } catch (e) {
@@ -206,10 +212,9 @@ class CommunityController extends GetxController
         .orderBy('writeTime', descending: true)
         .limit(5)
         .get()
-        .then((documentSnapshots) {
+        .then((documentSnapshots) async {
       lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
-      postList.value =
-          documentSnapshots.docs.map((e) => Post.fromMap(e.data())).toList();
+      postList.value = await addUserToPost(documentSnapshots);
       postList.refresh();
     });
   }
@@ -224,10 +229,9 @@ class CommunityController extends GetxController
           .startAfterDocument(lastVisible!)
           .limit(5)
           .get()
-          .then((documentSnapshots) {
+          .then((documentSnapshots) async {
         lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
-        postList.value!.addAll(
-            documentSnapshots.docs.map((e) => Post.fromMap(e.data())).toList());
+        postList.value!.addAll(await addUserToPost(documentSnapshots));
         postList.refresh();
       });
     } catch (e) {
@@ -286,10 +290,7 @@ class CommunityController extends GetxController
   // 작성하기 버튼
   writePost() async {
     // 로딩중 시작, 함수 종료시 로딩중 끝
-    Get.defaultDialog(
-        backgroundColor: Colors.transparent,
-        title: '업로드중입니다.',
-        content: CircularProgressIndicator());
+    Get.dialog(LoadingDialog(text: '업로드중입니다.',));
 
     // modify
     var userRes = await db
@@ -350,6 +351,8 @@ class CommunityController extends GetxController
 
   // #### post_detail_page controll
   TextEditingController commentTextController = TextEditingController();
+  ScrollController scrollController = ScrollController();
+  RxBool isButtonEnabled = RxBool(false);
 
   // 게시글 수정 1 - 기존 작성한 게시글을 post로 받아 게시글 작성페이지로 이동하는 함수
   moveToModifyPostPage(Post post) {
@@ -440,8 +443,7 @@ class CommunityController extends GetxController
         .get();
     List commentList = res.docs;
     commentCardList.value = await Future.wait(commentList.map((e) async {
-      var resUser =
-          await db.collection('users').doc(e.data()['userUid']).get();
+      var resUser = await db.collection('users').doc(e.data()['userUid']).get();
       UserModel user = UserModel.fromMap(resUser.data()!);
       return CommentCard(
           user: user,
@@ -459,7 +461,7 @@ class CommunityController extends GetxController
     // 해당 post의 postId 이용하여 post doc > comments collection > comment doc 에 작성
     final docRef = db.collection('community').doc(post.postId);
     var res = await docRef.collection('comments').add({
-      'userUid':  FirebaseAuth.instance.currentUser!.uid,
+      'userUid': FirebaseAuth.instance.currentUser!.uid,
       'content': content,
       'reportNum': 0,
       'writeTime': DateTime.now()
@@ -482,6 +484,16 @@ class CommunityController extends GetxController
     getComments(post);
   }
 
+  // ## 댓글버튼활성화함수
+  onChanged() {
+    if (commentTextController.text != '') {
+      isButtonEnabled.value = true;
+    } else {
+      isButtonEnabled.value = false;
+    }
+    print(isButtonEnabled.value);
+  }
+
   // ## 신고하기
   report() async {
     // 신고기능. 플레이스토어, 앱스토어 심사규정 확인 후 구체적 구현 계획할 것.
@@ -494,15 +506,26 @@ class CommunityController extends GetxController
     await getComments(post);
     commentTextController.text = '';
     Get.back();
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent + 100,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
 // 시간 변환 함수
   String convertTime(Timestamp time) {
     DateTime writeTime = time.toDate();
     Duration difference = DateTime.now().difference(writeTime);
-    if (difference.inDays > 0) { return '${difference.inDays} 일 전'; }
-    if (difference.inDays <= 0 && difference.inHours > 0) { return '${difference.inHours} 시간 전'; }
-    if (difference.inDays <= 0 && difference.inHours <= 0) { return '${difference.inMinutes} 분 전'; }
+    if (difference.inDays > 0) {
+      return '${difference.inDays} 일 전';
+    }
+    if (difference.inDays <= 0 && difference.inHours > 0) {
+      return '${difference.inHours} 시간 전';
+    }
+    if (difference.inDays <= 0 && difference.inHours <= 0) {
+      return '${difference.inMinutes} 분 전';
+    }
     return '?';
   }
 
@@ -523,3 +546,4 @@ class CommunityController extends GetxController
     communityTabController.dispose();
   }
 }
+
