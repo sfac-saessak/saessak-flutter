@@ -137,7 +137,7 @@ class ScheduleController extends GetxController {
         hour: int.parse(timeDropdownValue.value),
         plantName: plantDropdownValue.value,
         content: eventDropdownValue.value,
-        minute: 33);
+        minute: 00);
     print('알림 예약 완료, id: $id');
   }
 
