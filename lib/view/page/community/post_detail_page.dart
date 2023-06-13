@@ -26,7 +26,7 @@ class PostDetailPage extends GetView<CommunityController> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ListView(children: [
+        child: ListView(controller: controller.scrollController, children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -122,6 +122,7 @@ class PostDetailPage extends GetView<CommunityController> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(controller.convertTime(post.writeTime)),
+              Text('·'),
               Text('조회수 ${post.views}'),
             ],
           ),
@@ -161,17 +162,17 @@ class PostDetailPage extends GetView<CommunityController> {
               ),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: AppColor.primary),
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(color: AppColor.primary),
                       borderRadius: BorderRadius.circular(20)),
                 ),
                 child: Text(
                   '댓글 작성',
-                  style: AppTextStyle.body4_b().copyWith(
-                    color: AppColor.primary,
-                  ),
+                  style: AppTextStyle.body4_b(color: AppColor.primary),
                 ),
                 onPressed: () async {
+                  controller.commentTextController.text = '';
+                  controller.isButtonEnabled.value = false;
                   Get.dialog(
                     Dialog(
                       shape: RoundedRectangleBorder(
@@ -195,6 +196,8 @@ class PostDetailPage extends GetView<CommunityController> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextField(
+                                      onChanged: (value) =>
+                                          controller.onChanged(),
                                       maxLines: 27,
                                       controller:
                                           controller.commentTextController,
@@ -211,18 +214,26 @@ class PostDetailPage extends GetView<CommunityController> {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: OutlinedButton(
-                                onPressed: () =>
-                                    controller.completeComment(post),
-                                style: OutlinedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(color: AppColor.primary),
-                                      borderRadius: BorderRadius.circular(20)),
-                                ),
-                                child: Text(
-                                  '작성 완료',
-                                  style: AppTextStyle.body4_b().copyWith(
-                                    color: AppColor.primary,
+                              child: Obx(
+                                () => OutlinedButton(
+                                  onPressed: () =>
+                                      controller.completeComment(post),
+                                  style: OutlinedButton.styleFrom(
+                                    backgroundColor:
+                                        controller.isButtonEnabled.value
+                                            ? AppColor.primary
+                                            : AppColor.white,
+                                    side: BorderSide(color: AppColor.primary),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                  ),
+                                  child: Text(
+                                    '작성 완료',
+                                    style: AppTextStyle.body3_r(
+                                        color: controller.isButtonEnabled.value
+                                            ? AppColor.white
+                                            : AppColor.primary),
                                   ),
                                 ),
                               ),

@@ -26,6 +26,8 @@ class MainPage extends GetView<MainController> {
               return Text("게시판", style: AppTextStyle.body2_m());
             } else if (controller.curPage == 3) {
               return Text("챌린지", style: AppTextStyle.body2_m());
+            } else if (controller.curPage == 4) {
+              return Text("설정", style: AppTextStyle.body2_m());
             } else {
               return Text('');
             }
