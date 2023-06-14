@@ -32,6 +32,7 @@ class PlantController extends GetxController {
 
   RxList<Plant> plantList = <Plant>[].obs; // 식물 리스트
   RxList<Plant> reversedPlantList = <Plant>[].obs; // 식물 리스트
+  RxString forestBackground = 'assets/images/forest_background_night.png'.obs;
 
   // 이미지 선택
   void selectImage() async {
@@ -159,7 +160,7 @@ class PlantController extends GetxController {
     plantingDate(null);
     selectedImage(null);
 
-    Get.off(PlantDetailPage(plant: plant));
+    Get.off(PlantDetailPage(plant: plant), arguments: [plant]);
     getPlants();
   }
 
