@@ -19,21 +19,10 @@ class PlantDetailPage extends GetView<PlantDetailController> {
   @override
   Widget build(BuildContext context) {
     print('플랜트 상세 : ${plant}');
-    // var journalController = Get.find<JournalController>();
-    //
-    // RxList<Journal> journalList = journalController.journalList;
-    // List galleryJournal = [];
-    // for (Journal journal in journalList) {
-    //   if (plant.plantId == journal.plant.plantId) {
-    //     if (journal.imageUrl != null) {
-    //       galleryJournal.add(journal);
-    //     }
-    //   }
-    // }
     
     return WillPopScope(
       onWillPop: () {
-        controller.onClose();
+        controller.onDelete();
         return Future.value(true);
       },
       child: Scaffold(
@@ -119,21 +108,23 @@ class PlantDetailPage extends GetView<PlantDetailController> {
             Text('갤러리'),
             Expanded(
               child: Obx(
-                () => GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 16,
+                () => controller.isLoading.value
+                  ? Center(child: CircularProgressIndicator())
+                  : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: controller.galleryJournal.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Get.to(() => JournalDetailPage(journal: controller.galleryJournal[index]));
+                        },
+                        child: Image.network(controller.galleryJournal[index].imageUrl!),
+                      );
+                    },
                   ),
-                  itemCount: controller.galleryJournal.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.to(() => JournalDetailPage(journal: controller.galleryJournal[index]));
-                      },
-                      child: Image.network(controller.galleryJournal[index].imageUrl!),
-                    );
-                  },
-                ),
               ),
             )
           ],

@@ -57,6 +57,14 @@ class Plant {
   }
 
   @override
+  bool operator ==(Object other) {
+    if(other is Plant) {
+      return plantId == other.plantId;
+    }
+    return false;
+  }
+
+  @override
   String toString() {
     return 'Plant{name: $name}';
   }

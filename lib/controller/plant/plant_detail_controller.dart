@@ -13,22 +13,24 @@ class PlantDetailController extends GetxController {
   Plant plant = Get.arguments[0];
 
   var plantController = Get.find<PlantController>();
-  RxList<Journal> journalList = Get.find<JournalController>().journalList;
+  var journalController = Get.find<JournalController>();
   RxList<Journal> galleryJournal = <Journal>[].obs;
+  RxBool isLoading = false.obs;                     // 로딩중 상태
 
-  getGallery() {
+  getGallery() async {
+    isLoading(true);
+    RxList<Journal> journalList = journalController.journalList;
+    await journalController.readJournal();
     List<Journal> gallery = [];
     for (Journal journal in journalList) {
-      log('for => ${journal}');
       if (plant.plantId == journal.plant.plantId) {
-        log('plantId = journal.plantId => ${journal}');
         if (journal.imageUrl != null) {
-          log('imageUrl != null => ${journal}');
           gallery.add(journal);
         }
       }
     }
     galleryJournal(gallery);
+    isLoading(false);
     log('gallery => ${galleryJournal}');
   }
 
@@ -43,7 +45,13 @@ class PlantDetailController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
     getGallery();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    log('onClose');
+    super.onClose();
   }
 }

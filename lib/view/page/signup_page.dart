@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/component/login/custom_button.dart';
-import 'package:saessak_flutter/component/login/custom_text_field.dart';
+import 'package:saessak_flutter/view/widget/custom_text_field.dart';
 
 import '../../controller/signup_controller.dart';
 import '../../util/app_color.dart';
@@ -13,9 +13,9 @@ class SignupPage extends GetView<SignupController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
       child: Scaffold(
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
@@ -46,12 +46,14 @@ class SignupPage extends GetView<SignupController> {
                     SizedBox(height: 16.0),
                     CustomTextField(
                       isObscured: controller.isObscured.value,
-                          suffixIcon: IconButton(
-                            onPressed: controller.changeObscure,
-                            icon: Image.asset(color: AppColor.black40,controller.isObscured.value
+                      suffixIcon: IconButton(
+                        onPressed: controller.changeObscure,
+                        icon: Image.asset(
+                            color: AppColor.black40,
+                            controller.isObscured.value
                                 ? 'assets/images/eyeoff.png'
                                 : 'assets/images/eyeon.png'),
-                          ),
+                      ),
                       controller: controller.pwController,
                       hintText: '비밀번호',
                       errorText: controller.pwErrorText.value,
@@ -63,12 +65,14 @@ class SignupPage extends GetView<SignupController> {
                     SizedBox(height: 16.0),
                     CustomTextField(
                       isObscured: controller.isObscured.value,
-                          suffixIcon: IconButton(
-                            onPressed: controller.changeObscure,
-                            icon: Image.asset(color: AppColor.black40,controller.isObscured.value
+                      suffixIcon: IconButton(
+                        onPressed: controller.changeObscure,
+                        icon: Image.asset(
+                            color: AppColor.black40,
+                            controller.isObscured.value
                                 ? 'assets/images/eyeoff.png'
                                 : 'assets/images/eyeon.png'),
-                          ),
+                      ),
                       controller: controller.pwConfirmController,
                       hintText: '비밀번호 확인',
                       errorText: controller.pwConfirmErrorText.value,

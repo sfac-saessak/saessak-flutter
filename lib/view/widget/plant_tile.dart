@@ -18,18 +18,15 @@ class PlantTile extends StatelessWidget {
       },
       child: Column(
         children: [
-          Container(
-            width: 150,
-            height: 150,
-            child: CircleAvatar(
-              backgroundColor: AppColor.black20,
-              backgroundImage: plant.imageUrl != null
+          CircleAvatar(
+            radius: 70,
+            backgroundColor: AppColor.black20,
+            backgroundImage: plant.imageUrl != null
                 ? NetworkImage(plant.imageUrl!)
                 : null,
-              child: plant.imageUrl != null
+            child: plant.imageUrl != null
                 ? null
                 : Icon(Icons.person, color: AppColor.white),
-            ),
           ),
           Text('${plant.name}'),
           Text('${plant.species}',
