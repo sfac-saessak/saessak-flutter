@@ -18,8 +18,9 @@ class CustomDropDownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
+      isExpanded: true,
       value: value.runtimeType != int ? value : value.toString(),
-      icon: const Icon(Icons.arrow_drop_down_outlined,),
+      icon: Image.asset('assets/images/dropdown_icon.png'),
       onChanged: onChanged,
       items: items.map<DropdownMenuItem<String>>((value) {
         return DropdownMenuItem<String>(
