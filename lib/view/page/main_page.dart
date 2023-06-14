@@ -58,13 +58,12 @@ class MainPage extends GetView<MainController> {
                   ),
                 );
               } else if (controller.curPage == 4) {
-                return
-                  IconButton(
-                    onPressed: () {
-                      Get.toNamed(AppRoutes.setName);
-                    },
-                    icon: Icon(Icons.edit),
-                  );
+                return IconButton(
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.setName);
+                  },
+                  icon: Icon(Icons.edit),
+                );
               } else {
                 return Container();
               }
@@ -80,22 +79,57 @@ class MainPage extends GetView<MainController> {
             return Obx(() => controller.screens[controller.curPage]);
           }),
       bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.green,
-          onTap: controller.onPageTapped,
-          currentIndex: controller.curPage,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month), label: '일정일지'),
-            BottomNavigationBarItem(icon: Icon(Icons.chat), label: '게시판'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.emoji_events), label: '챌린지'),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
-          ],
+        () => Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(24)),
+            boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(24)),
+            child: BottomNavigationBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: Colors.green,
+              onTap: controller.onPageTapped,
+              currentIndex: controller.curPage,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Opacity(
+                      opacity: 0.4,
+                      child: Image.asset('assets/images/home.png')),
+                  label: '홈',
+                  activeIcon: Image.asset('assets/images/home.png'),
+                ),
+                BottomNavigationBarItem(
+                    icon: Opacity(
+                        opacity: 0.4,
+                        child: Image.asset('assets/images/schedule.png')),
+                    label: '일정일지',
+                    activeIcon: Image.asset('assets/images/schedule.png')),
+                BottomNavigationBarItem(
+                    icon: Opacity(
+                        opacity: 0.4,
+                        child: Image.asset('assets/images/community.png')),
+                    label: '게시판',
+                    activeIcon: Image.asset('assets/images/community.png')),
+                BottomNavigationBarItem(
+                    icon: Opacity(
+                        opacity: 0.4,
+                        child: Image.asset('assets/images/challenge.png')),
+                    label: '챌린지',
+                    activeIcon: Image.asset('assets/images/challenge.png')),
+                BottomNavigationBarItem(
+                    icon: Opacity(
+                        opacity: 0.4,
+                        child: Image.asset('assets/images/setting.png')),
+                    label: '설정',
+                    activeIcon: Image.asset('assets/images/setting.png')),
+              ],
+            ),
+          ),
         ),
       ),
     );
