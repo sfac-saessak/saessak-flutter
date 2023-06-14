@@ -7,11 +7,13 @@ class CustomButton extends StatelessWidget {
       {super.key,
       required this.onPressed,
       required this.text,
-      required this.isenableButton});
+      required this.isenableButton,
+      this.textStyle});
 
   final VoidCallback onPressed;
   final String text;
   final bool isenableButton;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,10 @@ class CustomButton extends StatelessWidget {
             ),
             elevation: 0),
         onPressed: isenableButton ? onPressed : null,
-        child: Text(text),
+        child: Text(
+          text,
+          style: textStyle ?? null,
+        ),
       ),
     );
   }

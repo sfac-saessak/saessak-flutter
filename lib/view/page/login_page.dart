@@ -5,7 +5,7 @@ import 'package:saessak_flutter/util/app_color.dart';
 import 'package:saessak_flutter/util/app_routes.dart';
 
 import '../../component/login/custom_button.dart';
-import '../../component/login/custom_text_field.dart';
+import '../widget/custom_text_field.dart';
 import '../../controller/login_controller.dart';
 
 class LoginPage extends GetView<LoginController> {
@@ -56,9 +56,11 @@ class LoginPage extends GetView<LoginController> {
                           isObscured: controller.isObscured.value,
                           suffixIcon: IconButton(
                             onPressed: controller.changeObscure,
-                            icon: Image.asset(color: AppColor.black40,controller.isObscured.value
-                                ? 'assets/images/eyeoff.png'
-                                : 'assets/images/eyeon.png'),
+                            icon: Image.asset(
+                                color: AppColor.black40,
+                                controller.isObscured.value
+                                    ? 'assets/images/eyeoff.png'
+                                    : 'assets/images/eyeon.png'),
                           ),
                         ),
                       ],
