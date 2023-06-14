@@ -128,7 +128,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                     padding: const EdgeInsets.only(top: 24.0),
                     child: Container(
                         width: double.infinity,
-                        height: 150,
+                        height: 240,
                         color: Colors.grey[300],
                         child: Image.network(challenge.imageUrl!,
                             fit: BoxFit.cover)),
