@@ -62,7 +62,7 @@ class ScheduleContainer extends StatelessWidget {
                 Get.find<ScheduleController>().deleteSchedule(e.id);
                 Get.back();
               },
-              icon: Image.asset('assets/images/delete.png'))
+              icon: Image.asset('assets/images/Vector (1).png'))
         ],
       ),
     );
