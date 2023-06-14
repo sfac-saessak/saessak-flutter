@@ -123,19 +123,19 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                         style: AppTextStyle.body4_r(color: AppColor.primary80))
               ],
             ),
-            SizedBox(
-              height: 32,
-            ),
             challenge.imageUrl != null
-                ? Container(
-                    width: double.infinity,
-                    height: 150,
-                    color: Colors.grey[300],
-                    child:
-                        Image.network(challenge.imageUrl!, fit: BoxFit.cover))
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Container(
+                        width: double.infinity,
+                        height: 150,
+                        color: Colors.grey[300],
+                        child: Image.network(challenge.imageUrl!,
+                            fit: BoxFit.cover)),
+                  )
                 : Container(),
             SizedBox(
-              height: 16,
+              height: 24,
             ),
             Text(
               '${challenge.content}',
