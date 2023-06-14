@@ -21,7 +21,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
     print(challenge.admin);
     return Scaffold(
       appBar: AppBar(
-        title: Text('챌린지'),
+        title: Text('챌린지', style: AppTextStyle.body2_r()),
         centerTitle: true,
         backgroundColor: AppColor.white,
         foregroundColor: AppColor.black,
@@ -50,15 +50,15 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                 CircleAvatar(
                   radius: 25,
 
-                  // backgroundImage: controller.user.photoURL != null
-                  //     ? NetworkImage(controller.user.photoURL!)
-                  //     : null,
+                  backgroundImage: challenge.admin.profileImg != null
+                      ? NetworkImage(challenge.admin.profileImg!)
+                      : null,
                 ),
                 SizedBox(
                   width: 12,
                 ),
                 Text(
-                  '챌린지 작성자 넣어주세요',
+                  '${challenge.admin.name}',
                   style: AppTextStyle.body1_m(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -68,24 +68,27 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
             SizedBox(
               height: 16,
             ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColor.primary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                '${challenge.plant}',
+                style: AppTextStyle.body4_r(color: Colors.white),
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
             Row(
               children: [
-                Text(
-                  '${challenge.title}',
-                  style: AppTextStyle.body2_b(color: AppColor.black90),
-                ),
-                SizedBox(
-                  width: 4,
-                ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColor.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                  constraints: BoxConstraints(maxWidth: 270),
                   child: Text(
-                    '${challenge.plant}',
-                    style: AppTextStyle.body4_r(color: Colors.white),
+                    '${challenge.title}',
+                    style: AppTextStyle.body2_b(color: AppColor.black90),
                   ),
                 ),
                 Spacer(),
@@ -97,6 +100,9 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                   '  ${challenge.members!.length} / ${challenge.memberLimit != null ? challenge.memberLimit : '제한없음'}',
                 ),
               ],
+            ),
+            SizedBox(
+              height: 8,
             ),
             Row(
               children: [

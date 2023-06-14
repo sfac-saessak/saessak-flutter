@@ -1,10 +1,11 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:saessak_flutter/model/user_model.dart';
 
 class Challenge {
   String? challengeId;  // 챌린지 식별자
   String plant;         // 주제 식물
-  String admin;         // 챌린지 개설자 uid
+  UserModel admin;      // 챌린지 개설자 uid
   String title;         // 제목
   String content;       // 내용
   Timestamp createdAt;  // 생성 시간
@@ -38,7 +39,7 @@ class Challenge {
     return {
       'challengeId': this.challengeId,
       'plant': this.plant,
-      'admin': this.admin,
+      'admin': this.admin.uid,
       'title': this.title,
       'content': this.content,
       'createdAt': this.createdAt,
@@ -57,7 +58,7 @@ class Challenge {
     return Challenge(
       challengeId: map['challengeId'] as String,
       plant: map['plant'] as String,
-      admin: map['admin'] as String,
+      admin: map['admin'] as UserModel,
       title: map['title'] as String,
       content: map['content'] as String,
       createdAt: map['createdAt'] as Timestamp,

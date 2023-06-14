@@ -11,6 +11,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:saessak_flutter/service/db_service.dart';
 
 import '../../model/challenge.dart';
+import '../../model/user_model.dart';
 import '../../view/page/challenge/challenge_detail_page.dart';
 import '../../view/screen/challenge/all_challenge_screen.dart';
 import '../../view/screen/challenge/joined_challenge_screen.dart';
@@ -97,9 +98,12 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
       imageUrl = downloadUrl;
     }
 
+    var userInfo = await getUserInfoById(user.uid);
+    var userModel = UserModel.fromMap(userInfo);
+
     Challenge challenge = Challenge(
       plant: plantController.text,
-      admin: user.uid,
+      admin: userModel,
       title: titleController.text,
       content: contentController.text,
       createdAt: Timestamp.now(),
@@ -111,33 +115,73 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
 
     await DBService(uid: user.uid).createChallenge(challenge);
     isLoading(false);
+    updateAllChallenge();
+    getJoinedChallenges();
     Get.back();
   }
 
-  // 전체 챌린지 가져오기
-  getChallenge() async {
-    isLoading(true);
-    allChallengeList([]);
+  // 전체 챌린지 업데이트
+  updateAllChallenge() async {
     QuerySnapshot snapshot = await DBService().getAllChallenge();
-    allChallengeList(snapshot.docs.map((doc) => Challenge.fromMap(doc.data() as Map<String, dynamic>)).toList());
-    log('${allChallengeList}');
-    isLoading(false);
+    var futureChallenges = snapshot.docs.map((doc) async {
+      var challenge = doc.data() as Map<String, dynamic>;
+      var userInfo = await getUserInfoById(challenge['admin']);
+      var admin = UserModel.fromMap(userInfo);
+      return Challenge(
+        challengeId: challenge['challengeId'],
+        plant: challenge['plant'],
+        admin: admin,
+        title: challenge['title'],
+        content: challenge['content'],
+        createdAt: challenge['createdAt'],
+        startDate: challenge['startDate'],
+        endDate: challenge['endDate'],
+        members: challenge['members'],
+        memberLimit: challenge['memberLimit'],
+        imageUrl: challenge['image'],
+        recentMessage: challenge['recentMessage'],
+        recentMessageSender: challenge['recentMessageSender'],
+        recentMessageTime: challenge['recentMessageTime'],
+      );
+    });
+
+    var challenges = await Future.wait(futureChallenges);
+    allChallengeList(challenges);
   }
 
   // 참여중인 챌린지 가져오기
   getJoinedChallenges() async {
     isLoading(true);
     var joinedChallengeIdList = await DBService(uid: user.uid).getJoinedChallenges();
-    var challenges = [];
 
-    if (joinedChallengeIdList.length > 0) {
+    if (joinedChallengeIdList.isNotEmpty) {
+      var challenges = <Challenge>[];
+
       for (var joinedChallengeId in joinedChallengeIdList) {
-        var challenge = await DBService().challengeCollection.doc(joinedChallengeId).get();
-        challenges.add(Challenge.fromMap(challenge.data() as Map<String, dynamic>));
+        var challengeDocRef = await DBService().challengeCollection.doc(joinedChallengeId).get();
+        var challenge = challengeDocRef.data() as Map<String, dynamic>;
+        var userInfo = await getUserInfoById(challenge['admin']);
+        var admin = UserModel.fromMap(userInfo);
+        challenges.add(Challenge(
+          challengeId: challenge['challengeId'],
+          plant: challenge['plant'],
+          admin: admin,
+          title: challenge['title'],
+          content: challenge['content'],
+          createdAt: challenge['createdAt'],
+          startDate: challenge['startDate'],
+          endDate: challenge['endDate'],
+          members: challenge['members'],
+          memberLimit: challenge['memberLimit'],
+          imageUrl: challenge['image'],
+          recentMessage: challenge['recentMessage'],
+          recentMessageSender: challenge['recentMessageSender'],
+          recentMessageTime: challenge['recentMessageTime'],
+        ));
       }
 
       // 최근 메세지 시간으로 정렬
-      challenges = challenges.where((challenge) => challenge.recentMessageTime != null).toList();
+      challenges.removeWhere((challenge) => challenge.recentMessageTime == null);
       challenges.sort((a, b) => b.recentMessageTime!.compareTo(a.recentMessageTime!)); // 내림차순 정렬
 
       joinedChallengeList(challenges);
@@ -149,7 +193,6 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
 
   // 전체 챌린지 새로고침
   void allChallengeRefresh() async {
-    await getChallenge();
     allRefreshController.refreshCompleted();
   }
 
@@ -243,13 +286,18 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
 
   // 진행중 / 마감 판별
 
+  // uid로 유저 정보 가져오기
+  Future<Map<String, dynamic>> getUserInfoById(String uid) async {
+    var userInfo = await DBService().getUserInfoById(uid);
+    return userInfo;
+  }
 
   @override
   void onInit() {
     super.onInit();
     tabController = TabController(length: tabs.length, vsync: this);
-    getChallenge();
     getJoinedChallenges();
+    updateAllChallenge();
   }
 
   @override
