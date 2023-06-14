@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/component/login/custom_button.dart';
-import 'package:saessak_flutter/component/login/custom_text_field.dart';
+import 'package:saessak_flutter/view/widget/custom_text_field.dart';
 import 'package:saessak_flutter/controller/reset_password_controller.dart';
 
 class ResetPasswordPage extends GetView<ResetPasswordController> {
@@ -11,9 +11,9 @@ class ResetPasswordPage extends GetView<ResetPasswordController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
       child: Scaffold(
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
@@ -41,7 +41,6 @@ class ResetPasswordPage extends GetView<ResetPasswordController> {
                       errorText: controller.emailErrorText.value,
                       onChanged: controller.emailOnChanged,
                     ),
-                    
                     SizedBox(height: 20.0),
                     CustomButton(
                         onPressed: controller.sendResetPasswordEmail,

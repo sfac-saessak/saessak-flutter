@@ -1,16 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import 'package:saessak_flutter/component/login/custom_button.dart';
 import '../../../controller/challenge/challenge_controller.dart';
 import '../../../model/challenge.dart';
-import '../../../service/db_service.dart';
 import '../../../util/app_color.dart';
 import '../../../util/app_text_style.dart';
 import 'edit_challenge_page.dart';
 
-class ChallengeDetailPage extends StatelessWidget {
+class ChallengeDetailPage extends GetView<ChallengeController> {
   const ChallengeDetailPage(
       {Key? key, required this.challenge, required this.challengeEnd})
       : super(key: key);
@@ -19,8 +17,8 @@ class ChallengeDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<ChallengeController>();
-
+    print(controller.user.uid);
+    print(challenge.admin);
     return Scaffold(
       appBar: AppBar(
         title: Text('챌린지'),
@@ -35,10 +33,10 @@ class ChallengeDetailPage extends StatelessWidget {
                       Get.off(() => EditChallengePage(challenge: challenge)),
                   icon: Icon(Icons.edit),
                 ),
-                // IconButton(
-                //   onPressed: (){},
-                //   icon: Icon(Icons.delete),
-                // ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.delete),
+                ),
               ]
             : null,
       ),
@@ -47,55 +45,106 @@ class ChallengeDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${challenge.title}'),
             Row(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1,
-                    ),
-                  ),
-                  child: Text('${challenge.plant}'),
+                CircleAvatar(
+                  radius: 25,
+
+                  // backgroundImage: controller.user.photoURL != null
+                  //     ? NetworkImage(controller.user.photoURL!)
+                  //     : null,
                 ),
-                Icon(Icons.people),
+                SizedBox(
+                  width: 12,
+                ),
                 Text(
-                    '${challenge.members!.length} / ${challenge.memberLimit != null ? challenge.memberLimit : '제한없음'}'),
-                Spacer(),
-                challengeEnd
-                    ? Text('모집 마감')
-                    : Text(controller.getDeadline(challenge.startDate) == 0
-                        ? '마감 D-DAY'
-                        : '마감 D${controller.getDeadline(challenge.startDate)}')
-              ],
-            ),
-            Row(
-              children: [
-                Icon(Icons.access_time, size: 16),
-                SizedBox(width: 4),
-                Text(
-                    '${DateFormat("yyyy-MM-dd").format(challenge.startDate.toDate())} ~ ${DateFormat("yyyy-MM-dd").format(challenge.endDate.toDate())}'),
+                  '챌린지 작성자 넣어주세요',
+                  style: AppTextStyle.body1_m(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
             SizedBox(
-              height: 40,
+              height: 16,
+            ),
+            Row(
+              children: [
+                Text(
+                  '${challenge.title}',
+                  style: AppTextStyle.body2_b(color: AppColor.black90),
+                ),
+                SizedBox(
+                  width: 4,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppColor.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '${challenge.plant}',
+                    style: AppTextStyle.body4_r(color: Colors.white),
+                  ),
+                ),
+                Spacer(),
+                Icon(
+                  Icons.people,
+                  color: AppColor.primary,
+                ),
+                Text(
+                  '  ${challenge.members!.length} / ${challenge.memberLimit != null ? challenge.memberLimit : '제한없음'}',
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Icon(
+                  Icons.access_time,
+                  size: 16,
+                  color: AppColor.black40,
+                ),
+                SizedBox(width: 4),
+                Text(
+                  '챌린지 기간 : ${DateFormat("yyyy-MM-dd").format(challenge.startDate.toDate())} ~ ${DateFormat("yyyy-MM-dd").format(challenge.endDate.toDate())}',
+                  style: AppTextStyle.body4_r(color: AppColor.black40),
+                ),
+                Spacer(),
+                challengeEnd
+                    ? Text(
+                        '모집 마감',
+                        style: AppTextStyle.body4_m(color: AppColor.black40),
+                      )
+                    : Text(
+                        controller.getDeadline(challenge.startDate) == 0
+                            ? '챌린지 D-DAY'
+                            : '시작까지 D${controller.getDeadline(challenge.startDate)}',
+                        style: AppTextStyle.body4_r(color: AppColor.primary80))
+              ],
             ),
             challenge.imageUrl != null
-                ? Container(
-                    width: double.infinity,
-                    height: 150,
-                    color: Colors.grey[300],
-                    child:
-                        Image.network(challenge.imageUrl!, fit: BoxFit.cover))
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Container(
+                        width: double.infinity,
+                        height: 240,
+                        color: Colors.grey[300],
+                        child: Image.network(challenge.imageUrl!,
+                            fit: BoxFit.cover)),
+                  )
                 : Container(),
-            Text('${challenge.content}'),
+            SizedBox(
+              height: 24,
+            ),
+            Text(
+              '${challenge.content}',
+              style: AppTextStyle.body2_r(color: AppColor.black70),
+            ),
             Spacer(),
-            Container(
-              width: double.infinity,
-              child: ElevatedButton(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+              child: CustomButton(
                 onPressed: () {
                   challengeEnd
                       ? Get.snackbar('참가 실패', '모집이 끝난 챌린지입니다.')
@@ -129,7 +178,9 @@ class ChallengeDetailPage extends StatelessWidget {
                             );
                           });
                 },
-                child: Text('참가하기'),
+                text: '참가하기',
+                textStyle: AppTextStyle.body2_b(color: Colors.white),
+                isenableButton: challengeEnd ? false : true,
               ),
             ),
           ],

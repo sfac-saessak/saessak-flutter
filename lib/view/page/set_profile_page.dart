@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/component/login/custom_button.dart';
-import 'package:saessak_flutter/component/login/custom_text_field.dart';
+import 'package:saessak_flutter/view/widget/custom_text_field.dart';
 import 'package:saessak_flutter/util/app_color.dart';
 
 import '../../controller/set_profile_controller.dart';
