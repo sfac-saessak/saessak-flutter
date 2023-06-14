@@ -45,8 +45,8 @@ class ChallengeTile extends StatelessWidget {
                     ? Text('종료', style: AppTextStyle.body5_m(color: Colors.red))
                     : Text(
                         controller.getDeadline(challenge.startDate) == 0
-                            ? '마감 D-DAY'
-                            : '마감 D${controller.getDeadline(challenge.startDate)}',
+                            ? '챌린지 D-DAY'
+                            : '시작까지 D${controller.getDeadline(challenge.startDate)}',
                         style: AppTextStyle.body5_m())
               ],
             ),
@@ -62,7 +62,7 @@ class ChallengeTile extends StatelessWidget {
                 Icon(Icons.access_time, color: AppColor.black40, size: 16),
                 SizedBox(width: 4),
                 Text(
-                    '${DateFormat("yyyy-MM-dd").format(challenge.startDate.toDate())} ~ ${DateFormat("yyyy-MM-dd").format(challenge.endDate.toDate())}',
+                    '챌린지 기간 : ${DateFormat("yyyy-MM-dd").format(challenge.startDate.toDate())} ~ ${DateFormat("yyyy-MM-dd").format(challenge.endDate.toDate())}',
                     style: AppTextStyle.body5_r(color: AppColor.black40)),
               ],
             ),

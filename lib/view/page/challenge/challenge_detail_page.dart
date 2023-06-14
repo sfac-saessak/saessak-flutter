@@ -107,7 +107,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                 ),
                 SizedBox(width: 4),
                 Text(
-                  '${DateFormat("yyyy-MM-dd").format(challenge.startDate.toDate())} ~ ${DateFormat("yyyy-MM-dd").format(challenge.endDate.toDate())}',
+                  '챌린지 기간 : ${DateFormat("yyyy-MM-dd").format(challenge.startDate.toDate())} ~ ${DateFormat("yyyy-MM-dd").format(challenge.endDate.toDate())}',
                   style: AppTextStyle.body4_r(color: AppColor.black40),
                 ),
                 Spacer(),
@@ -118,8 +118,8 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                       )
                     : Text(
                         controller.getDeadline(challenge.startDate) == 0
-                            ? '마감 D-DAY'
-                            : '마감 D${controller.getDeadline(challenge.startDate)}',
+                            ? '챌린지 D-DAY'
+                            : '시작까지 D${controller.getDeadline(challenge.startDate)}',
                         style: AppTextStyle.body4_r(color: AppColor.primary80))
               ],
             ),
