@@ -39,7 +39,7 @@ class ChatPage extends GetView<ChatController> {
           ],
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 22, vertical: 18),
+          padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
           color: AppColor.black10,
           child: Column(
             children: <Widget>[
@@ -50,6 +50,15 @@ class ChatPage extends GetView<ChatController> {
                   itemBuilder: (context, index) {
                     Message chat = controller.chats[index];
                     final currentChatDate = chat.time.toDate();
+                    final currentSender = chat.sender.uid;
+                    final minutes = currentChatDate.minute + currentChatDate.hour * 60;
+
+                    bool showTime = (index == 0 || minutes != controller.chats[index - 1].time.toDate().minute + controller.chats[index - 1].time.toDate().hour * 60);
+                    bool showUserName = (
+                        index == 0 ||
+                        currentSender != controller.chats[index - 1].sender.uid ||
+                        showTime
+                      );
                     return Column(
                       children: [
                         if (index == 0 ||
@@ -72,41 +81,47 @@ class ChatPage extends GetView<ChatController> {
                           ),
                         MessageTile(
                           message: chat,
-                          sentByMe: controller.user.uid == chat.sender.uid),
+                          sentByMe: controller.user.uid == chat.sender.uid,
+                          showUserName: showUserName,
+                          showTime: showTime,
+                        ),
                       ],
                     );
                   },
                 ),
               )),
-              Container(
-                alignment: Alignment.bottomCenter,
-                width: Get.width,
-                decoration: BoxDecoration(
-                  color: AppColor.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: AppColor.primary,
-                    width: 1.0,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: AppTextField(
-                      hintText: '채팅 입력...',
-                      controller: controller.messageController,
-                      onSubmitted: (p0) {
-                        controller.sendMessage(controller.challenge.challengeId!);
-                      },
-                    )),
-                    TextButton(
-                      child: Text('전송',
-                          style: AppTextStyle.body2_m(color: AppColor.primary)),
-                      onPressed: () {
-                        controller.sendMessage(controller.challenge.challengeId!);
-                      },
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  width: Get.width,
+                  decoration: BoxDecoration(
+                    color: AppColor.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: AppColor.primary,
+                      width: 1.0,
                     ),
-                  ],
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: AppTextField(
+                        hintText: '채팅 입력...',
+                        controller: controller.messageController,
+                        onSubmitted: (p0) {
+                          controller.sendMessage(controller.challenge.challengeId!);
+                        },
+                      )),
+                      TextButton(
+                        child: Text('전송',
+                            style: AppTextStyle.body2_m(color: AppColor.primary)),
+                        onPressed: () {
+                          controller.sendMessage(controller.challenge.challengeId!);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
