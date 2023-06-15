@@ -8,13 +8,15 @@ class AppTextField extends StatelessWidget {
   final TextEditingController controller;
   final Function(String)? onSubmitted;
   final TextInputType? keyboardType;
+  final TextStyle? textStyle;
 
   const AppTextField(
       {Key? key,
       required this.hintText,
       required this.controller,
       this.onSubmitted,
-      this.keyboardType})
+      this.keyboardType,
+      this.textStyle})
       : super(key: key);
 
   @override
@@ -23,13 +25,17 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       decoration: InputDecoration(
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: AppColor.black20)),
         hintText: hintText,
-        hintStyle: AppTextStyle.body4_r(color: AppColor.black30),
-        border: InputBorder.none,
+        hintStyle: AppTextStyle.body3_m(color: AppColor.black30),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.black20),
+        ),
         contentPadding: EdgeInsets.symmetric(horizontal: 1),
-      
       ),
       onSubmitted: onSubmitted,
+      style: textStyle ?? null,
     );
   }
 }
