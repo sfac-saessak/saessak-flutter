@@ -26,17 +26,17 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
         backgroundColor: AppColor.white,
         foregroundColor: AppColor.black,
         elevation: 0,
-        actions: controller.user.uid == challenge.admin
+        actions: controller.user.uid == challenge.admin.uid
             ? [
                 IconButton(
                   onPressed: () =>
                       Get.off(() => EditChallengePage(challenge: challenge)),
                   icon: Icon(Icons.edit),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.delete),
-                ),
+                // IconButton(
+                //   onPressed: () {},
+                //   icon: Icon(Icons.delete),
+                // ),
               ]
             : null,
       ),
