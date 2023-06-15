@@ -88,7 +88,7 @@ class ChatDetailPage extends StatelessWidget {
                   '${DateFormat("yyyy-MM-dd").format(challenge.startDate.toDate())} ~ ${DateFormat("yyyy-MM-dd").format(challenge.endDate.toDate())}'),
             ],
           ),
-          Text('개설자 : ${challenge.admin}'),
+          Text('개설자 : ${challenge.admin.name}'),
           Expanded(
             child: ListView.builder(
                 itemCount: members.length,

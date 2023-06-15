@@ -33,7 +33,10 @@ class ChallengeTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('${challenge.title}', style: AppTextStyle.body3_b()),
+                Container(
+                  constraints: BoxConstraints(maxWidth: 200),
+                  child: Text('${challenge.title}', style: AppTextStyle.body3_b(), overflow: TextOverflow.ellipsis)
+                ),
                 SizedBox(width: 10),
                 Icon(Icons.people, color: AppColor.primary, size: 16),
                 SizedBox(width: 4),
