@@ -19,15 +19,12 @@ class HomeScreen extends GetView<PlantController> {
         color: AppColor.white,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                width: double.infinity,
-                height: 180,
-                decoration: BoxDecoration(
-                  color: AppColor.black40,
-                  image: DecorationImage(image: AssetImage(controller.forestBackground.value), fit: BoxFit.cover)
-                ),
+            Container(
+              width: double.infinity,
+              height: 200,
+              decoration: BoxDecoration(
+                color: AppColor.black40,
+                image: DecorationImage(image: AssetImage(controller.forestBackground.value), fit: BoxFit.cover)
               ),
             ),
             SizedBox(height: 12),
