@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -19,6 +18,9 @@ class AddJournalPage extends GetView<JournalController> {
   Widget build(BuildContext context) {
     if (journal != null) {
       controller.contentController.text = journal!.content;
+    } else {
+      controller.contentController.text = '';
+      controller.selectedImage.value = null;
     }
     return Scaffold(
       appBar: AppBar(
@@ -29,21 +31,21 @@ class AddJournalPage extends GetView<JournalController> {
         elevation: 0,
         actions: [
           journal == null
-            ? TextButton(
-              onPressed: () {
-                controller.addJournal();
-                Get.back();
-                Get.snackbar('일지', '등록 완');
-              },
-              child: Text('등록'),
-            )
-            : TextButton(
-              onPressed: () {
-                controller.editJournal(journal!);
-                Get.snackbar('일지', '수정 완');
-              },
-              child: Text('수정'),
-          )
+              ? TextButton(
+                  onPressed: () {
+                    controller.addJournal();
+                    Get.back();
+                    Get.snackbar('일지', '등록 완');
+                  },
+                  child: Text('등록'),
+                )
+              : TextButton(
+                  onPressed: () {
+                    controller.editJournal(journal!);
+                    Get.snackbar('일지', '수정 완');
+                  },
+                  child: Text('수정'),
+                )
         ],
       ),
       body: Padding(
@@ -53,19 +55,23 @@ class AddJournalPage extends GetView<JournalController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               journal == null
-              ? CustomDropDownButton(
-                value: controller.selectedPlant.value.name,
-                items: controller.plantList.map((plant) => plant.name).toList(),
-                onChanged: (String? value) {
-                  controller.selectedPlant.value = controller.plantList.firstWhere(
-                    (plant) => plant.name == value,
-                  );
-                  log('${controller.selectedPlant}');
-                },
-              )
-              : Text('${journal!.plant.name}'),
+                  ? CustomDropDownButton(
+                      value: controller.selectedPlant.value.name,
+                      items: controller.plantList
+                          .map((plant) => plant.name)
+                          .toList(),
+                      onChanged: (String? value) {
+                        controller.selectedPlant.value =
+                            controller.plantList.firstWhere(
+                          (plant) => plant.name == value,
+                        );
+                        log('${controller.selectedPlant}');
+                      },
+                    )
+                  : Text('${journal!.plant.name}'),
               SizedBox(height: 12),
-              AppTextField(hintText: '내용 입력', controller: controller.contentController),
+              AppTextField(
+                  hintText: '내용 입력', controller: controller.contentController),
               GestureDetector(
                 onTap: controller.selectImage,
                 child: Container(
@@ -76,12 +82,15 @@ class AddJournalPage extends GetView<JournalController> {
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: controller.selectedImage.value != null
-                    ? Image.file(controller.selectedImage.value!, fit: BoxFit.cover)
-                    : journal == null
-                      ? Icon(Icons.add, color: AppColor.black60, size: 30)
-                      : journal!.imageUrl != null
-                        ? Image.network(journal!.imageUrl!, fit: BoxFit.cover)
-                        : Icon(Icons.add, color: AppColor.black60, size: 30),
+                      ? Image.file(controller.selectedImage.value!,
+                          fit: BoxFit.cover)
+                      : journal == null
+                          ? Icon(Icons.add, color: AppColor.black60, size: 30)
+                          : journal!.imageUrl != null
+                              ? Image.network(journal!.imageUrl!,
+                                  fit: BoxFit.cover)
+                              : Icon(Icons.add,
+                                  color: AppColor.black60, size: 30),
                 ),
               ),
             ],
@@ -91,4 +100,3 @@ class AddJournalPage extends GetView<JournalController> {
     );
   }
 }
-
