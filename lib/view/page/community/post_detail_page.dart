@@ -23,6 +23,9 @@ class PostDetailPage extends GetView<CommunityController> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: AppColor.black,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios_new),
+            onPressed: () {controller.backButton(controller.curTab);}),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
