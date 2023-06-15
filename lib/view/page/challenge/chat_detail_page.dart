@@ -51,6 +51,7 @@ class ChatDetailPage extends StatelessWidget {
                             onPressed: () async {
                               Get.find<ChallengeController>()
                                   .exitChallenge(challenge.challengeId!);
+                              Get.back();
                               Get.snackbar('${challenge.title}', '탈주 완');
                             },
                             icon: const Icon(

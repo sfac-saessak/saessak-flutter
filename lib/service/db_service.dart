@@ -264,6 +264,13 @@ class DBService {
     await groupDocumentReference.update({
       "members": FieldValue.arrayRemove(["${uid}"])
     });
+
+    DocumentSnapshot groupSnapshot = await groupDocumentReference.get();
+    List<dynamic> members = await groupSnapshot['members'];
+
+    if (members.length <= 0) {
+      await groupDocumentReference.delete();
+    }
   }
 
   // 참여중인 챌린지 가져오기

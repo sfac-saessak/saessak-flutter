@@ -25,8 +25,10 @@ class JournalTile extends StatelessWidget {
           child: Container(
             height: 90,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       width: 50,
