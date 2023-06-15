@@ -7,11 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:saessak_flutter/view/page/plant/plant_detail_page.dart';
-
-import '../../model/journal.dart';
 import '../../model/plant.dart';
 import '../../service/db_service.dart';
-import '../schedule_journal/journal_controller.dart';
 
 class PlantController extends GetxController {
   User get user => FirebaseAuth.instance.currentUser!;
@@ -72,41 +69,41 @@ class PlantController extends GetxController {
 
   // 식물 추가
   addPlant() async {
-    var imageUrl;
-    isLoading(true);
-    if (selectedImage.value != null) {
-      var ref =
-          FirebaseStorage.instance.ref('plants/${user.uid}/${DateTime.now()}');
-      await ref.putFile(selectedImage.value!);
-      var downloadUrl = await ref.getDownloadURL();
-      imageUrl = downloadUrl;
+    if (nameController.text != '' &&
+        speciesController.text != '' &&
+        optimalTemperatureController.text != '' &&
+        wateringCycleController.text != '' &&
+        lightRequirementController.text != '') {
+      var imageUrl;
+      isLoading(true);
+      if (selectedImage.value != null) {
+        var ref = FirebaseStorage.instance
+            .ref('plants/${user.uid}/${DateTime.now()}');
+        await ref.putFile(selectedImage.value!);
+        var downloadUrl = await ref.getDownloadURL();
+        imageUrl = downloadUrl;
+      }
+
+      Plant plant = Plant(
+        name: nameController.text,
+        species: speciesController.text,
+        plantingDate: plantingDate.value!,
+        optimalTemperature: optimalTemperatureController.text,
+        wateringCycle: int.tryParse(wateringCycleController.text)!,
+        lightRequirement: lightRequirementController.text,
+        createdAt: Timestamp.now(),
+        memo: memoController.text,
+        imageUrl: imageUrl,
+      );
+      await DBService(uid: user.uid).addPlant(plant);
+      isLoading(false);
+
+      Get.back();
+      getPlants();
+      Get.snackbar('식물', '등록 완');
+    } else {
+      Get.snackbar('등록 실패', '식물 정보를 정확히 입력해주세요.');
     }
-
-    Plant plant = Plant(
-      name: nameController.text,
-      species: speciesController.text,
-      plantingDate: plantingDate.value!,
-      optimalTemperature: optimalTemperatureController.text,
-      wateringCycle: int.tryParse(wateringCycleController.text)!,
-      lightRequirement: lightRequirementController.text,
-      createdAt: Timestamp.now(),
-      memo: memoController.text,
-      imageUrl: imageUrl,
-    );
-
-    await DBService(uid: user.uid).addPlant(plant);
-    isLoading(false);
-
-    nameController.clear();
-    speciesController.clear();
-    wateringCycleController.clear();
-    optimalTemperatureController.clear();
-    lightRequirementController.clear();
-    memoController.clear();
-    plantingDate(null);
-    selectedImage(null);
-    Get.back();
-    getPlants();
   }
 
   // 식물 삭제
@@ -149,15 +146,6 @@ class PlantController extends GetxController {
     var data = await plantDocRef.get();
 
     plant = Plant.fromMap(data.data()!);
-
-    nameController.clear();
-    speciesController.clear();
-    wateringCycleController.clear();
-    optimalTemperatureController.clear();
-    lightRequirementController.clear();
-    memoController.clear();
-    plantingDate(null);
-    selectedImage(null);
 
     Get.off(PlantDetailPage(plant: plant), arguments: [plant]);
     getPlants();
