@@ -17,8 +17,6 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
 
   @override
   Widget build(BuildContext context) {
-    print(controller.user.uid);
-    print(challenge.admin);
     return Scaffold(
       appBar: AppBar(
         title: Text('챌린지', style: AppTextStyle.body2_r()),
@@ -49,7 +47,6 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
               children: [
                 CircleAvatar(
                   radius: 25,
-
                   backgroundImage: challenge.admin.profileImg != null
                       ? NetworkImage(challenge.admin.profileImg!)
                       : null,

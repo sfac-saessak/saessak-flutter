@@ -119,11 +119,15 @@ class ResistScheduleDialog extends GetView<ScheduleController> {
                     SizedBox(
                       width: 20,
                     ),
-                    Switch.adaptive(
-                      materialTapTargetSize: MaterialTapTargetSize.padded,
-                      activeColor: AppColor.primary,
-                      value: controller.isDoNotify.value,
-                      onChanged: (value) => controller.isDoNotify.value = value,
+                    Transform.scale(
+                      scale: 0.8,
+                      child: Switch.adaptive(
+                    
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                        activeColor: AppColor.primary,
+                        value: controller.isDoNotify.value,
+                        onChanged: (value) => controller.isDoNotify.value = value,
+                      ),
                     ),
                   ],
                 ),
@@ -132,7 +136,7 @@ class ResistScheduleDialog extends GetView<ScheduleController> {
           ),
         ),
         leftButtonOnTap: () => Get.back(),
-        rightButtonOnTap: () {
+        rightButtonOnTap: () async {
           if (e != null) {
             controller.modifySchedule(e!);
             Get.back();

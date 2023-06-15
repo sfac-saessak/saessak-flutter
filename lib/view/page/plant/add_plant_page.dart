@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +10,7 @@ import '../../widget/app_text_field.dart';
 
 class AddPlantPage extends GetView<PlantController> {
   const AddPlantPage({Key? key, this.plant}) : super(key: key);
-  
+
   final Plant? plant;
 
   @override
@@ -24,6 +23,15 @@ class AddPlantPage extends GetView<PlantController> {
       controller.wateringCycleController.text = plant!.wateringCycle.toString();
       controller.lightRequirementController.text = plant!.lightRequirement;
       controller.memoController.text = plant!.memo!;
+    } else {
+      controller.nameController.clear();
+      controller.speciesController.clear();
+      controller.wateringCycleController.clear();
+      controller.optimalTemperatureController.clear();
+      controller.lightRequirementController.clear();
+      controller.memoController.clear();
+      controller.plantingDate.value = null;
+      controller.selectedImage.value = null;
     }
 
     return Scaffold(
@@ -36,21 +44,19 @@ class AddPlantPage extends GetView<PlantController> {
         elevation: 0,
         actions: [
           plant == null
-            ? TextButton(
-                onPressed: () {
-                  controller.addPlant();
-                  Get.back();
-                  Get.snackbar('식물', '등록 완');
-                },
-                child: Text('등록'),
-              )
-            : TextButton(
-                onPressed: () {
-                  controller.editPlant(plant!);
-                  Get.snackbar('식물', '수정 완');
-                },
-                child: Text('수정'),
-              )
+              ? TextButton(
+                  onPressed: () {
+                    controller.addPlant();
+                  },
+                  child: Text('등록'),
+                )
+              : TextButton(
+                  onPressed: () {
+                    controller.editPlant(plant!);
+                    Get.snackbar('식물', '수정 완');
+                  },
+                  child: Text('수정'),
+                )
         ],
       ),
       body: Obx(
@@ -72,26 +78,36 @@ class AddPlantPage extends GetView<PlantController> {
                           borderRadius: BorderRadius.circular(7),
                         ),
                         child: controller.selectedImage.value != null
-                            ? Image.file(controller.selectedImage.value!, fit: BoxFit.cover)
+                            ? Image.file(controller.selectedImage.value!,
+                                fit: BoxFit.cover)
                             : plant == null
-                              ? Icon(Icons.add, color: AppColor.black60, size: 30)
-                              : plant!.imageUrl != null
-                                ? Image.network(plant!.imageUrl!, fit: BoxFit.cover)
-                                : Icon(Icons.add, color: AppColor.black60, size: 30),
+                                ? Icon(Icons.add,
+                                    color: AppColor.black60, size: 30)
+                                : plant!.imageUrl != null
+                                    ? Image.network(plant!.imageUrl!,
+                                        fit: BoxFit.cover)
+                                    : Icon(Icons.add,
+                                        color: AppColor.black60, size: 30),
                       ),
                     ),
                     Row(
                       children: [
                         Text('애칭', style: AppTextStyle.body3_m()),
                         SizedBox(width: 24),
-                        Expanded(child: AppTextField(hintText: '애칭', controller: controller.nameController)),
+                        Expanded(
+                            child: AppTextField(
+                                hintText: '애칭',
+                                controller: controller.nameController)),
                       ],
                     ),
                     Row(
                       children: [
                         Text('종류', style: AppTextStyle.body3_m()),
                         SizedBox(width: 24),
-                        Expanded(child: AppTextField(hintText: '종류', controller: controller.speciesController)),
+                        Expanded(
+                            child: AppTextField(
+                                hintText: '종류',
+                                controller: controller.speciesController)),
                       ],
                     ),
                     Row(
@@ -101,7 +117,8 @@ class AddPlantPage extends GetView<PlantController> {
                         GestureDetector(
                           onTap: controller.selectDate,
                           child: Container(
-                            padding: EdgeInsets.only(left: 2, right: 2, bottom: 3),
+                            padding:
+                                EdgeInsets.only(left: 2, right: 2, bottom: 3),
                             width: 110,
                             decoration: BoxDecoration(
                               border: Border(
@@ -121,7 +138,8 @@ class AddPlantPage extends GetView<PlantController> {
                                   style: AppTextStyle.body3_m(),
                                 ),
                                 Spacer(),
-                                Icon(Icons.calendar_today, size: 16, color: AppColor.primary60),
+                                Icon(Icons.calendar_today,
+                                    size: 16, color: AppColor.primary60),
                               ],
                             ),
                           ),
@@ -132,28 +150,44 @@ class AddPlantPage extends GetView<PlantController> {
                       children: [
                         Text('급수주기', style: AppTextStyle.body3_m()),
                         SizedBox(width: 24),
-                        Expanded(child: AppTextField(hintText: '00일', controller: controller.wateringCycleController)),
+                        Expanded(
+                            child: AppTextField(
+                          hintText: '00일',
+                          controller: controller.wateringCycleController,
+                          keyboardType: TextInputType.number,
+                        )),
                       ],
                     ),
                     Row(
                       children: [
                         Text('최적온도', style: AppTextStyle.body3_m()),
                         SizedBox(width: 24),
-                        Expanded(child: AppTextField(hintText: '00~00°', controller: controller.optimalTemperatureController)),
+                        Expanded(
+                            child: AppTextField(
+                                hintText: '00~00°',
+                                controller:
+                                    controller.optimalTemperatureController)),
                       ],
                     ),
                     Row(
                       children: [
                         Text('빛 요구도', style: AppTextStyle.body3_m()),
                         SizedBox(width: 24),
-                        Expanded(child: AppTextField(hintText: '00~00°', controller: controller.lightRequirementController)),
+                        Expanded(
+                            child: AppTextField(
+                                hintText: '00~00°',
+                                controller:
+                                    controller.lightRequirementController)),
                       ],
                     ),
                     Row(
                       children: [
                         Text('메모', style: AppTextStyle.body3_m()),
                         SizedBox(width: 24),
-                        Expanded(child: AppTextField(hintText: '간단한 메모', controller: controller.memoController)),
+                        Expanded(
+                            child: AppTextField(
+                                hintText: '간단한 메모',
+                                controller: controller.memoController)),
                       ],
                     ),
                   ],
@@ -166,4 +200,3 @@ class AddPlantPage extends GetView<PlantController> {
     );
   }
 }
-

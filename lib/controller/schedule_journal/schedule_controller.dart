@@ -54,9 +54,7 @@ class ScheduleController extends GetxController {
           userUid: drift.Value(user.uid),
           isDoNotify: drift.Value(isDoNotify.value)),
     );
-
     getMonthSchedule(selectedDay.value.month); // 추가된 데이터 포함된 전체 데이터 가져오기
-
     if (isDoNotify.value) {
       reservePush(id: id);
     }
