@@ -169,8 +169,8 @@ class DBService {
   }
 
   // 일지 가져오기
-  Future readJournal(String uid) async {
-    return journalsCollection.doc(uid).collection("journal").orderBy('writeTime', descending: true).get();
+  Future readJournal(String uid, bool sort) async {
+    return journalsCollection.doc(uid).collection("journal").orderBy('writeTime', descending: sort).get();
   }
 
   // plantId로 식물 정보 가져오기

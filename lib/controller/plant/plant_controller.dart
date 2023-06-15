@@ -28,7 +28,7 @@ class PlantController extends GetxController {
 
   RxList<Plant> plantList = <Plant>[].obs; // 식물 리스트
   RxList<Plant> reversedPlantList = <Plant>[].obs; // 식물 리스트
-  RxString forestBackground = 'assets/images/forest_background_night.png'.obs;
+  String forestBackground = 'assets/images/forest_background_day.png';  // 숲 배경
 
   // 이미지 선택
   void selectImage() async {
@@ -158,22 +158,16 @@ class PlantController extends GetxController {
     return daysSincePlanting;
   }
 
-  // 갤러리 가져오기
-  getGallery(String plantId) {
-    List gallery = [];
-    // for (Journal journal in journalList) {
-    //   if (plantId == journal.plant.plantId) {
-    //     if (journal.imageUrl != null) {
-    //       gallery.add(journal.imageUrl);
-    //     }
-    //   }
-    // }
-    // return gallery;
-  }
-
   @override
   void onInit() {
     super.onInit();
     getPlants();
+
+    int currentHour = DateTime.now().hour;
+    if (currentHour >= 6 && currentHour < 18) {
+      forestBackground = 'assets/images/forest_background_day.png';
+    } else {
+      forestBackground = 'assets/images/forest_background_night.png';
+    }
   }
 }

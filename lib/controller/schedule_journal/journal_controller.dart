@@ -29,6 +29,7 @@ class JournalController extends GetxController {
   RxList<Journal> bookmarkList = <Journal>[].obs;   // 북마크 리스트
   RxList<Plant> journalPlantList = <Plant>[].obs;   // 필터링 식물 리스트
   RxInt selectedIdx = 0.obs;                        // 필터링 식물 리스트
+  RxString sortDropdownValue = RxString('최신순');   // 정렬 드롭다운
 
   // 이미지 선택
   void selectImage() async {
@@ -64,7 +65,6 @@ class JournalController extends GetxController {
 
     contentController.clear();
     selectedImage(null);
-    // readJournal();
     Get.back();
   }
 
@@ -141,7 +141,7 @@ class JournalController extends GetxController {
   // 일지 가져오기
   Future readJournal() async {
     isLoading(true);
-    QuerySnapshot snapshot = await DBService().readJournal(user.uid);
+    QuerySnapshot snapshot = await DBService().readJournal(user.uid, sortDropdownValue.value == '최신순');
 
     var futureJournals = snapshot.docs.map((doc) async {
       var journal = doc.data() as Map<String, dynamic>;
@@ -196,7 +196,6 @@ class JournalController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    readJournal();
     try {
       selectedPlant = plantList[0].obs;
     } catch (e) {
@@ -211,7 +210,6 @@ class JournalController extends GetxController {
     });
     DBService().journalsCollection
         .doc(user.uid).collection("journal")
-        .orderBy('writeTime', descending: true)
         .snapshots()
         .listen((QuerySnapshot snapshot) {
       if (snapshot.docs.isNotEmpty) {

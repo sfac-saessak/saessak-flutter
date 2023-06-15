@@ -8,6 +8,7 @@ import '../../controller/plant/plant_controller.dart';
 import '../../util/app_color.dart';
 import '../page/plant/add_plant_page.dart';
 import '../page/plant/plant_detail_page.dart';
+import '../widget/custom_dropdown_button.dart';
 
 class HomeScreen extends GetView<PlantController> {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class HomeScreen extends GetView<PlantController> {
               height: 200,
               decoration: BoxDecoration(
                 color: AppColor.black40,
-                image: DecorationImage(image: AssetImage(controller.forestBackground.value), fit: BoxFit.cover)
+                image: DecorationImage(image: AssetImage(controller.forestBackground), fit: BoxFit.cover)
               ),
             ),
             SizedBox(height: 12),
@@ -82,7 +83,7 @@ class HomeScreen extends GetView<PlantController> {
                           );
                         }
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
