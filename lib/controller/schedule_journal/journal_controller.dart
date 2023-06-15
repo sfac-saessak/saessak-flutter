@@ -24,8 +24,11 @@ class JournalController extends GetxController {
   Rxn<File> selectedImage = Rxn();                  // 추가한 사진
   RxBool isLoading = false.obs;                     // 로딩중 상태
   late Rx<Plant> selectedPlant;                     // 선택된 식물
-  RxList<Journal> journalList = <Journal>[].obs;    // 일지 리스트
+  RxList<Journal> journalList = <Journal>[].obs;    // 전체 일지 리스트
+  RxList<Journal> filteredJournalList = <Journal>[].obs;    // 필터링된 일지 리스트
   RxList<Journal> bookmarkList = <Journal>[].obs;   // 북마크 리스트
+  RxList<Plant> journalPlantList = <Plant>[].obs;   // 필터링 식물 리스트
+  RxInt selectedIdx = 0.obs;                        // 필터링 식물 리스트
 
   // 이미지 선택
   void selectImage() async {
@@ -135,31 +138,6 @@ class JournalController extends GetxController {
     this.bookmarkList(bookmarkList);
   }
 
-  // 일지 업데이트
-  void updateJournals(List<QueryDocumentSnapshot> docs) async {
-    isLoading(true);
-    var futureJournals = docs.map((doc) async {
-      var journal = doc.data() as Map<String, dynamic>;
-      var plantInfo = await getPlantById(journal['plant']);
-      var plant = Plant.fromMap(plantInfo);
-      bool bookmark = journal['bookmark'];
-      return Journal(
-        plant: plant,
-        journalId: journal['journalId'],
-        uid: journal['uid'],
-        writeTime: journal['writeTime'],
-        bookmark: bookmark.obs,
-        content: journal['content'],
-        imageUrl: journal['imageUrl'],
-      );
-    }).toList();
-
-    var journals = await Future.wait(futureJournals);
-    journalList(journals);
-    getBookmark();
-    isLoading(false);
-  }
-
   // 일지 가져오기
   Future readJournal() async {
     isLoading(true);
@@ -184,8 +162,35 @@ class JournalController extends GetxController {
     var journals = await Future.wait(futureJournals);
     journalList(journals);
 
+    List<Plant> journalPlantList = [];
+    for (Journal journal in journals) {
+      bool isDuplicate = false;
+      for (Plant plant in journalPlantList) {
+        if (journal.plant == plant) {
+          isDuplicate = true;
+          break;
+        }
+      }
+      if (!isDuplicate) {
+        journalPlantList.add(journal.plant);
+      }
+    }
+    this.journalPlantList(journalPlantList);
+    log('journalPlantList => ${journalPlantList}');
+
     getBookmark();
     isLoading(false);
+  }
+
+  // 식물별 필터링
+  filterJournalsByPlant(String plantId) {
+    List<Journal> filteredJournalList = [];
+    for (var journal in journalList) {
+      if (journal.plant.plantId == plantId) {
+        filteredJournalList.add(journal);
+      }
+    }
+    this.filteredJournalList(filteredJournalList);
   }
 
   @override
@@ -210,7 +215,7 @@ class JournalController extends GetxController {
         .snapshots()
         .listen((QuerySnapshot snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        updateJournals(snapshot.docs);
+        readJournal();
       } else {
         journalList([]);
       }
