@@ -9,6 +9,7 @@ import '../../../util/app_color.dart';
 import '../../../util/app_text_style.dart';
 import '../../page/schedule_journal/journal/add_journal_page.dart';
 import '../../page/schedule_journal/journal/journal_bookmark_page.dart';
+import '../../widget/custom_dropdown_button.dart';
 import '../../widget/journal_tile.dart';
 
 class JournalScreen extends GetView<JournalController> {
@@ -75,14 +76,14 @@ class JournalScreen extends GetView<JournalController> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 24),
+                      padding: const EdgeInsets.only(left: 20),
                       child: Obx(
                         () => ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: controller.journalPlantList.length + 1,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.only(right: 10, top: 12, bottom: 12),
+                              padding: const EdgeInsets.only(right: 10, top: 8, bottom: 8),
                               child: GestureDetector(
                                 onTap: () {
                                   controller.selectedIdx(index);
@@ -93,17 +94,17 @@ class JournalScreen extends GetView<JournalController> {
                                   }
                                 },
                                 child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                                    decoration: BoxDecoration(
-                                      color: controller.selectedIdx.value == index ? AppColor.primary : AppColor.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        index == 0 ? '전체' : '${controller.journalPlantList[index-1].name}',
-                                        style: AppTextStyle.body4_r(color: controller.selectedIdx.value == index ? AppColor.white : AppColor.black)
-                                      )
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  decoration: BoxDecoration(
+                                    color: controller.selectedIdx.value == index ? AppColor.primary : AppColor.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      index == 0 ? '전체' : '${controller.journalPlantList[index-1].name}',
+                                      style: AppTextStyle.body4_r(color: controller.selectedIdx.value == index ? AppColor.white : AppColor.black)
                                     )
+                                  )
                                 ),
                               ),
                             );
@@ -112,6 +113,19 @@ class JournalScreen extends GetView<JournalController> {
                       ),
                     ),
                   ),
+                  SizedBox(width: 12),
+                  Container(
+                    width: 70,
+                    child: CustomDropDownButton(
+                      value: controller.sortDropdownValue.value,
+                      items: ['최신순', '오래된순'],
+                      onChanged: (String? value) {
+                        controller.sortDropdownValue.value = value!;
+                        controller.readJournal();
+                      }
+                    ),
+                  ),
+                  SizedBox(width: 20),
                 ],
               ),
             ),
