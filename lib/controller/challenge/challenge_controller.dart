@@ -36,6 +36,14 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   RxList allChallengeList = [].obs;         // 전체 챌린지 리스트
   RxList joinedChallengeList = [].obs;      // 참여중인 챌린지 리스트
   RxList searchResultList = [].obs;         // 챌린지 검색결과 리스트
+  RxList filteredJoinChallengeList = [].obs;   // 참여중인 챌린지 진행/종료 필터링 리스트
+  RxList filteredAllChallengeList = [].obs;    // 전체 챌린지 모집중/모집종료 필터링 리스트
+
+  List<String> joinedChallengeFilter = ['전체', '진행중', '종료'];
+  List<String> allChallengeFilter = ['전체', '모집중', '모집마감'];
+
+  RxInt joinedFilterSelectedIdx = 0.obs;    // 참여중인 챌린지 필터링 선택값
+  RxInt allFilterSelectedIdx = 0.obs;       // 전체 챌린지 필터링 선택값
 
   final List<Tab> tabs = <Tab>[             // 탭
     Tab(text: '참여중'),
@@ -143,7 +151,7 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
         recentMessageSender: challengeData['recentMessageSender'],
         recentMessageTime: challengeData['recentMessageTime'],
       );
-      challenge.recruitmentStatus = getDeadline(challenge.startDate) > 0;
+      challenge.recruitmentStatus = getDeadline(challenge.startDate) <= 0;
 
       return challenge;
     });
@@ -154,21 +162,24 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
 
   // 참여중인 챌린지 가져오기
   getJoinedChallenges() async {
+    var startTime = DateTime.now(); // 코드 실행 시작 시간 기록
     isLoading(true);
+
     var joinedChallengeIdList = await DBService(uid: user.uid).getJoinedChallenges();
 
     if (joinedChallengeIdList.isNotEmpty) {
       var challenges = <Challenge>[];
-      var challengeFutures = <Future>[];
+      var challengeFutures = <Future<QuerySnapshot>>[];
 
-      for (var joinedChallengeId in joinedChallengeIdList) {
-        challengeFutures.add(DBService().challengeCollection.where('challengeId', isEqualTo: joinedChallengeId).get());
-      }
+      // 단일 쿼리로 모든 참여 중인 챌린지 데이터 가져오기
+      challengeFutures.add(DBService().challengeCollection.where('challengeId', whereIn: joinedChallengeIdList).get());
 
       var challengeSnapshots = await Future.wait(challengeFutures);
 
-      for (var snapshot in challengeSnapshots) {
-        var challengeData = snapshot.docs.first.data();
+      // 첫 번째 쿼리 결과를 사용하여 챌린지 데이터 추출
+      var joinedChallengesData = challengeSnapshots[0].docs.map((snapshot) => snapshot.data() as Map<String, dynamic>).toList();
+
+      for (var challengeData in joinedChallengesData) {
         var userInfo = await getUserInfoById(challengeData['admin']);
         var admin = UserModel.fromMap(userInfo);
         var challenge = Challenge(
@@ -200,10 +211,15 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     }
 
     isLoading(false);
+
+    var endTime = DateTime.now();
+    var executionTime = endTime.difference(startTime);
+    log('실행속도: ${executionTime.inMilliseconds} milliseconds');
   }
 
   // 전체 챌린지 새로고침
   void allChallengeRefresh() async {
+    await updateAllChallenge();
     allRefreshController.refreshCompleted();
   }
 
@@ -300,6 +316,40 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   Future<Map<String, dynamic>> getUserInfoById(String uid) async {
     var userInfo = await DBService().getUserInfoById(uid);
     return userInfo;
+  }
+
+  // 참여중인 챌린지 필터링
+  filterJoinChallenge(String status) {
+    List<Challenge> filteredChallengeList = [];
+    for (Challenge challenge in joinedChallengeList) {
+      if (status == '진행중') {
+        if (challenge.progressStatus!) {
+          filteredChallengeList.add(challenge);
+        }
+      } else {
+        if (!challenge.progressStatus!) {
+          filteredChallengeList.add(challenge);
+        }
+      }
+    }
+    this.filteredJoinChallengeList(filteredChallengeList);
+  }
+
+  // 전체 챌린지 필터링
+  filterAllChallenge(String status) {
+    List<Challenge> filteredChallengeList = [];
+    for (Challenge challenge in allChallengeList) {
+      if (status == '모집중') {
+        if (challenge.recruitmentStatus!) {
+          filteredChallengeList.add(challenge);
+        }
+      } else {
+        if (!challenge.recruitmentStatus!) {
+          filteredChallengeList.add(challenge);
+        }
+      }
+    }
+    this.filteredAllChallengeList(filteredChallengeList);
   }
 
   @override

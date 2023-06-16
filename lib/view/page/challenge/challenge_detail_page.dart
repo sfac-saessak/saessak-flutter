@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +18,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
 
   @override
   Widget build(BuildContext context) {
+    log('${challenge.recruitmentStatus}');
     return Scaffold(
       appBar: AppBar(
         title: Text('챌린지', style: AppTextStyle.body2_r()),
@@ -148,41 +151,40 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 24),
               child: CustomButton(
                 onPressed: () {
-                  challenge.recruitmentStatus!
-                      ? Get.snackbar('참가 실패', '모집이 끝난 챌린지입니다.')
-                      : showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("참가"),
-                              content: Text('${challenge.title}에 참가하시겠습니까?'),
-                              actions: [
-                                IconButton(
-                                  onPressed: () => Get.back(),
-                                  icon: const Icon(
-                                    Icons.cancel,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () async {
-                                    controller
-                                        .joinChallenge(challenge.challengeId!);
-                                    Get.snackbar('${challenge.title}', '참가 완');
-                                  },
-                                  icon: const Icon(
-                                    Icons.done,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                              ],
-                            );
-                          });
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("참가"),
+                        content: Text('${challenge.title}에 참가하시겠습니까?'),
+                        actions: [
+                          IconButton(
+                            onPressed: () => Get.back(),
+                            icon: const Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              controller
+                                  .joinChallenge(challenge.challengeId!);
+                              Get.snackbar('${challenge.title}', '참가 완');
+                            },
+                            icon: const Icon(
+                              Icons.done,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  );
                 },
                 text: '참가하기',
                 textStyle: AppTextStyle.body2_b(color: Colors.white),
-                isenableButton: challenge.recruitmentStatus! ? false : true,
+                isenableButton: challenge.recruitmentStatus! ? true : false,
               ),
             ),
           ],

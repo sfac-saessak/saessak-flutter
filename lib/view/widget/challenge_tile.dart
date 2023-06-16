@@ -24,7 +24,7 @@ class ChallengeTile extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: challengeEnd ? AppColor.black20 : AppColor.white,
+          color: challenge.recruitmentStatus! ? AppColor.white : AppColor.black20,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
@@ -44,12 +44,12 @@ class ChallengeTile extends StatelessWidget {
                     style: AppTextStyle.body4_r()),
                 Spacer(),
                 challenge.recruitmentStatus!
-                    ? Text('종료', style: AppTextStyle.body5_m(color: Colors.red))
-                    : Text(
-                        controller.getDeadline(challenge.startDate) == 0
-                            ? '챌린지 D-DAY'
-                            : '시작까지 D${controller.getDeadline(challenge.startDate)}',
-                        style: AppTextStyle.body5_m())
+                    ? Text(
+                      controller.getDeadline(challenge.startDate) == 0
+                        ? '챌린지 D-DAY'
+                        : '시작까지 D${controller.getDeadline(challenge.startDate)}',
+                      style: AppTextStyle.body5_m())
+                    : Text('모집 마감', style: AppTextStyle.body5_m(color: Colors.red))
               ],
             ),
             SizedBox(height: 8),
