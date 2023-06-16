@@ -17,8 +17,6 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
 
   @override
   Widget build(BuildContext context) {
-    print(controller.user.uid);
-    print(challenge.admin);
     return Scaffold(
       appBar: AppBar(
         title: Text('챌린지', style: AppTextStyle.body2_r()),
@@ -26,17 +24,17 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
         backgroundColor: AppColor.white,
         foregroundColor: AppColor.black,
         elevation: 0,
-        actions: controller.user.uid == challenge.admin
+        actions: controller.user.uid == challenge.admin.uid
             ? [
                 IconButton(
                   onPressed: () =>
                       Get.off(() => EditChallengePage(challenge: challenge)),
                   icon: Icon(Icons.edit),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.delete),
-                ),
+                // IconButton(
+                //   onPressed: () {},
+                //   icon: Icon(Icons.delete),
+                // ),
               ]
             : null,
       ),
@@ -49,7 +47,6 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
               children: [
                 CircleAvatar(
                   radius: 25,
-
                   backgroundImage: challenge.admin.profileImg != null
                       ? NetworkImage(challenge.admin.profileImg!)
                       : null,

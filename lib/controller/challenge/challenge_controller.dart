@@ -219,10 +219,11 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   }
 
   // 챌린지 포기
-  void exitChallenge(String challengeId) {
-    DBService(uid: user.uid).exitChallenge(challengeId);
-    getJoinedChallenges();
+  void exitChallenge(String challengeId) async {
+    await DBService(uid: user.uid).exitChallenge(challengeId);
     Get.back();
+    getJoinedChallenges();
+    updateAllChallenge();
   }
 
   // 시간 변환
@@ -296,8 +297,8 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   void onInit() {
     super.onInit();
     tabController = TabController(length: tabs.length, vsync: this);
-    getJoinedChallenges();
     updateAllChallenge();
+    getJoinedChallenges();
   }
 
   @override

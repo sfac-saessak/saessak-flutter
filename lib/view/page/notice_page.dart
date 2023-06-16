@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -31,7 +30,8 @@ class NoticePage extends GetView<SettingController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${DateFormat("yyyy-MM-dd").format(controller.noticeList[index].writeTime.toDate())}'),
+                    Text(
+                        '${DateFormat("yyyy-MM-dd").format(controller.noticeList[index].writeTime.toDate())}'),
                     SizedBox(height: 8),
                     Text('${controller.noticeList[index].content}'),
                   ],

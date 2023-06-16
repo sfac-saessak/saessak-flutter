@@ -65,7 +65,7 @@ class FriendDetailController extends GetxController with GetSingleTickerProvider
   void readJournal() async {
     isLoading(true);
     journalList([]);
-    QuerySnapshot snapshot = await DBService().readJournal(user.uid);
+    QuerySnapshot snapshot = await DBService().readJournal(user.uid, true);
 
     var futureJournals = snapshot.docs.map((doc) async {
       var journal = doc.data() as Map<String, dynamic>;
