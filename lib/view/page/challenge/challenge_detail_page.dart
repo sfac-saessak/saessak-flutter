@@ -10,10 +10,9 @@ import 'edit_challenge_page.dart';
 
 class ChallengeDetailPage extends GetView<ChallengeController> {
   const ChallengeDetailPage(
-      {Key? key, required this.challenge, required this.challengeEnd})
+      {Key? key, required this.challenge})
       : super(key: key);
   final Challenge challenge;
-  final bool challengeEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +113,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                   style: AppTextStyle.body4_r(color: AppColor.black40),
                 ),
                 Spacer(),
-                challengeEnd
+                challenge.recruitmentStatus!
                     ? Text(
                         '모집 마감',
                         style: AppTextStyle.body4_m(color: AppColor.black40),
@@ -149,7 +148,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 24),
               child: CustomButton(
                 onPressed: () {
-                  challengeEnd
+                  challenge.recruitmentStatus!
                       ? Get.snackbar('참가 실패', '모집이 끝난 챌린지입니다.')
                       : showDialog(
                           barrierDismissible: false,
@@ -183,7 +182,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                 },
                 text: '참가하기',
                 textStyle: AppTextStyle.body2_b(color: Colors.white),
-                isenableButton: challengeEnd ? false : true,
+                isenableButton: challenge.recruitmentStatus! ? false : true,
               ),
             ),
           ],

@@ -17,6 +17,8 @@ class Challenge {
   String? recentMessage;
   String? recentMessageSender;
   Timestamp? recentMessageTime;
+  bool? recruitmentStatus;   // 모집 상태 (true: 모집중, false: 모집 마감)
+  bool? progressStatus;      // 진행 상태 (true: 진행중, false: 끝남)
 
   Challenge({
     this.challengeId,
@@ -33,6 +35,8 @@ class Challenge {
     this.recentMessage,
     this.recentMessageSender,
     this.recentMessageTime,
+    this.recruitmentStatus,
+    this.progressStatus,
   });
 
   Map<String, dynamic> toMap() {

@@ -124,25 +124,28 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   updateAllChallenge() async {
     QuerySnapshot snapshot = await DBService().getAllChallenge();
     var futureChallenges = snapshot.docs.map((doc) async {
-      var challenge = doc.data() as Map<String, dynamic>;
-      var userInfo = await getUserInfoById(challenge['admin']);
+      var challengeData = doc.data() as Map<String, dynamic>;
+      var userInfo = await getUserInfoById(challengeData['admin']);
       var admin = UserModel.fromMap(userInfo);
-      return Challenge(
-        challengeId: challenge['challengeId'],
-        plant: challenge['plant'],
+      var challenge = Challenge(
+        challengeId: challengeData['challengeId'],
+        plant: challengeData['plant'],
         admin: admin,
-        title: challenge['title'],
-        content: challenge['content'],
-        createdAt: challenge['createdAt'],
-        startDate: challenge['startDate'],
-        endDate: challenge['endDate'],
-        members: challenge['members'],
-        memberLimit: challenge['memberLimit'],
-        imageUrl: challenge['image'],
-        recentMessage: challenge['recentMessage'],
-        recentMessageSender: challenge['recentMessageSender'],
-        recentMessageTime: challenge['recentMessageTime'],
+        title: challengeData['title'],
+        content: challengeData['content'],
+        createdAt: challengeData['createdAt'],
+        startDate: challengeData['startDate'],
+        endDate: challengeData['endDate'],
+        members: challengeData['members'],
+        memberLimit: challengeData['memberLimit'],
+        imageUrl: challengeData['image'],
+        recentMessage: challengeData['recentMessage'],
+        recentMessageSender: challengeData['recentMessageSender'],
+        recentMessageTime: challengeData['recentMessageTime'],
       );
+      challenge.recruitmentStatus = getDeadline(challenge.startDate) > 0;
+
+      return challenge;
     });
 
     var challenges = await Future.wait(futureChallenges);
@@ -156,33 +159,41 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
 
     if (joinedChallengeIdList.isNotEmpty) {
       var challenges = <Challenge>[];
+      var challengeFutures = <Future>[];
 
       for (var joinedChallengeId in joinedChallengeIdList) {
-        var challengeDocRef = await DBService().challengeCollection.doc(joinedChallengeId).get();
-        var challenge = challengeDocRef.data() as Map<String, dynamic>;
-        var userInfo = await getUserInfoById(challenge['admin']);
-        var admin = UserModel.fromMap(userInfo);
-        challenges.add(Challenge(
-          challengeId: challenge['challengeId'],
-          plant: challenge['plant'],
-          admin: admin,
-          title: challenge['title'],
-          content: challenge['content'],
-          createdAt: challenge['createdAt'],
-          startDate: challenge['startDate'],
-          endDate: challenge['endDate'],
-          members: challenge['members'],
-          memberLimit: challenge['memberLimit'],
-          imageUrl: challenge['image'],
-          recentMessage: challenge['recentMessage'],
-          recentMessageSender: challenge['recentMessageSender'],
-          recentMessageTime: challenge['recentMessageTime'],
-        ));
+        challengeFutures.add(DBService().challengeCollection.where('challengeId', isEqualTo: joinedChallengeId).get());
       }
 
-      // 최근 메세지 시간으로 정렬
-      challenges.removeWhere((challenge) => challenge.recentMessageTime == null);
-      challenges.sort((a, b) => b.recentMessageTime!.compareTo(a.recentMessageTime!)); // 내림차순 정렬
+      var challengeSnapshots = await Future.wait(challengeFutures);
+
+      for (var snapshot in challengeSnapshots) {
+        var challengeData = snapshot.docs.first.data();
+        var userInfo = await getUserInfoById(challengeData['admin']);
+        var admin = UserModel.fromMap(userInfo);
+        var challenge = Challenge(
+          challengeId: challengeData['challengeId'],
+          plant: challengeData['plant'],
+          admin: admin,
+          title: challengeData['title'],
+          content: challengeData['content'],
+          createdAt: challengeData['createdAt'],
+          startDate: challengeData['startDate'],
+          endDate: challengeData['endDate'],
+          members: challengeData['members'],
+          memberLimit: challengeData['memberLimit'],
+          imageUrl: challengeData['image'],
+          recentMessage: challengeData['recentMessage'],
+          recentMessageSender: challengeData['recentMessageSender'],
+          recentMessageTime: challengeData['recentMessageTime'],
+        );
+
+        challenge.progressStatus = DateTime.now().isBefore(challenge.endDate.toDate());
+
+        challenges.add(challenge);
+      }
+
+      challenges.sort((a, b) => b.recentMessageTime!.compareTo(a.recentMessageTime!));
 
       joinedChallengeList(challenges);
       log('joinedChallengeList $joinedChallengeList');
@@ -282,10 +293,8 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     titleController.text = '';
     contentController.text = '';
 
-    Get.off(ChallengeDetailPage(challenge: challenge, challengeEnd: getDeadline(challenge.startDate) > 0));
+    Get.off(ChallengeDetailPage(challenge: challenge));
   }
-
-  // 진행중 / 마감 판별
 
   // uid로 유저 정보 가져오기
   Future<Map<String, dynamic>> getUserInfoById(String uid) async {

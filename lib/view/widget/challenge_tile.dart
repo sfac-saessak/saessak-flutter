@@ -19,8 +19,7 @@ class ChallengeTile extends StatelessWidget {
     print(challenge.memberLimit == null);
     return GestureDetector(
       onTap: () {
-        Get.to(() => ChallengeDetailPage(
-            challenge: challenge, challengeEnd: challengeEnd));
+        Get.to(() => ChallengeDetailPage(challenge: challenge));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -44,7 +43,7 @@ class ChallengeTile extends StatelessWidget {
                     '${challenge.members!.length} / ${challenge.memberLimit != null ? challenge.memberLimit : '제한없음'}',
                     style: AppTextStyle.body4_r()),
                 Spacer(),
-                challengeEnd
+                challenge.recruitmentStatus!
                     ? Text('종료', style: AppTextStyle.body5_m(color: Colors.red))
                     : Text(
                         controller.getDeadline(challenge.startDate) == 0

@@ -24,7 +24,7 @@ class JoinedChallengeTile extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: AppColor.white,
+          color: challenge.progressStatus! ? AppColor.white : AppColor.black20,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
@@ -40,7 +40,9 @@ class JoinedChallengeTile extends StatelessWidget {
                 SizedBox(width: 4),
                 Text('${challenge.members!.length}', style: AppTextStyle.body4_r()),
                 Spacer(),
-                Text('진행', style: AppTextStyle.body5_m(color: AppColor.primary)),
+                challenge.progressStatus!
+                  ? Text('진행', style: AppTextStyle.body5_m(color: AppColor.primary))
+                  : Text('종료', style: AppTextStyle.body5_m(color: Colors.red)),
               ],
             ),
             SizedBox(height: 16),
