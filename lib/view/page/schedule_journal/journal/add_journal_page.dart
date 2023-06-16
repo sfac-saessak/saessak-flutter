@@ -38,7 +38,10 @@ class AddJournalPage extends GetView<JournalController> {
                     Get.back();
                     Get.snackbar('일지', '등록 완');
                   },
-                  child: Text('등록'),
+                  child: Text(
+                    '등록',
+                    style: AppTextStyle.body3_m(color: AppColor.primary),
+                  ),
                 )
               : TextButton(
                   onPressed: () {
@@ -79,20 +82,38 @@ class AddJournalPage extends GetView<JournalController> {
                 ],
               ),
               Expanded(
-                child: TextFormField(
-                  controller: controller.contentController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 40,
-                  decoration: InputDecoration(hintText: '내용 입력'),
+                child: Container(
+                  width: Get.width,
+                  margin: EdgeInsets.only(top: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: AppColor.black20,
+                      ),
+                      borderRadius: BorderRadius.circular(8)),
+                  child: TextFormField(
+                    controller: controller.contentController,
+                    // keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                        hintText: '내용 입력', border: InputBorder.none),
+                    style: AppTextStyle.body3_r(color: AppColor.black90),
+                  ),
                 ),
               ),
-              // AppTextField(
-              //     hintText: '내용 입력', controller: controller.contentController),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  '사진첨부',
+                  style: AppTextStyle.body3_b(color: AppColor.black90),
+                ),
+              ),
               GestureDetector(
                 onTap: controller.selectImage,
                 child: Container(
-                  width: 150,
-                  height: 150,
+                  width: 75,
+                  height: 75,
                   decoration: BoxDecoration(
                     color: AppColor.black10,
                     borderRadius: BorderRadius.circular(7),
@@ -108,6 +129,9 @@ class AddJournalPage extends GetView<JournalController> {
                               : Icon(Icons.add,
                                   color: AppColor.black60, size: 30),
                 ),
+              ),
+              SizedBox(
+                height: Get.height / 8,
               ),
             ],
           ),
