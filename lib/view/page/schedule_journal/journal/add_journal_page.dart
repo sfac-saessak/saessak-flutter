@@ -7,6 +7,7 @@ import 'package:saessak_flutter/view/widget/app_text_field.dart';
 import '../../../../controller/schedule_journal/journal_controller.dart';
 import '../../../../model/journal.dart';
 import '../../../../util/app_color.dart';
+import '../../../../util/app_text_style.dart';
 import '../../../widget/custom_dropdown_button.dart';
 
 class AddJournalPage extends GetView<JournalController> {
@@ -54,24 +55,39 @@ class AddJournalPage extends GetView<JournalController> {
           () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              journal == null
-                  ? CustomDropDownButton(
-                      value: controller.selectedPlant.value.name,
-                      items: controller.plantList
-                          .map((plant) => plant.name)
-                          .toList(),
-                      onChanged: (String? value) {
-                        controller.selectedPlant.value =
-                            controller.plantList.firstWhere(
-                          (plant) => plant.name == value,
-                        );
-                        log('${controller.selectedPlant}');
-                      },
-                    )
-                  : Text('${journal!.plant.name}'),
-              SizedBox(height: 12),
-              AppTextField(
-                  hintText: '내용 입력', controller: controller.contentController),
+              Row(
+                children: [
+                  Text('식물', style: AppTextStyle.body2_m()),
+                  SizedBox(width: 24),
+                  journal == null
+                      ? Expanded(
+                          child: CustomDropDownButton(
+                            value: controller.selectedPlant.value.name,
+                            items: controller.plantList
+                                .map((plant) => plant.name)
+                                .toList(),
+                            onChanged: (String? value) {
+                              controller.selectedPlant.value =
+                                  controller.plantList.firstWhere(
+                                (plant) => plant.name == value,
+                              );
+                              log('${controller.selectedPlant}');
+                            },
+                          ),
+                        )
+                      : Text('${journal!.plant.name}'),
+                ],
+              ),
+              Expanded(
+                child: TextFormField(
+                  controller: controller.contentController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 40,
+                  decoration: InputDecoration(hintText: '내용 입력'),
+                ),
+              ),
+              // AppTextField(
+              //     hintText: '내용 입력', controller: controller.contentController),
               GestureDetector(
                 onTap: controller.selectImage,
                 child: Container(

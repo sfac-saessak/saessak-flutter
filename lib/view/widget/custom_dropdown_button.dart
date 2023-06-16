@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:saessak_flutter/util/app_color.dart';
 import 'package:saessak_flutter/util/app_text_style.dart';
@@ -25,7 +24,13 @@ class CustomDropDownButton extends StatelessWidget {
       items: items.map<DropdownMenuItem<String>>((value) {
         return DropdownMenuItem<String>(
           value: value.runtimeType != int ? value : value.toString(),
-          child: value.runtimeType != int ? Text(value, style: AppTextStyle.body4_r(color: AppColor.black30),) : Text('$value 시', style: AppTextStyle.body4_r(color: AppColor.black30)),
+          child: value.runtimeType != int
+              ? Text(
+                  value,
+                  style: AppTextStyle.body3_r(color: AppColor.black90),
+                )
+              : Text('$value 시',
+                  style: AppTextStyle.body3_r(color: AppColor.black30)),
         );
       }).toList(),
     );
