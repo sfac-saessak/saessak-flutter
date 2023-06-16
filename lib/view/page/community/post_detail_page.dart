@@ -23,6 +23,11 @@ class PostDetailPage extends GetView<CommunityController> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: AppColor.black,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios_new),
+            onPressed: () {
+              controller.backButton(controller.curTab);
+            }),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -180,7 +185,7 @@ class PostDetailPage extends GetView<CommunityController> {
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(17)),
-                        height: 525,
+                        height: 200,
                         width: 300,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -188,7 +193,7 @@ class PostDetailPage extends GetView<CommunityController> {
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: AppColor.black10,
@@ -198,14 +203,13 @@ class PostDetailPage extends GetView<CommunityController> {
                                     child: TextField(
                                       onChanged: (value) =>
                                           controller.onChanged(),
-                                      maxLines: 27,
+                                      maxLines: 4,
                                       controller:
                                           controller.commentTextController,
                                       decoration: InputDecoration(
                                           hintText: '댓글 내용을 입력해주세요.',
-                                          hintStyle: AppTextStyle.body3_r()
-                                              .copyWith(
-                                                  color: AppColor.black50),
+                                          hintStyle: AppTextStyle.body3_r(
+                                              color: AppColor.black50),
                                           border: InputBorder.none),
                                     ),
                                   ),
@@ -213,7 +217,8 @@ class PostDetailPage extends GetView<CommunityController> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
                               child: Obx(
                                 () => OutlinedButton(
                                   onPressed: () =>

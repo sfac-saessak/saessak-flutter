@@ -10,13 +10,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:saessak_flutter/component/community/comment_card.dart';
 import 'package:saessak_flutter/model/community/post.dart';
 import 'package:saessak_flutter/model/user_model.dart';
-import 'package:saessak_flutter/util/app_color.dart';
-import 'package:saessak_flutter/util/app_text_style.dart';
 import 'package:saessak_flutter/view/page/community/post_detail_page.dart';
 import 'package:saessak_flutter/view/page/community/post_write_page.dart';
 
 import '../../view/widget/loading_dialog.dart';
-
 
 class CommunityController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -66,7 +63,6 @@ class CommunityController extends GetxController
   void _handleTabSelection() {
     if (communityTabController.indexIsChanging) {
       int selectedTabIndex = communityTabController.index;
-      // 선택된 탭에 따라 실행할 동작을 수행합니다.
       switch (selectedTabIndex) {
         case 0: // '전체' 탭
           curTab = '전체';
@@ -290,7 +286,9 @@ class CommunityController extends GetxController
   // 작성하기 버튼
   writePost() async {
     // 로딩중 시작, 함수 종료시 로딩중 끝
-    Get.dialog(LoadingDialog(text: '업로드중입니다.',));
+    Get.dialog(LoadingDialog(
+      text: '업로드중입니다.',
+    ));
 
     // modify
     var userRes = await db
@@ -413,11 +411,31 @@ class CommunityController extends GetxController
     contentController.text = '';
 
     // 수정 완료 후 수정한 페이지로 이동
+
     Get.back();
     Get.off(PostDetailPage(
       post: post,
       user: user,
     ));
+  }
+
+  // 백버튼
+  backButton(String curTab) {
+    switch (curTab) {
+      case '전체':
+        getPosts();
+        break;
+      case '정보':
+        getInfoPosts();
+        break;
+      case '질문':
+        getQuestionPosts();
+        break;
+      case '잡담':
+        getTalkPosts();
+        break;
+    }
+    Get.back();
   }
 
   // ## 게시글 삭제
@@ -546,4 +564,3 @@ class CommunityController extends GetxController
     communityTabController.dispose();
   }
 }
-
