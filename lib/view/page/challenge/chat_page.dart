@@ -44,52 +44,70 @@ class ChatPage extends GetView<ChatController> {
           child: Column(
             children: <Widget>[
               Obx(() => Expanded(
-                child: ListView.builder(
-                  controller: controller.scrollController,
-                  itemCount: controller.chats.length,
-                  itemBuilder: (context, index) {
-                    Message chat = controller.chats[index];
-                    final currentChatDate = chat.time.toDate();
-                    final currentSender = chat.sender.uid;
-                    final minutes = currentChatDate.minute + currentChatDate.hour * 60;
+                    child: ListView.builder(
+                      controller: controller.scrollController,
+                      itemCount: controller.chats.length,
+                      itemBuilder: (context, index) {
+                        Message chat = controller.chats[index];
+                        final currentChatDate = chat.time.toDate();
+                        final currentSender = chat.sender.uid;
+                        final minutes =
+                            currentChatDate.minute + currentChatDate.hour * 60;
 
-                    bool showTime = (index == 0 || minutes != controller.chats[index - 1].time.toDate().minute + controller.chats[index - 1].time.toDate().hour * 60);
-                    bool showUserName = (
-                        index == 0 ||
-                        currentSender != controller.chats[index - 1].sender.uid ||
-                        showTime
-                      );
-                    return Column(
-                      children: [
-                        if (index == 0 ||
-                            currentChatDate.year != controller.chats[index - 1].time.toDate().year ||
-                            currentChatDate.month != controller.chats[index - 1].time.toDate().month ||
-                            currentChatDate.day != controller.chats[index - 1].time.toDate().day)
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                              decoration: BoxDecoration(
-                                color: AppColor.black40,
-                                borderRadius: BorderRadius.circular(15)
+                        bool showTime = (index == 0 ||
+                            minutes !=
+                                controller.chats[index - 1].time
+                                        .toDate()
+                                        .minute +
+                                    controller.chats[index - 1].time
+                                            .toDate()
+                                            .hour *
+                                        60);
+                        bool showUserName = (index == 0 ||
+                            currentSender !=
+                                controller.chats[index - 1].sender.uid ||
+                            showTime);
+                        return Column(
+                          children: [
+                            if (index == 0 ||
+                                currentChatDate.year !=
+                                    controller.chats[index - 1].time
+                                        .toDate()
+                                        .year ||
+                                currentChatDate.month !=
+                                    controller.chats[index - 1].time
+                                        .toDate()
+                                        .month ||
+                                currentChatDate.day !=
+                                    controller.chats[index - 1].time
+                                        .toDate()
+                                        .day)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 6),
+                                  decoration: BoxDecoration(
+                                      color: AppColor.black40,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Text(
+                                    '${currentChatDate.year}.${currentChatDate.month}.${currentChatDate.day}',
+                                    style: AppTextStyle.body4_r(
+                                        color: AppColor.white),
+                                  ),
+                                ),
                               ),
-                              child: Text(
-                                '${currentChatDate.year}.${currentChatDate.month}.${currentChatDate.day}',
-                                style: AppTextStyle.body4_r(color: AppColor.white),
-                              ),
+                            MessageTile(
+                              message: chat,
+                              sentByMe: controller.user.uid == chat.sender.uid,
+                              showUserName: showUserName,
+                              showTime: showTime,
                             ),
-                          ),
-                        MessageTile(
-                          message: chat,
-                          sentByMe: controller.user.uid == chat.sender.uid,
-                          showUserName: showUserName,
-                          showTime: showTime,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              )),
+                          ],
+                        );
+                      },
+                    ),
+                  )),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Container(
@@ -110,14 +128,17 @@ class ChatPage extends GetView<ChatController> {
                         hintText: '채팅 입력...',
                         controller: controller.messageController,
                         onSubmitted: (p0) {
-                          controller.sendMessage(controller.challenge.challengeId!);
+                          controller
+                              .sendMessage(controller.challenge.challengeId!);
                         },
                       )),
                       TextButton(
                         child: Text('전송',
-                            style: AppTextStyle.body2_m(color: AppColor.primary)),
+                            style:
+                                AppTextStyle.body2_m(color: AppColor.primary)),
                         onPressed: () {
-                          controller.sendMessage(controller.challenge.challengeId!);
+                          controller
+                              .sendMessage(controller.challenge.challengeId!);
                         },
                       ),
                     ],

@@ -16,7 +16,6 @@ class ChallengeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<ChallengeController>();
     bool challengeEnd = controller.getDeadline(challenge.startDate) > 0;
-    print(challenge.memberLimit == null);
     return GestureDetector(
       onTap: () {
         Get.to(() => ChallengeDetailPage(
@@ -34,9 +33,10 @@ class ChallengeTile extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  constraints: BoxConstraints(maxWidth: 200),
-                  child: Text('${challenge.title}', style: AppTextStyle.body3_b(), overflow: TextOverflow.ellipsis)
-                ),
+                    constraints: BoxConstraints(maxWidth: 200),
+                    child: Text('${challenge.title}',
+                        style: AppTextStyle.body3_b(),
+                        overflow: TextOverflow.ellipsis)),
                 SizedBox(width: 10),
                 Icon(Icons.people, color: AppColor.primary, size: 16),
                 SizedBox(width: 4),

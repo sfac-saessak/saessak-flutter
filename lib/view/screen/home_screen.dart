@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/util/app_text_style.dart';
@@ -24,9 +23,10 @@ class HomeScreen extends GetView<PlantController> {
               width: double.infinity,
               height: 200,
               decoration: BoxDecoration(
-                color: AppColor.black40,
-                image: DecorationImage(image: AssetImage(controller.forestBackground), fit: BoxFit.cover)
-              ),
+                  color: AppColor.black40,
+                  image: DecorationImage(
+                      image: AssetImage(controller.forestBackground),
+                      fit: BoxFit.cover)),
             ),
             SizedBox(height: 12),
             Container(
@@ -62,27 +62,34 @@ class HomeScreen extends GetView<PlantController> {
                             padding: const EdgeInsets.all(8.0),
                             child: GestureDetector(
                               onTap: () {
-                                Get.to(() => PlantDetailPage(plant: plant), arguments: [plant]);
+                                Get.to(() => PlantDetailPage(plant: plant),
+                                    arguments: [plant]);
                               },
                               child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0),
                                   decoration: BoxDecoration(
                                     color: AppColor.black20,
                                     borderRadius: BorderRadius.circular(15),
                                     image: plant.imageUrl != null
                                         ? DecorationImage(
-                                      image: NetworkImage(plant.imageUrl!),
-                                      fit: BoxFit.fitWidth,
-                                      colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.darken),
-                                    )
+                                            image:
+                                                NetworkImage(plant.imageUrl!),
+                                            fit: BoxFit.fitWidth,
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.black.withOpacity(0.2),
+                                                BlendMode.darken),
+                                          )
                                         : null,
                                   ),
-                                  child: Center(child: Text('${controller.reversedPlantList[index].name}', style: AppTextStyle.body3_r(color: AppColor.white)))
-                              ),
+                                  child: Center(
+                                      child: Text(
+                                          '${controller.reversedPlantList[index].name}',
+                                          style: AppTextStyle.body3_r(
+                                              color: AppColor.white)))),
                             ),
                           );
-                        }
-                    ),
+                        }),
                   ),
                 ],
               ),
