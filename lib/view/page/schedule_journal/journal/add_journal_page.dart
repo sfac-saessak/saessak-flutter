@@ -7,6 +7,7 @@ import 'package:saessak_flutter/view/widget/app_text_field.dart';
 import '../../../../controller/schedule_journal/journal_controller.dart';
 import '../../../../model/journal.dart';
 import '../../../../util/app_color.dart';
+import '../../../../util/app_text_style.dart';
 import '../../../widget/custom_dropdown_button.dart';
 
 class AddJournalPage extends GetView<JournalController> {
@@ -37,7 +38,10 @@ class AddJournalPage extends GetView<JournalController> {
                     Get.back();
                     Get.snackbar('일지', '등록 완');
                   },
-                  child: Text('등록'),
+                  child: Text(
+                    '등록',
+                    style: AppTextStyle.body3_m(color: AppColor.primary),
+                  ),
                 )
               : TextButton(
                   onPressed: () {
@@ -54,29 +58,62 @@ class AddJournalPage extends GetView<JournalController> {
           () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              journal == null
-                  ? CustomDropDownButton(
-                      value: controller.selectedPlant.value.name,
-                      items: controller.plantList
-                          .map((plant) => plant.name)
-                          .toList(),
-                      onChanged: (String? value) {
-                        controller.selectedPlant.value =
-                            controller.plantList.firstWhere(
-                          (plant) => plant.name == value,
-                        );
-                        log('${controller.selectedPlant}');
-                      },
-                    )
-                  : Text('${journal!.plant.name}'),
-              SizedBox(height: 12),
-              AppTextField(
-                  hintText: '내용 입력', controller: controller.contentController),
+              Row(
+                children: [
+                  Text('식물', style: AppTextStyle.body2_m()),
+                  SizedBox(width: 24),
+                  journal == null
+                      ? Expanded(
+                          child: CustomDropDownButton(
+                            value: controller.selectedPlant.value.name,
+                            items: controller.plantList
+                                .map((plant) => plant.name)
+                                .toList(),
+                            onChanged: (String? value) {
+                              controller.selectedPlant.value =
+                                  controller.plantList.firstWhere(
+                                (plant) => plant.name == value,
+                              );
+                              log('${controller.selectedPlant}');
+                            },
+                          ),
+                        )
+                      : Text('${journal!.plant.name}'),
+                ],
+              ),
+              Expanded(
+                child: Container(
+                  width: Get.width,
+                  margin: EdgeInsets.only(top: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: AppColor.black20,
+                      ),
+                      borderRadius: BorderRadius.circular(8)),
+                  child: TextFormField(
+                    controller: controller.contentController,
+                    // keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                        hintText: '내용 입력', border: InputBorder.none),
+                    style: AppTextStyle.body3_r(color: AppColor.black90),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  '사진첨부',
+                  style: AppTextStyle.body3_b(color: AppColor.black90),
+                ),
+              ),
               GestureDetector(
                 onTap: controller.selectImage,
                 child: Container(
-                  width: 150,
-                  height: 150,
+                  width: 75,
+                  height: 75,
                   decoration: BoxDecoration(
                     color: AppColor.black10,
                     borderRadius: BorderRadius.circular(7),
@@ -92,6 +129,9 @@ class AddJournalPage extends GetView<JournalController> {
                               : Icon(Icons.add,
                                   color: AppColor.black60, size: 30),
                 ),
+              ),
+              SizedBox(
+                height: Get.height / 8,
               ),
             ],
           ),

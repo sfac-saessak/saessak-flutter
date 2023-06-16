@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -25,20 +24,19 @@ class JournalDetailPage extends StatelessWidget {
         foregroundColor: AppColor.black,
         elevation: 0,
         actions: journal.uid == controller.user.uid
-          ? [
-            IconButton(
-              onPressed: () {
-                Get.off(() => AddJournalPage(journal: journal));
-              },
-              icon: Icon(Icons.edit)
-            ),
-            IconButton(
-              onPressed: () {
-                controller.deleteJournal(journal.journalId!);
-              },
-              icon: Icon(Icons.delete)
-            ),
-          ]: null,
+            ? [
+                IconButton(
+                    onPressed: () {
+                      Get.off(() => AddJournalPage(journal: journal));
+                    },
+                    icon: Icon(Icons.edit)),
+                IconButton(
+                    onPressed: () {
+                      controller.deleteJournal(journal.journalId!);
+                    },
+                    icon: Icon(Icons.delete)),
+              ]
+            : null,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -52,8 +50,12 @@ class JournalDetailPage extends StatelessWidget {
                   height: 50,
                   child: CircleAvatar(
                     backgroundColor: AppColor.black20,
-                    backgroundImage: journal.plant.imageUrl != null ? NetworkImage(journal.plant.imageUrl!) : null,
-                    child: journal.plant.imageUrl != null ? null : Icon(Icons.person, color: AppColor.white),
+                    backgroundImage: journal.plant.imageUrl != null
+                        ? NetworkImage(journal.plant.imageUrl!)
+                        : null,
+                    child: journal.plant.imageUrl != null
+                        ? null
+                        : Icon(Icons.person, color: AppColor.white),
                   ),
                 ),
                 SizedBox(width: 10),
@@ -63,39 +65,51 @@ class JournalDetailPage extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text('${journal.plant.name}', style: AppTextStyle.body3_m()),
+                        Text('${journal.plant.name}',
+                            style: AppTextStyle.body3_m()),
                         SizedBox(width: 2),
-                        Text('${journal.plant.species}', style: AppTextStyle.body4_r(color: AppColor.black40)),
+                        Text('${journal.plant.species}',
+                            style:
+                                AppTextStyle.body4_r(color: AppColor.black40)),
                       ],
                     ),
                     SizedBox(height: 6),
-                    Text('${DateFormat("yyyy-MM-dd").format(journal.writeTime.toDate())}', style: AppTextStyle.body4_r(color: AppColor.black40)),
+                    Text(
+                        '${DateFormat("yyyy-MM-dd").format(journal.writeTime.toDate())}',
+                        style: AppTextStyle.body4_r(color: AppColor.black40)),
                   ],
                 ),
                 Spacer(),
                 journal.uid == controller.user.uid
-                ? Obx(
-                  () => IconButton(
-                    onPressed: (){
-                      journal.bookmark.toggle();
-                      controller.toggleBookmark(journal.journalId!);
-                    },
-                    icon: Icon(journal.bookmark.value ? Icons.bookmark : Icons.bookmark_outline, color: AppColor.primary)
-                  ),
-                )
-                : Container()
+                    ? Obx(
+                        () => IconButton(
+                            onPressed: () {
+                              journal.bookmark.toggle();
+                              controller.toggleBookmark(journal.journalId!);
+                            },
+                            icon: Icon(
+                                journal.bookmark.value
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_outline,
+                                color: AppColor.primary)),
+                      )
+                    : Container()
               ],
             ),
-            SizedBox(height: 10),
-            Text('${journal.content}'),
-            SizedBox(height: 20),
+            SizedBox(height: 24),
             Container(
               width: double.infinity,
-              height: 100,
+              height: 240,
               decoration: BoxDecoration(
-                image: journal.imageUrl != null ? DecorationImage(image: NetworkImage(journal.imageUrl!)) : null,
+                image: journal.imageUrl != null
+                    ? DecorationImage(
+                        image: NetworkImage(journal.imageUrl!),
+                        fit: BoxFit.cover)
+                    : null,
               ),
             ),
+            SizedBox(height: 8),
+            Expanded(child: Text('${journal.content}')),
           ],
         ),
       ),
