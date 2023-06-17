@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'controller/plant/plant_detail_controller.dart';
@@ -41,30 +42,37 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      theme: ThemeData(fontFamily: 'NotoSansKR'),
-      initialBinding: BindingsBuilder(() {
-        Get.put(AuthController());
-        Get.lazyPut(() => LoginController(), fenix: true);
-        Get.lazyPut(() => SignupController(), fenix: true);
-        Get.lazyPut(() => SetProfileController(), fenix: true);
-        Get.lazyPut(() => MainController(), fenix: true);
-        Get.lazyPut(() => CommunityController(), fenix: true);
-        Get.lazyPut(() => ScheduleController(), fenix: true);
-        Get.lazyPut(() => ChallengeController(), fenix: true);
-        Get.lazyPut(() => ChatController(), fenix: true);
-        Get.lazyPut(() => ResetPasswordController(), fenix: true);
-        Get.lazyPut(() => PlantController(), fenix: true);
-        Get.lazyPut(() => FriendsController(), fenix: true);
-        Get.lazyPut(() => ScheduleJornalMainController(), fenix: true);
-        Get.lazyPut(() => FriendDetailController(), fenix: true);
-        Get.lazyPut(() => JournalController(), fenix: true);
-        Get.lazyPut(() => SettingController(), fenix: true);
-        Get.lazyPut(() => FriendsListController(), fenix: true);
-        Get.lazyPut(() => PlantDetailController(), fenix: true);
-      }),
-      getPages: AppPages.pages,
-      initialRoute: AppRoutes.splash,
+    return ScreenUtilInit(
+      designSize: const Size(390, 844),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return GetMaterialApp(
+          theme: ThemeData(fontFamily: 'NotoSansKR'),
+          initialBinding: BindingsBuilder(() {
+            Get.put(AuthController());
+            Get.lazyPut(() => LoginController(), fenix: true);
+            Get.lazyPut(() => SignupController(), fenix: true);
+            Get.lazyPut(() => SetProfileController(), fenix: true);
+            Get.lazyPut(() => MainController(), fenix: true);
+            Get.lazyPut(() => CommunityController(), fenix: true);
+            Get.lazyPut(() => ScheduleController(), fenix: true);
+            Get.lazyPut(() => ChallengeController(), fenix: true);
+            Get.lazyPut(() => ChatController(), fenix: true);
+            Get.lazyPut(() => ResetPasswordController(), fenix: true);
+            Get.lazyPut(() => PlantController(), fenix: true);
+            Get.lazyPut(() => FriendsController(), fenix: true);
+            Get.lazyPut(() => ScheduleJornalMainController(), fenix: true);
+            Get.lazyPut(() => FriendDetailController(), fenix: true);
+            Get.lazyPut(() => JournalController(), fenix: true);
+            Get.lazyPut(() => SettingController(), fenix: true);
+            Get.lazyPut(() => FriendsListController(), fenix: true);
+            Get.lazyPut(() => PlantDetailController(), fenix: true);
+          }),
+          getPages: AppPages.pages,
+          initialRoute: AppRoutes.splash,
+        );
+      },
     );
   }
 }

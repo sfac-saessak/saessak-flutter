@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app_color.dart';
 
@@ -12,33 +13,33 @@ class AppTextStyle {
   static const black = TextStyle(fontFamily: 'NotoSans', fontWeight: FontWeight.w900);
 
   // header
-  static TextStyle header1({Color color = AppColor.black}) => bold.copyWith(fontSize: 36, color: color);
-  static TextStyle header2({Color color = AppColor.black}) => bold.copyWith(fontSize: 28, color: color);
-  static TextStyle header3({Color color = AppColor.black}) => bold.copyWith(fontSize: 24, color: color);
-  static TextStyle header4({Color color = AppColor.black}) => bold.copyWith(fontSize: 20, color: color);
+  static TextStyle header1({Color color = AppColor.black}) => bold.copyWith(fontSize: 36.sp, color: color);
+  static TextStyle header2({Color color = AppColor.black}) => bold.copyWith(fontSize: 28.sp, color: color);
+  static TextStyle header3({Color color = AppColor.black}) => bold.copyWith(fontSize: 24.sp, color: color);
+  static TextStyle header4({Color color = AppColor.black}) => bold.copyWith(fontSize: 20.sp, color: color);
 
   // body
-  static TextStyle body1_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 18, color: color);
-  static TextStyle body1_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 18, color: color);
-  static TextStyle body1_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 18, color: color);
+  static TextStyle body1_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 18.sp, color: color);
+  static TextStyle body1_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 18.sp, color: color);
+  static TextStyle body1_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 18.sp, color: color);
 
-  static TextStyle body2_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 16, color: color);
-  static TextStyle body2_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 16, color: color);
-  static TextStyle body2_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 16, color: color);
+  static TextStyle body2_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 16.sp, color: color);
+  static TextStyle body2_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 16.sp, color: color);
+  static TextStyle body2_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 16.sp, color: color);
 
-  static TextStyle body3_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 14, color: color);
-  static TextStyle body3_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 14, color: color);
-  static TextStyle body3_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 14, color: color);
+  static TextStyle body3_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 14.sp, color: color);
+  static TextStyle body3_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 14.sp, color: color);
+  static TextStyle body3_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 14.sp, color: color);
 
-  static TextStyle body4_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 12, color: color);
-  static TextStyle body4_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 12, color: color);
-  static TextStyle body4_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 12, color: color);
+  static TextStyle body4_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 12.sp, color: color);
+  static TextStyle body4_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 12.sp, color: color);
+  static TextStyle body4_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 12.sp, color: color);
 
-  static TextStyle body5_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 10, color: color);
-  static TextStyle body5_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 10, color: color);
-  static TextStyle body5_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 10, color: color);
+  static TextStyle body5_b({Color color = AppColor.black}) => bold.copyWith(fontSize: 10.sp, color: color);
+  static TextStyle body5_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 10.sp, color: color);
+  static TextStyle body5_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 10.sp, color: color);
 
   // caption
-  static TextStyle caption_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 8, color: color);
-  static TextStyle caption_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 8, color: color);
+  static TextStyle caption_m({Color color = AppColor.black}) => medium.copyWith(fontSize: 8.sp, color: color);
+  static TextStyle caption_r({Color color = AppColor.black}) => regular.copyWith(fontSize: 8.sp, color: color);
 }
