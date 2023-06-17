@@ -291,7 +291,7 @@ class DBService {
     challengeCollection.doc(groupId).collection("messages").add(message.toMap());
     challengeCollection.doc(groupId).update({
       "recentMessage": message.message,
-      "recentMessageSender": message.sender.name,
+      "recentMessageSender": message.sender!.name,
       "recentMessageTime": message.time,
     });
   }

@@ -28,10 +28,10 @@ class MessageTile extends StatelessWidget {
               if (!sentByMe && showUserName)
                 CircleAvatar(
                   backgroundColor: AppColor.black20,
-                  backgroundImage: message.sender.profileImg != null
-                    ? NetworkImage(message.sender.profileImg!)
+                  backgroundImage: message.sender!.profileImg != null
+                    ? NetworkImage(message.sender!.profileImg!)
                     : null,
-                  child: message.sender.profileImg != null
+                  child: message.sender!.profileImg != null
                     ? null
                     : Icon(Icons.person, color: AppColor.white),
                 ),
@@ -40,7 +40,7 @@ class MessageTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (!sentByMe && showUserName)
-                    Text(message.sender.name, style: AppTextStyle.body3_m()),
+                    Text(message.sender!.name, style: AppTextStyle.body3_m()),
                   if (!sentByMe && showUserName) SizedBox(height: 8),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,

@@ -50,7 +50,7 @@ class ChatPage extends GetView<ChatController> {
                       itemBuilder: (context, index) {
                         Message chat = controller.chats[index];
                         final currentChatDate = chat.time.toDate();
-                        final currentSender = chat.sender.uid;
+                        final currentSender = chat.sender!.uid;
                         final minutes = currentChatDate.minute + currentChatDate.hour * 60;
 
                         bool cutMinutes = (
@@ -60,7 +60,7 @@ class ChatPage extends GetView<ChatController> {
 
                         bool showUserName = (
                           index == 0 ||
-                          currentSender != controller.chats[index - 1].sender.uid ||
+                          currentSender != controller.chats[index - 1].sender!.uid ||
                           cutMinutes
                         );
                         bool showTime = false;
@@ -70,7 +70,7 @@ class ChatPage extends GetView<ChatController> {
                         } else {
                           final nextChat = controller.chats[index + 1];
                           final nextChatDate = nextChat.time.toDate();
-                          final nextSender = nextChat.sender.uid;
+                          final nextSender = nextChat.sender!.uid;
                           final nextMinutes =
                               nextChatDate.minute + nextChatDate.hour * 60;
 
@@ -112,7 +112,7 @@ class ChatPage extends GetView<ChatController> {
                               ),
                             MessageTile(
                               message: chat,
-                              sentByMe: controller.user.uid == chat.sender.uid,
+                              sentByMe: controller.user.uid == chat.sender!.uid,
                               showUserName: showUserName,
                               showTime: showTime,
                             ),

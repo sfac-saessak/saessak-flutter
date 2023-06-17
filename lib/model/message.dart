@@ -4,7 +4,7 @@ import 'package:saessak_flutter/model/user_model.dart';
 
 class Message {
   String message;
-  UserModel sender;
+  UserModel? sender;
   Timestamp time;
 
   Message({
@@ -16,7 +16,7 @@ class Message {
   Map<String, dynamic> toMap() {
     return {
       'message': this.message,
-      'sender': this.sender.uid,
+      'sender': this.sender!.uid,
       'time': this.time,
     };
   }
@@ -24,7 +24,7 @@ class Message {
   factory Message.fromMap(Map<String, dynamic> map) {
     return Message(
       message: map['message'] as String,
-      sender: map['sender'] as UserModel,
+      sender: map['sender'] as UserModel?,
       time: map['time'] as Timestamp,
     );
   }

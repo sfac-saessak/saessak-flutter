@@ -18,13 +18,15 @@ class ChatController extends GetxController {
   User user = FirebaseAuth.instance.currentUser!;
   ScrollController scrollController = ScrollController();
   RxList<UserModel> memberList = <UserModel>[].obs;
+  Timestamp? lastChatTime; // 가장 최근 채팅 시간
 
   @override
   void onInit() {
     super.onInit();
     log('chat group => ${challenge.title}');
     getMembers();
-    // Firestore 컬렉션의 스트림을 구독하여 chats 리스트 갱신
+
+    // Firestore 컬렉션의 스트림을 구독하여 추가된 채팅만 갱신
     FirebaseFirestore.instance
         .collection('challenges')
         .doc(challenge.challengeId)
@@ -34,8 +36,6 @@ class ChatController extends GetxController {
         .listen((QuerySnapshot snapshot) {
       if (snapshot.docs.isNotEmpty) {
         updateChats(snapshot.docs);
-      } else {
-        chats([]);
       }
       update(); // GetX에게 상태 업데이트를 알림
     });
@@ -51,20 +51,40 @@ class ChatController extends GetxController {
 
   // 채팅 업데이트
   void updateChats(List<QueryDocumentSnapshot> docs) async {
-    var futureMessages = docs.map((doc) async {
+    var newMessages = <Message>[];
+    var userInfoFutures = <Future<Map<String, dynamic>>>[];
+
+    for (var doc in docs) {
       var message = doc.data() as Map<String, dynamic>;
+      var messageTime = message['time'] as Timestamp;
 
-      var userInfo = await getUserInfoById(message['sender']);
-      var userModel = UserModel.fromMap(userInfo);
-      return Message(
+      // 가장 최근 채팅의 시간 이후에 추가된 채팅만 가져옴
+      if (lastChatTime != null && messageTime.compareTo(lastChatTime!) <= 0) {
+        continue;
+      }
+
+      var userInfoFuture = getUserInfoById(message['sender']);
+      userInfoFutures.add(userInfoFuture);
+
+      var newMessage = Message(
         message: message['message'],
-        sender: userModel,
-        time: message['time'],
+        sender: null,
+        time: messageTime,
       );
-    }).toList();
+      newMessages.add(newMessage);
+    }
 
-    var messages = await Future.wait(futureMessages);
-    chats(messages);
+    var userInfos = await Future.wait(userInfoFutures);
+    for (var i = 0; i < userInfos.length; i++) {
+      var userInfo = userInfos[i];
+      var userModel = UserModel.fromMap(userInfo);
+      newMessages[i].sender = userModel;
+    }
+
+    if (newMessages.isNotEmpty) {
+      chats.addAll(newMessages);
+      lastChatTime = newMessages.last.time;
+    }
   }
 
   // 메세지 보내기
