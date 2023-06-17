@@ -26,7 +26,7 @@ class ChatPage extends GetView<ChatController> {
           backgroundColor: AppColor.white,
           foregroundColor: AppColor.black,
           elevation: 0,
-          title: Text(controller.challenge.title),
+          title: Text(controller.challenge.title, style: AppTextStyle.body2_m()),
           actions: [
             IconButton(
               onPressed: () {
@@ -51,22 +51,35 @@ class ChatPage extends GetView<ChatController> {
                         Message chat = controller.chats[index];
                         final currentChatDate = chat.time.toDate();
                         final currentSender = chat.sender.uid;
-                        final minutes =
-                            currentChatDate.minute + currentChatDate.hour * 60;
+                        final minutes = currentChatDate.minute + currentChatDate.hour * 60;
 
-                        bool showTime = (index == 0 ||
-                            minutes !=
-                                controller.chats[index - 1].time
-                                        .toDate()
-                                        .minute +
-                                    controller.chats[index - 1].time
-                                            .toDate()
-                                            .hour *
-                                        60);
-                        bool showUserName = (index == 0 ||
-                            currentSender !=
-                                controller.chats[index - 1].sender.uid ||
-                            showTime);
+                        bool cutMinutes = (
+                          index == 0 ||
+                          minutes != controller.chats[index - 1].time.toDate().minute + controller.chats[index - 1].time.toDate().hour * 60
+                        );
+
+                        bool showUserName = (
+                          index == 0 ||
+                          currentSender != controller.chats[index - 1].sender.uid ||
+                          cutMinutes
+                        );
+                        bool showTime = false;
+
+                        if (index == controller.chats.length - 1) {
+                          showTime = true;
+                        } else {
+                          final nextChat = controller.chats[index + 1];
+                          final nextChatDate = nextChat.time.toDate();
+                          final nextSender = nextChat.sender.uid;
+                          final nextMinutes =
+                              nextChatDate.minute + nextChatDate.hour * 60;
+
+                          if (minutes != nextMinutes ||
+                              currentSender != nextSender) {
+                            showTime = true;
+                          }
+                        }
+
                         return Column(
                           children: [
                             if (index == 0 ||

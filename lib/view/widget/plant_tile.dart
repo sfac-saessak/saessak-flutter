@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/view/page/plant/plant_detail_page.dart';
 
@@ -25,14 +26,14 @@ class PlantTile extends StatelessWidget {
                       ImageChunkEvent? loadingProgress) {
                     if (loadingProgress == null) {
                       return CircleAvatar(
+                        radius: 61.w,
                         backgroundColor: Colors.transparent,
-                        radius: 70,
                         backgroundImage: NetworkImage(plant.imageUrl!),
                       );
                     }
                     return CircleAvatar(
                       backgroundColor: Colors.transparent,
-                      radius: 70,
+                      radius: 61.w,
                       child: CircularProgressIndicator(
                         color: AppColor.primary,
                         value: loadingProgress.expectedTotalBytes != null
@@ -44,13 +45,15 @@ class PlantTile extends StatelessWidget {
                   },
                 )
               : CircleAvatar(
-                  radius: 70,
+                  radius: 61.w,
                   backgroundColor: AppColor.black10,
                   child: Opacity(
-                      opacity: 0.2,
-                      child: Image.asset('assets/images/logo.png')),
+                    opacity: 0.2,
+                    child: Image.asset('assets/images/logo.png')),
                 ),
-          Text('${plant.name}'),
+          SizedBox(height: 8.h),
+          Text('${plant.name}', style: AppTextStyle.body2_m()),
+          SizedBox(height: 4.h),
           Text('${plant.species}',
               style: AppTextStyle.body3_m(color: AppColor.primary)),
         ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/message.dart';
@@ -46,7 +45,7 @@ class MessageTile extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      if (sentByMe)
+                      if (sentByMe && showTime)
                         Text(
                           '${DateFormat('HH:mm').format(message.time.toDate())}',
                           style: AppTextStyle.caption_r(),
@@ -86,7 +85,7 @@ class MessageTile extends StatelessWidget {
                         ),
                       ),
                       if (!sentByMe) SizedBox(width: 4),
-                      if (!sentByMe)
+                      if (!sentByMe && showTime)
                         Text(
                           '${DateFormat('HH:mm').format(message.time.toDate())}',
                           style: AppTextStyle.caption_r()),

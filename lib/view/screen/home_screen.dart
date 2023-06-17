@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/util/app_text_style.dart';
 import 'package:saessak_flutter/view/widget/plant_tile.dart';
@@ -7,7 +8,6 @@ import '../../controller/plant/plant_controller.dart';
 import '../../util/app_color.dart';
 import '../page/plant/add_plant_page.dart';
 import '../page/plant/plant_detail_page.dart';
-import '../widget/custom_dropdown_button.dart';
 
 class HomeScreen extends GetView<PlantController> {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,36 +20,33 @@ class HomeScreen extends GetView<PlantController> {
         child: Column(
           children: [
             Container(
-              width: double.infinity,
-              height: 200,
+              width: double.infinity.w,
+              height: 210.h,
               decoration: BoxDecoration(
                   color: AppColor.black40,
                   image: DecorationImage(
                       image: AssetImage(controller.forestBackground),
                       fit: BoxFit.cover)),
             ),
-            SizedBox(height: 12),
             Container(
-              padding: const EdgeInsets.only(right: 20),
-              height: 50,
+              color: AppColor.black10,
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 2.h),
+              height: 56.h,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.to(() => AddPlantPage(plant: null));
-                      },
-                      child: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: AppColor.primary),
-                        ),
-                        child: Icon(Icons.add, color: AppColor.primary),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => AddPlantPage(plant: null));
+                    },
+                    child: Container(
+                      width: 36.h,
+                      height: 36.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: AppColor.primary),
                       ),
+                      child: Icon(Icons.add, color: AppColor.primary),
                     ),
                   ),
                   Expanded(
@@ -70,7 +67,7 @@ class HomeScreen extends GetView<PlantController> {
                                       horizontal: 12.0),
                                   decoration: BoxDecoration(
                                     color: AppColor.black20,
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(20.r),
                                     image: plant.imageUrl != null
                                         ? DecorationImage(
                                             image:
@@ -94,7 +91,7 @@ class HomeScreen extends GetView<PlantController> {
                 ],
               ),
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 20.h),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -105,7 +102,7 @@ class HomeScreen extends GetView<PlantController> {
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    mainAxisSpacing: 16,
+                    mainAxisSpacing: 12.h,
                   ),
                 ),
               ),
