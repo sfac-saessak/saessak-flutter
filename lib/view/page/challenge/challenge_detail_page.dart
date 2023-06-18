@@ -19,6 +19,15 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
   @override
   Widget build(BuildContext context) {
     log('${challenge.recruitmentStatus}');
+
+    bool isUnderLimit = true;
+
+    if (challenge.memberLimit != null) {
+      if (challenge.members!.length == challenge.memberLimit) {
+        isUnderLimit = false;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('챌린지', style: AppTextStyle.body2_r()),
@@ -184,7 +193,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                 },
                 text: '참가하기',
                 textStyle: AppTextStyle.body2_b(color: Colors.white),
-                isenableButton: challenge.recruitmentStatus! ? true : false,
+                isenableButton: challenge.recruitmentStatus! && isUnderLimit ? true : false,
               ),
             ),
           ],
