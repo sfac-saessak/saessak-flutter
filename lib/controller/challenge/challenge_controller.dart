@@ -232,9 +232,25 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   // 챌린지 검색
   void searchChallenge() async {
     isLoading(true);
+
     var res = await DBService().searchChallengeByPlant(searchController.text);
+
     List<dynamic> snapshotData = res.docs.map((doc) => doc.data()).toList();
-    searchResultList(snapshotData.map((e) => Challenge.fromMap(e)).toList());
+
+    var futureChallenges = snapshotData.map((e) async {
+      var userInfo = await getUserInfoById(e['admin']);
+      var admin = UserModel.fromMap(userInfo);
+      var challenge = Challenge.fromMap(e, admin);
+
+      challenge.progressStatus = DateTime.now().isBefore(challenge.endDate.toDate());
+      challenge.recruitmentStatus = getDeadline(challenge.startDate) <= 0;
+
+      return challenge;
+    }).toList();
+
+    var challenges = await Future.wait(futureChallenges);
+
+    searchResultList(challenges);
     isLoading(false);
   }
 
@@ -303,7 +319,10 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
       .doc(challenge.challengeId)
       .get();
 
-    challenge = Challenge.fromMap(data.data()!);
+    var userInfo = await getUserInfoById(data.data()!['admin']);
+    var admin = UserModel.fromMap(userInfo);
+
+    challenge = Challenge.fromMap(data.data()!, admin);
 
     selectedImage.value = null;
     titleController.text = '';

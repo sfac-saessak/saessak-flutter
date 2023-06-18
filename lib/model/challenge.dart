@@ -58,11 +58,11 @@ class Challenge {
     };
   }
 
-  factory Challenge.fromMap(Map<String, dynamic> map) {
+  factory Challenge.fromMap(Map<String, dynamic> map, UserModel admin) {
     return Challenge(
       challengeId: map['challengeId'] as String,
       plant: map['plant'] as String,
-      admin: map['admin'] as UserModel,
+      admin: admin,
       title: map['title'] as String,
       content: map['content'] as String,
       createdAt: map['createdAt'] as Timestamp,

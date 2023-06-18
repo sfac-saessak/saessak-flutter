@@ -15,7 +15,6 @@ class ChallengeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<ChallengeController>();
-    bool challengeEnd = controller.getDeadline(challenge.startDate) > 0;
     return GestureDetector(
       onTap: () {
         Get.to(() => ChallengeDetailPage(challenge: challenge));
