@@ -189,7 +189,7 @@ class AddPlantPage extends GetView<PlantController> {
                           SizedBox(width: 24),
                           Expanded(
                               child: AppTextField(
-                            hintText: '급수 주기를 입력하세요 (숫자)',
+                            hintText: '급수 주기를 입력하세요 (@일, 숫자 입력)',
                             controller: controller.wateringCycleController,
                             keyboardType: TextInputType.number,
                             textStyle:

@@ -41,7 +41,49 @@ class PlantDetailPage extends GetView<PlantDetailController> {
             ),
             IconButton(
               onPressed: () {
-                controller.deletePlant();
+                Get.defaultDialog(
+                  title: '식물 삭제',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12),
+                  content: Text('${plant.name}을 삭제하시겠습니까?'),
+                  actions: [
+                    Container(
+                      width: 100,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          backgroundColor: Colors.grey,
+                          elevation: 0,
+                        ),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text('취소'),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      width: 100,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          backgroundColor: Colors.red,
+                          elevation: 0,
+                        ),
+                        onPressed: () {
+                          Get.back();
+                          controller.deletePlant();
+                        },
+                        child: Text('삭제'),
+                      ),
+                    ),
+                  ],
+                );
               },
               icon: Icon(Icons.delete),
             ),
@@ -132,7 +174,7 @@ class PlantDetailPage extends GetView<PlantDetailController> {
                           child: Text('급수', style: AppTextStyle.body3_m(color: AppColor.primary))
                         ),
                         SizedBox(width: 4.w),
-                        Text('${plant.wateringCycle}', style: AppTextStyle.body4_r(color: AppColor.black80)),
+                        Text('${plant.wateringCycle}일에 한번', style: AppTextStyle.body4_r(color: AppColor.black80)),
                       ],
                     ),
                   )
@@ -158,22 +200,24 @@ class PlantDetailPage extends GetView<PlantDetailController> {
                 child: Obx(
                   () => controller.isLoading.value
                     ? Center(child: CircularProgressIndicator())
-                    : GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 10.h,
-                        crossAxisSpacing: 10.w,
-                      ),
-                      itemCount: controller.galleryJournal.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(() => JournalDetailPage(journal: controller.galleryJournal[index]));
-                          },
-                          child: Image.network(controller.galleryJournal[index].imageUrl!, fit: BoxFit.cover),
-                        );
-                      },
-                    ),
+                    : controller.galleryJournal.length > 0
+                      ? GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 10.h,
+                          crossAxisSpacing: 10.w,
+                        ),
+                        itemCount: controller.galleryJournal.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(() => JournalDetailPage(journal: controller.galleryJournal[index]));
+                            },
+                            child: Image.network(controller.galleryJournal[index].imageUrl!, fit: BoxFit.cover),
+                          );
+                        },
+                      )
+                      : Center(child: Text('일지에 사진을 등록해서 갤러리를 채워보세요!', style: AppTextStyle.body3_r())),
                 ),
               )
             ],

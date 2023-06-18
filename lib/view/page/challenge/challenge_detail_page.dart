@@ -125,7 +125,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                   style: AppTextStyle.body4_r(color: AppColor.black40),
                 ),
                 Spacer(),
-                challenge.recruitmentStatus!
+                !challenge.recruitmentStatus!
                     ? Text(
                         '모집 마감',
                         style: AppTextStyle.body4_m(color: AppColor.black40),
