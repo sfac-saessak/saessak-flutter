@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/challenge/chat_controller.dart';
@@ -44,83 +45,83 @@ class ChatPage extends GetView<ChatController> {
           child: Column(
             children: <Widget>[
               Obx(() => Expanded(
-                    child: ListView.builder(
-                      controller: controller.scrollController,
-                      itemCount: controller.chats.length,
-                      itemBuilder: (context, index) {
-                        Message chat = controller.chats[index];
-                        final currentChatDate = chat.time.toDate();
-                        final currentSender = chat.sender!.uid;
-                        final minutes = currentChatDate.minute + currentChatDate.hour * 60;
+                child: ListView.builder(
+                  controller: controller.scrollController,
+                  itemCount: controller.chats.length,
+                  itemBuilder: (context, index) {
+                    Message chat = controller.chats[index];
+                    final currentChatDate = chat.time.toDate();
+                    final currentSender = chat.sender!.uid;
+                    final minutes = currentChatDate.minute + currentChatDate.hour * 60;
 
-                        bool cutMinutes = (
-                          index == 0 ||
-                          minutes != controller.chats[index - 1].time.toDate().minute + controller.chats[index - 1].time.toDate().hour * 60
-                        );
+                    bool cutMinutes = (
+                      index == 0 ||
+                      minutes != controller.chats[index - 1].time.toDate().minute + controller.chats[index - 1].time.toDate().hour * 60
+                    );
 
-                        bool showUserName = (
-                          index == 0 ||
-                          currentSender != controller.chats[index - 1].sender!.uid ||
-                          cutMinutes
-                        );
-                        bool showTime = false;
+                    bool showUserName = (
+                      index == 0 ||
+                      currentSender != controller.chats[index - 1].sender!.uid ||
+                      cutMinutes
+                    );
+                    bool showTime = false;
 
-                        if (index == controller.chats.length - 1) {
-                          showTime = true;
-                        } else {
-                          final nextChat = controller.chats[index + 1];
-                          final nextChatDate = nextChat.time.toDate();
-                          final nextSender = nextChat.sender!.uid;
-                          final nextMinutes =
-                              nextChatDate.minute + nextChatDate.hour * 60;
+                    if (index == controller.chats.length - 1) {
+                      showTime = true;
+                    } else {
+                      final nextChat = controller.chats[index + 1];
+                      final nextChatDate = nextChat.time.toDate();
+                      final nextSender = nextChat.sender!.uid;
+                      final nextMinutes =
+                          nextChatDate.minute + nextChatDate.hour * 60;
 
-                          if (minutes != nextMinutes ||
-                              currentSender != nextSender) {
-                            showTime = true;
-                          }
-                        }
+                      if (minutes != nextMinutes ||
+                          currentSender != nextSender) {
+                        showTime = true;
+                      }
+                    }
 
-                        return Column(
-                          children: [
-                            if (index == 0 ||
-                                currentChatDate.year !=
-                                    controller.chats[index - 1].time
-                                        .toDate()
-                                        .year ||
-                                currentChatDate.month !=
-                                    controller.chats[index - 1].time
-                                        .toDate()
-                                        .month ||
-                                currentChatDate.day !=
-                                    controller.chats[index - 1].time
-                                        .toDate()
-                                        .day)
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 6),
-                                  decoration: BoxDecoration(
-                                      color: AppColor.black40,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Text(
-                                    '${currentChatDate.year}.${currentChatDate.month}.${currentChatDate.day}',
-                                    style: AppTextStyle.body4_r(
-                                        color: AppColor.white),
-                                  ),
-                                ),
+                    return Column(
+                      children: [
+                        if (index == 0 ||
+                            currentChatDate.year !=
+                                controller.chats[index - 1].time
+                                    .toDate()
+                                    .year ||
+                            currentChatDate.month !=
+                                controller.chats[index - 1].time
+                                    .toDate()
+                                    .month ||
+                            currentChatDate.day !=
+                                controller.chats[index - 1].time
+                                    .toDate()
+                                    .day)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 6),
+                              decoration: BoxDecoration(
+                                  color: AppColor.black40,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Text(
+                                '${currentChatDate.year}.${currentChatDate.month}.${currentChatDate.day}',
+                                style: AppTextStyle.body4_r(
+                                    color: AppColor.white),
                               ),
-                            MessageTile(
-                              message: chat,
-                              sentByMe: controller.user.uid == chat.sender!.uid,
-                              showUserName: showUserName,
-                              showTime: showTime,
                             ),
-                          ],
-                        );
-                      },
-                    ),
-                  )),
+                          ),
+                        MessageTile(
+                          message: chat,
+                          sentByMe: controller.user.uid == chat.sender!.uid,
+                          showUserName: showUserName,
+                          showTime: showTime,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              )),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Container(
@@ -136,8 +137,9 @@ class ChatPage extends GetView<ChatController> {
                   ),
                   child: Row(
                     children: [
+                      SizedBox(width: 8.w),
                       Expanded(
-                          child: AppTextField(
+                        child: AppTextField(
                         hintText: '채팅 입력...',
                         controller: controller.messageController,
                         onSubmitted: (p0) {

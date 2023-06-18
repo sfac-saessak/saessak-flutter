@@ -135,22 +135,8 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
       var challengeData = doc.data() as Map<String, dynamic>;
       var userInfo = await getUserInfoById(challengeData['admin']);
       var admin = UserModel.fromMap(userInfo);
-      var challenge = Challenge(
-        challengeId: challengeData['challengeId'],
-        plant: challengeData['plant'],
-        admin: admin,
-        title: challengeData['title'],
-        content: challengeData['content'],
-        createdAt: challengeData['createdAt'],
-        startDate: challengeData['startDate'],
-        endDate: challengeData['endDate'],
-        members: challengeData['members'],
-        memberLimit: challengeData['memberLimit'],
-        imageUrl: challengeData['image'],
-        recentMessage: challengeData['recentMessage'],
-        recentMessageSender: challengeData['recentMessageSender'],
-        recentMessageTime: challengeData['recentMessageTime'],
-      );
+      var challenge = Challenge.fromMap(challengeData, admin);
+
       challenge.recruitmentStatus = getDeadline(challenge.startDate) <= 0;
 
       return challenge;
@@ -182,22 +168,8 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
       for (var challengeData in joinedChallengesData) {
         var userInfo = await getUserInfoById(challengeData['admin']);
         var admin = UserModel.fromMap(userInfo);
-        var challenge = Challenge(
-          challengeId: challengeData['challengeId'],
-          plant: challengeData['plant'],
-          admin: admin,
-          title: challengeData['title'],
-          content: challengeData['content'],
-          createdAt: challengeData['createdAt'],
-          startDate: challengeData['startDate'],
-          endDate: challengeData['endDate'],
-          members: challengeData['members'],
-          memberLimit: challengeData['memberLimit'],
-          imageUrl: challengeData['image'],
-          recentMessage: challengeData['recentMessage'],
-          recentMessageSender: challengeData['recentMessageSender'],
-          recentMessageTime: challengeData['recentMessageTime'],
-        );
+
+        var challenge = Challenge.fromMap(challengeData, admin);
 
         challenge.progressStatus = DateTime.now().isBefore(challenge.endDate.toDate());
 
@@ -323,6 +295,9 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     var admin = UserModel.fromMap(userInfo);
 
     challenge = Challenge.fromMap(data.data()!, admin);
+
+    challenge.progressStatus = DateTime.now().isBefore(challenge.endDate.toDate());
+    challenge.recruitmentStatus = getDeadline(challenge.startDate) <= 0;
 
     selectedImage.value = null;
     titleController.text = '';

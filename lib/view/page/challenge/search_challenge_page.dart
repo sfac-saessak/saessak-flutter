@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/challenge/challenge_controller.dart';
@@ -37,6 +38,7 @@ class SearchChallengePage extends GetView<ChallengeController> {
               ),
               child: Row(
                 children: [
+                  SizedBox(width: 8.w),
                   Expanded(
                     child: AppTextField(
                       hintText: '검색', 
