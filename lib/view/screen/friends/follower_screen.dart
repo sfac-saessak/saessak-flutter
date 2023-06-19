@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saessak_flutter/controller/follow/friends_controller.dart';
 
 import '../../../controller/setting_controller.dart';
 import '../../../model/user_model.dart';
@@ -17,6 +17,7 @@ class FollowerScreen extends GetView<SettingController> {
         itemCount: controller.followerList.length,
         itemBuilder: (context, index) {
           UserModel user = controller.followerList[index];
+
           return FriendTile(user: user, isFollowed: false.obs);
         },
       ),

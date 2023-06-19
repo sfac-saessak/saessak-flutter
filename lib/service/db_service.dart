@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,15 +12,22 @@ class DBService {
   final String? uid;
   DBService({this.uid});
 
-  final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
-  final CollectionReference challengeCollection = FirebaseFirestore.instance.collection("challenges");
-  final CollectionReference plantsCollection = FirebaseFirestore.instance.collection("plants");
-  final CollectionReference followCollection = FirebaseFirestore.instance.collection("follow");
-  final CollectionReference communityCollection = FirebaseFirestore.instance.collection("community");
-  final CollectionReference journalsCollection = FirebaseFirestore.instance.collection("journals");
-  final CollectionReference noticeCollection = FirebaseFirestore.instance.collection("notice");
-  final CollectionReference forestCollection = FirebaseFirestore.instance.collection("forest");
-
+  final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection("users");
+  final CollectionReference challengeCollection =
+      FirebaseFirestore.instance.collection("challenges");
+  final CollectionReference plantsCollection =
+      FirebaseFirestore.instance.collection("plants");
+  final CollectionReference followCollection =
+      FirebaseFirestore.instance.collection("follow");
+  final CollectionReference communityCollection =
+      FirebaseFirestore.instance.collection("community");
+  final CollectionReference journalsCollection =
+      FirebaseFirestore.instance.collection("journals");
+  final CollectionReference noticeCollection =
+      FirebaseFirestore.instance.collection("notice");
+  final CollectionReference forestCollection =
+      FirebaseFirestore.instance.collection("forest");
 
   /* ############################## 유저 정보 ############################## */
   // 사용자 정보 저장
@@ -65,11 +71,11 @@ class DBService {
     return userDoc;
   }
 
-
   /* ############################## 식물 관리 ############################## */
   // 식물 저장
   Future addPlant(Plant plant) async {
-    DocumentReference plantDocRef = await plantsCollection.doc(uid).collection("plant").add(plant.toMap());
+    DocumentReference plantDocRef =
+        await plantsCollection.doc(uid).collection("plant").add(plant.toMap());
 
     await plantDocRef.update({
       'plantId': plantDocRef.id,
@@ -79,7 +85,11 @@ class DBService {
 
   // 식물 가져오기
   Future getPlants() async {
-    return plantsCollection.doc(uid).collection("plant").orderBy('createdAt', descending: true).get();
+    return plantsCollection
+        .doc(uid)
+        .collection("plant")
+        .orderBy('createdAt', descending: true)
+        .get();
   }
 
   // 식물 삭제
@@ -115,7 +125,8 @@ class DBService {
         for (var tree in trees) {
           final existingPosition = tree['position'];
 
-          if ((position >= existingPosition - 20 && position <= existingPosition + 20) ||
+          if ((position >= existingPosition - 20 &&
+                  position <= existingPosition + 20) ||
               position == existingPosition) {
             overlap = true;
             break;
@@ -123,10 +134,7 @@ class DBService {
         }
 
         if (!overlap) {
-          FirebaseFirestore.instance
-              .collection('forest')
-              .doc(uid)
-              .update({
+          FirebaseFirestore.instance.collection('forest').doc(uid).update({
             'tree': FieldValue.arrayUnion([
               {'treeIdx': treeIdx, 'position': position}
             ])
@@ -135,10 +143,7 @@ class DBService {
           createTree();
         }
       } else {
-        FirebaseFirestore.instance
-            .collection('forest')
-            .doc(uid)
-            .update({
+        FirebaseFirestore.instance.collection('forest').doc(uid).update({
           'tree': FieldValue.arrayUnion([
             {'treeIdx': treeIdx, 'position': position}
           ])
@@ -159,16 +164,12 @@ class DBService {
       if (trees != null && trees.isNotEmpty) {
         final lastTree = trees.last;
 
-        FirebaseFirestore.instance
-            .collection('forest')
-            .doc(uid)
-            .update({
+        FirebaseFirestore.instance.collection('forest').doc(uid).update({
           'tree': FieldValue.arrayRemove([lastTree])
         });
       }
     });
   }
-
 
   /* ############################## 친구 관리 ############################## */
   // 친구 검색
@@ -207,6 +208,7 @@ class DBService {
     DocumentSnapshot documentSnapshot = await userFollowDocRef.get();
 
     List<dynamic> following = await documentSnapshot['following'];
+
     if (following.contains(uid)) {
       return true;
     } else {
@@ -237,11 +239,13 @@ class DBService {
     return communityCollection.where('userUid', isEqualTo: uid).get();
   }
 
-
   /* ############################## 일지 ############################## */
   // 일지 저장
   Future addJournal(Journal journal) async {
-    DocumentReference journalDocRef = await journalsCollection.doc(uid).collection("journal").add(journal.toMap());
+    DocumentReference journalDocRef = await journalsCollection
+        .doc(uid)
+        .collection("journal")
+        .add(journal.toMap());
 
     await journalDocRef.update({
       'journalId': journalDocRef.id,
@@ -250,12 +254,17 @@ class DBService {
 
   // 일지 가져오기
   Future readJournal(String uid, bool sort) async {
-    return journalsCollection.doc(uid).collection("journal").orderBy('writeTime', descending: sort).get();
+    return journalsCollection
+        .doc(uid)
+        .collection("journal")
+        .orderBy('writeTime', descending: sort)
+        .get();
   }
 
   // plantId로 식물 정보 가져오기
   getPlantById(String uid, String plantId) {
-    final plantDocRef = plantsCollection.doc(uid).collection("plant").doc(plantId);
+    final plantDocRef =
+        plantsCollection.doc(uid).collection("plant").doc(plantId);
     final plantDoc = plantDocRef.get().then((snapshot) {
       return snapshot.data() as Map<String, dynamic>;
     });
@@ -264,12 +273,17 @@ class DBService {
 
   // 일지 삭제
   Future deleteJournal(String journalId) async {
-    await journalsCollection.doc(uid).collection("journal").doc(journalId).delete();
+    await journalsCollection
+        .doc(uid)
+        .collection("journal")
+        .doc(journalId)
+        .delete();
   }
 
   // 북마크
   Future toggleBookmark(String journalId) async {
-    DocumentReference journalDocRef = journalsCollection.doc(uid).collection("journal").doc(journalId);
+    DocumentReference journalDocRef =
+        journalsCollection.doc(uid).collection("journal").doc(journalId);
     DocumentSnapshot snapshot = await journalDocRef.get();
     var journalData = snapshot.data() as Map<String, dynamic>;
 
@@ -282,11 +296,11 @@ class DBService {
     await journalDocRef.update(updatedData);
   }
 
-
   /* ############################## 챌린지 ############################## */
   // 챌린지 생성
   Future createChallenge(Challenge challenge) async {
-    DocumentReference challengeDocumentReference = await challengeCollection.add({
+    DocumentReference challengeDocumentReference =
+        await challengeCollection.add({
       'challengeId': "",
       'plant': challenge.plant,
       'admin': uid,
@@ -323,7 +337,8 @@ class DBService {
   // 챌린지 참가
   Future joinChallenge(String challengeId) async {
     DocumentReference userDocumentReference = userCollection.doc(uid);
-    DocumentReference groupDocumentReference = challengeCollection.doc(challengeId);
+    DocumentReference groupDocumentReference =
+        challengeCollection.doc(challengeId);
 
     await userDocumentReference.update({
       "challenges": FieldValue.arrayUnion(["${challengeId}"])
@@ -336,7 +351,8 @@ class DBService {
   // 챌린지 포기
   Future exitChallenge(String challengeId) async {
     DocumentReference userDocumentReference = userCollection.doc(uid);
-    DocumentReference groupDocumentReference = challengeCollection.doc(challengeId);
+    DocumentReference groupDocumentReference =
+        challengeCollection.doc(challengeId);
 
     await userDocumentReference.update({
       "challenges": FieldValue.arrayRemove(["${challengeId}"])
@@ -368,14 +384,16 @@ class DBService {
 
   // 메세지 보내기
   sendMessage(String groupId, Message message) async {
-    challengeCollection.doc(groupId).collection("messages").add(message.toMap());
+    challengeCollection
+        .doc(groupId)
+        .collection("messages")
+        .add(message.toMap());
     challengeCollection.doc(groupId).update({
       "recentMessage": message.message,
       "recentMessageSender": message.sender!.name,
       "recentMessageTime": message.time,
     });
   }
-
 
   /* ############################## 공지 ############################## */
   // 공지 가져오기

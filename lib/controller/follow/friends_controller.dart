@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,30 +8,35 @@ import '../../model/user_model.dart';
 import '../../view/screen/friends/following_screen.dart';
 import '../../view/screen/friends/search_friend_screen.dart';
 
-class FriendsController extends GetxController with GetSingleTickerProviderStateMixin {
+class FriendsController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   User get user => FirebaseAuth.instance.currentUser!;
-  TextEditingController searchController = TextEditingController();   // 이메일 검색
-  late TabController tabController;         // 탭바 컨트롤러
+  TextEditingController searchController = TextEditingController(); // 이메일 검색
+  late TabController tabController; // 탭바 컨트롤러
 
-  RxList<UserModel> followingList = <UserModel>[].obs;  // 팔로잉 리스트
-  Rxn<UserModel> searchResult = Rxn();      // 검색 결과
-  RxBool isLoading = false.obs;             // 로딩중 상태
+  RxList<UserModel> followingList = <UserModel>[].obs; // 팔로잉 리스트
+  Rxn<UserModel> searchResult = Rxn(); // 검색 결과
+  RxBool isLoading = false.obs; // 로딩중 상태
 
-  final List<Tab> tabs = <Tab>[             // 탭
+  final List<Tab> tabs = <Tab>[
+    // 탭
     Tab(text: '팔로잉'),
     Tab(text: '친구검색'),
   ];
 
-  final List<Widget> tabViews = <Widget>[   // 탭 뷰
+  final List<Widget> tabViews = <Widget>[
+    // 탭 뷰
     FollowingScreen(),
     SearchFriendScreen(),
   ];
 
   // 친구 검색
   searchFriend() async {
-    QuerySnapshot snapshot = await DBService().searchFriend(searchController.text);
+    QuerySnapshot snapshot =
+        await DBService().searchFriend(searchController.text);
     if (snapshot.docs.isNotEmpty) {
-      searchResult(UserModel.fromMap(snapshot.docs.first.data() as Map<String, dynamic>));
+      searchResult(UserModel.fromMap(
+          snapshot.docs.first.data() as Map<String, dynamic>));
     } else {
       searchResult(null);
     }
@@ -60,7 +63,7 @@ class FriendsController extends GetxController with GetSingleTickerProviderState
 
   // 팔로우중인 유저인지 판별
   isUserFollowed(String uid) async {
-    await DBService(uid: user.uid).isUserFollowed(uid);
+    return await DBService(uid: user.uid).isUserFollowed(uid);
   }
 
   // uid로 유저 정보 가져오기

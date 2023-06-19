@@ -1,9 +1,7 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../controller/follow/friends_controller.dart';
 import '../../../util/app_color.dart';
 import '../../widget/app_text_field.dart';
@@ -14,7 +12,6 @@ class SearchFriendScreen extends GetView<FriendsController> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       padding: EdgeInsets.all(20),
       child: Column(
@@ -27,14 +24,13 @@ class SearchFriendScreen extends GetView<FriendsController> {
             child: Row(
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: AppTextField(
-                      hintText: '이메일주소 입력',
-                      controller: controller.searchController,
-                    ),
-                  )
-                ),
+                    child: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: AppTextField(
+                    hintText: '이메일주소 입력',
+                    controller: controller.searchController,
+                  ),
+                )),
                 IconButton(
                   icon: Icon(Icons.search, color: AppColor.black40),
                   onPressed: controller.searchFriend,
@@ -43,16 +39,19 @@ class SearchFriendScreen extends GetView<FriendsController> {
             ),
           ),
           SizedBox(height: 20),
-          Obx(()
-            {
+          Obx(
+            () {
               if (controller.searchResult.value != null) {
+                print(controller.searchResult.value!.uid);
                 RxBool isFollowed = RxBool(false);
-                controller.isUserFollowed(controller.searchResult.value!.uid).then((value) {
-                  log('$value');
+                controller
+                    .isUserFollowed(controller.searchResult.value!.uid)
+                    .then((value) {
                   isFollowed(value);
                 });
                 return FriendTile(
-                  user: controller.searchResult.value!, isFollowed: isFollowed);
+                    user: controller.searchResult.value!,
+                    isFollowed: isFollowed);
               } else {
                 return Container();
               }
