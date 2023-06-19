@@ -6,7 +6,6 @@ import 'package:saessak_flutter/util/app_text_style.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../controller/schedule_journal/schedule_controller.dart';
-import '../../widget/resist_schedule_dialog.dart';
 import '../../widget/schedule_container.dart';
 
 class ScheduleScreen extends GetView<ScheduleController> {
@@ -61,10 +60,7 @@ class ScheduleScreen extends GetView<ScheduleController> {
                           .copyWith(color: AppColor.black80)),
                   // 일정등록 버튼
                   IconButton(
-                      onPressed: () {
-                        // 일정등록 다이얼로그
-                        Get.dialog(ResistScheduleDialog());
-                      },
+                      onPressed: controller.goAddScheduleDialog,
                       icon: Image.asset('assets/images/icon_material_add.png')),
                 ],
               ),

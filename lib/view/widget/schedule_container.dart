@@ -36,10 +36,13 @@ class ScheduleContainer extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                Text(
-                  '[${e.plant}]',
-                  style: AppTextStyle.body2_m()
-                      .copyWith(color: e.isExecuted ? AppColor.black30 : null),
+                Expanded(
+                  child: Text(
+                    '[${e.plant}]',
+                    style: AppTextStyle.body2_m().copyWith(
+                        color: e.isExecuted ? AppColor.black30 : null),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Text(
                   e.content,
@@ -52,7 +55,7 @@ class ScheduleContainer extends StatelessWidget {
           // 수정버튼
           IconButton(
               onPressed: e.isExecuted
-                  ? () {}
+                  ? null
                   : () =>
                       Get.find<ScheduleController>().modifyScheduleDialog(e),
               icon: Image.asset('assets/images/pencil.png')),
