@@ -106,7 +106,9 @@ class CommunityController extends GetxController
         .limit(5)
         .get()
         .then((documentSnapshots) async {
-      lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
+      try {
+        lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];
+      } catch (e) {}
       postList.value = await addUserToPost(documentSnapshots);
     });
   }
