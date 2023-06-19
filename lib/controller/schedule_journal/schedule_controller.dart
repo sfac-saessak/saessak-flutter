@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:saessak_flutter/controller/plant/plant_controller.dart';
 import 'package:saessak_flutter/database/database.dart';
 import 'package:drift/drift.dart' as drift;
-import '../../model/plant.dart';
-import '../../service/db_service.dart';
 import '../../service/local_notification.dart';
 import '../../view/widget/resist_schedule_dialog.dart';
 
@@ -31,7 +28,7 @@ class ScheduleController extends GetxController {
   Rx<List> monthScheduleList = Rx([]); // 월단위 일정 리스트
   Rx<DateTime> selectedDay = Rx(DateTime.now()); // 캘린더 선택 날짜
   Rx<DateTime> focusedDay = Rx(DateTime.now()); // 캘린더 포커스 날짜
-  
+
   // 식물 가져오기
   getPlantList() {
     plantList.value = ['등록식물'];
@@ -48,6 +45,12 @@ class ScheduleController extends GetxController {
     eventDropdownValue.value = '일정 종류';
     timeDropdownValue.value = '18';
     Get.dialog(ResistScheduleDialog());
+  }
+
+// 월단위 일정 가져오기
+  getMonthSchedule(month) async {
+    monthScheduleList.value =
+        await localDb.selectMonthSchedule(month, user.uid);
   }
 
 // 일정추가 - 임시구현, 단순히 events에 Event 인스턴스 추가. 임시 구현시 물주기(알림 주기 15초? 로 설정할 것임)
@@ -69,11 +72,6 @@ class ScheduleController extends GetxController {
     if (isDoNotify.value) {
       reservePush(id: id);
     }
-  }
-
-  // 월단위 일정 가져오기
-  getMonthSchedule(month) async {
-    monthScheduleList.value = await localDb.selectMonthSchedule(month);
   }
 
   // 일정 삭제

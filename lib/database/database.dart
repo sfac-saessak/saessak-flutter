@@ -13,8 +13,11 @@ class LocalDatabase extends _$LocalDatabase {
 
   Future createSchedule(ScheduleCompanion data) => into(schedule).insert(data); // 스케줄 만들기
   Future selectSchedule() => select(schedule).get(); // 스케줄 가져오기
-  Future selectMonthSchedule(int month) => // 선택한 월 스케줄 가져오기
-      (select(schedule)..where((tbl) => tbl.month.equals(month))).get();
+  Future selectMonthSchedule(int month, String uid) => // 선택한 월 스케줄 가져오기
+      (select(schedule)
+      ..where((tbl) => tbl.month.equals(month))
+      ..where((tbl) => tbl.userUid.equals(uid))
+      ).get();
   Future deleteAll() => delete(schedule).go(); // 전체 스케줄 삭제
   Future deleteSchedule(int id) => // 선택한 id의 단일 스케줄 가져오기
       (delete(schedule)..where((tbl) => tbl.id.equals(id))).go();
