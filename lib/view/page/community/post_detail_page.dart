@@ -65,9 +65,11 @@ class PostDetailPage extends GetView<CommunityController> {
                                 arguments: [user]), //
                             child: CircleAvatar(
                               radius: 25,
+                              backgroundColor: Colors.transparent,
                               backgroundImage: user.profileImg != null
                                   ? NetworkImage(user.profileImg!)
-                                  : null,
+                                  : AssetImage('assets/images/logo.png')
+                                      as ImageProvider,
                             ),
                           ),
                           SizedBox(
