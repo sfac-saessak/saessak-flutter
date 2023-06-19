@@ -5,6 +5,7 @@ import 'package:saessak_flutter/util/app_text_style.dart';
 import 'package:saessak_flutter/view/widget/plant_tile.dart';
 
 import '../../controller/plant/plant_controller.dart';
+import '../../model/tree.dart';
 import '../../util/app_color.dart';
 import '../page/plant/add_plant_page.dart';
 import '../page/plant/plant_detail_page.dart';
@@ -19,14 +20,41 @@ class HomeScreen extends GetView<PlantController> {
         color: AppColor.white,
         child: Column(
           children: [
-            Container(
-              width: double.infinity.w,
-              height: 210.h,
-              decoration: BoxDecoration(
-                  color: AppColor.black40,
-                  image: DecorationImage(
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity.w,
+                  height: 210.h,
+                  decoration: BoxDecoration(
+                    color: AppColor.black40,
+                    image: DecorationImage(
                       image: AssetImage(controller.forestBackground),
-                      fit: BoxFit.cover)),
+                      fit: BoxFit.cover
+                    )
+                  ),
+                ),
+                Row(
+                  children: [
+
+                  ],
+                ),
+                Container(
+                  height: 100,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: controller.treeList.length,
+                    itemBuilder: (context, index) {
+                      Tree tree = controller.treeList[index];
+                      return Positioned(
+                        bottom: 0,
+                        left: tree.position.toDouble(),
+                        child: Image.asset('assets/images/tree${tree.treeIdx}.png', height: 100)
+                      );
+                    }
+                  ),
+                )
+              ]
             ),
             Container(
               color: AppColor.black10,

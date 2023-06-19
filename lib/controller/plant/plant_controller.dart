@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:saessak_flutter/view/page/plant/plant_detail_page.dart';
 import '../../model/plant.dart';
+import '../../model/tree.dart';
 import '../../service/db_service.dart';
 
 class PlantController extends GetxController {
@@ -29,6 +30,8 @@ class PlantController extends GetxController {
   RxList<Plant> plantList = <Plant>[].obs; // 식물 리스트
   RxList<Plant> reversedPlantList = <Plant>[].obs; // 식물 리스트
   String forestBackground = 'assets/images/forest_background_day.png';  // 숲 배경
+  RxList<Tree> treeList = <Tree>[].obs;    // 나무 리스트
+
 
   // 이미지 선택
   void selectImage() async {
@@ -64,6 +67,7 @@ class PlantController extends GetxController {
         .map((doc) => Plant.fromMap(doc.data() as Map<String, dynamic>))
         .toList());
     reversedPlantList(plantList.reversed.toList());
+    getTrees();
     isLoading(false);
   }
 
@@ -158,10 +162,32 @@ class PlantController extends GetxController {
     return daysSincePlanting;
   }
 
+  // 나무 가져오기
+  Future<void> getTrees() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('forest')
+          .doc(user.uid)
+          .get();
+
+      final data = snapshot.data();
+      if (data != null && data.containsKey('tree')) {
+        final treeList = List<Map<String, dynamic>>.from(data['tree']);
+        this.treeList(treeList.map((treeMap) => Tree.fromMap(treeMap)).toList());
+      } else {
+        this.treeList([]);
+      }
+    } catch (e) {
+      print('Error fetching trees: $e');
+    }
+  }
+
+
   @override
   void onInit() {
     super.onInit();
     getPlants();
+    getTrees();
 
     int currentHour = DateTime.now().hour;
     if (currentHour >= 6 && currentHour < 18) {

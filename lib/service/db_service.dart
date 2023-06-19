@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -18,6 +20,7 @@ class DBService {
   final CollectionReference communityCollection = FirebaseFirestore.instance.collection("community");
   final CollectionReference journalsCollection = FirebaseFirestore.instance.collection("journals");
   final CollectionReference noticeCollection = FirebaseFirestore.instance.collection("notice");
+  final CollectionReference forestCollection = FirebaseFirestore.instance.collection("forest");
 
 
   /* ############################## 유저 정보 ############################## */
@@ -26,6 +29,7 @@ class DBService {
     final userDocRef = userCollection.doc(user.uid);
     final userDocSnapshot = await userDocRef.get();
     final userFollowDocRef = followCollection.doc(user.uid);
+    final userForestDocRef = forestCollection.doc(user.uid);
 
     if (userDocSnapshot.exists) {
       // 문서가 이미 존재하는 경우 업데이트
@@ -45,6 +49,9 @@ class DBService {
       await userFollowDocRef.set({
         'following': [],
         'follower': [],
+      });
+      await userForestDocRef.set({
+        'tree': [],
       });
     }
   }
@@ -67,6 +74,7 @@ class DBService {
     await plantDocRef.update({
       'plantId': plantDocRef.id,
     });
+    createTree();
   }
 
   // 식물 가져오기
@@ -87,6 +95,78 @@ class DBService {
     for (var document in journalQuerySnapshot.docs) {
       await document.reference.delete();
     }
+    deleteTree();
+  }
+
+  // 나무 생성
+  void createTree() {
+    final treeIdx = Random().nextInt(11);
+    var position = Random().nextInt(281) + 40;
+
+    FirebaseFirestore.instance
+        .collection('forest')
+        .doc(uid)
+        .get()
+        .then((snapshot) {
+      final trees = snapshot.data()?['tree'];
+
+      if (trees != null) {
+        bool overlap = false;
+        for (var tree in trees) {
+          final existingPosition = tree['position'];
+
+          if ((position >= existingPosition - 40 && position <= existingPosition + 40) ||
+              position == existingPosition) {
+            overlap = true;
+            break;
+          }
+        }
+
+        if (!overlap) {
+          FirebaseFirestore.instance
+              .collection('forest')
+              .doc(uid)
+              .update({
+            'tree': FieldValue.arrayUnion([
+              {'treeIdx': treeIdx, 'position': position}
+            ])
+          });
+        } else {
+          createTree();
+        }
+      } else {
+        FirebaseFirestore.instance
+            .collection('forest')
+            .doc(uid)
+            .update({
+          'tree': FieldValue.arrayUnion([
+            {'treeIdx': treeIdx, 'position': position}
+          ])
+        });
+      }
+    });
+  }
+
+  // 나무 삭제
+  void deleteTree() {
+    FirebaseFirestore.instance
+        .collection('forest')
+        .doc(uid)
+        .get()
+        .then((snapshot) {
+      final trees = snapshot.data()?['tree'];
+
+      if (trees != null && trees.isNotEmpty) {
+        final lastTree = trees.last;
+
+        FirebaseFirestore.instance
+            .collection('forest')
+            .doc(uid)
+            .update({
+          'tree': FieldValue.arrayRemove([lastTree])
+        });
+      }
+    });
   }
 
 
