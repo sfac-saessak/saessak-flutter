@@ -10,6 +10,7 @@ import 'package:saessak_flutter/view/page/plant/plant_detail_page.dart';
 import '../../model/plant.dart';
 import '../../model/tree.dart';
 import '../../service/db_service.dart';
+import '../schedule_journal/journal_controller.dart';
 
 class PlantController extends GetxController {
   User get user => FirebaseAuth.instance.currentUser!;
@@ -117,6 +118,7 @@ class PlantController extends GetxController {
     isLoading(false);
     Get.back();
     getPlants();
+    Get.find<JournalController>().readJournal();
   }
 
   // 식물 수정
