@@ -105,7 +105,7 @@ class DBService {
     for (var document in journalQuerySnapshot.docs) {
       await document.reference.delete();
     }
-    deleteTree();
+    await deleteTree();
   }
 
   // 나무 생성
@@ -153,8 +153,8 @@ class DBService {
   }
 
   // 나무 삭제
-  void deleteTree() {
-    FirebaseFirestore.instance
+  Future<void> deleteTree() async {
+    await FirebaseFirestore.instance
         .collection('forest')
         .doc(uid)
         .get()
