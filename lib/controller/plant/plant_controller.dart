@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -172,6 +173,8 @@ class PlantController extends GetxController {
           .doc(user.uid)
           .get();
 
+      log('snapshot.data() => ${snapshot.data()?['tree']}');
+
       final data = snapshot.data();
       if (data != null && data.containsKey('tree')) {
         final treeList = List<Map<String, dynamic>>.from(data['tree']);
@@ -182,6 +185,7 @@ class PlantController extends GetxController {
     } catch (e) {
       print('Error fetching trees: $e');
     }
+    log('tree => ${treeList}');
   }
 
 
