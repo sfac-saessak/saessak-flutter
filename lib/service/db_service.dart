@@ -110,7 +110,7 @@ class DBService {
 
   // 나무 생성
   void createTree() {
-    final treeIdx = Random().nextInt(11);
+    final treeIdx = Random().nextInt(10);
     var position = Random().nextInt(281) + 40;
 
     FirebaseFirestore.instance
@@ -125,8 +125,8 @@ class DBService {
         for (var tree in trees) {
           final existingPosition = tree['position'];
 
-          if ((position >= existingPosition - 20 &&
-                  position <= existingPosition + 20) ||
+          if ((position >= existingPosition - 40 &&
+                  position <= existingPosition + 40) ||
               position == existingPosition) {
             overlap = true;
             break;

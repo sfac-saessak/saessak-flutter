@@ -52,10 +52,16 @@ class PlantTile extends StatelessWidget {
                     child: Image.asset('assets/images/logo.png')),
                 ),
           SizedBox(height: 8.h),
-          Text('${plant.name}', style: AppTextStyle.body2_m()),
+          Container(
+            constraints: BoxConstraints(maxWidth: 100),
+            child: Text('${plant.name}', style: AppTextStyle.body2_m(), overflow: TextOverflow.ellipsis)
+          ),
           SizedBox(height: 4.h),
-          Text('${plant.species}',
-              style: AppTextStyle.body3_m(color: AppColor.primary)),
+          Container(
+            constraints: BoxConstraints(maxWidth: 100),
+            child: Text('${plant.species}',
+                style: AppTextStyle.body3_m(color: AppColor.primary), overflow: TextOverflow.ellipsis),
+          ),
         ],
       ),
     );

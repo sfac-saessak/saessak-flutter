@@ -65,6 +65,7 @@ class JournalController extends GetxController {
 
     contentController.clear();
     selectedImage(null);
+    readJournal();
     Get.back();
   }
 
@@ -105,7 +106,7 @@ class JournalController extends GetxController {
     selectedImage(null);
 
     Get.off(JournalDetailPage(journal: journal));
-    // readJournal();
+    readJournal();
   }
 
   // 일지 삭제
@@ -114,7 +115,7 @@ class JournalController extends GetxController {
     await DBService(uid: user.uid).deleteJournal(journalId);
     isLoading(false);
     Get.back();
-    // readJournal();
+    readJournal();
   }
 
   // 식물id로 식물 정보 가져오기
@@ -208,16 +209,6 @@ class JournalController extends GetxController {
         selectedPlant = plantList[0].obs;
       }
     });
-    DBService().journalsCollection
-        .doc(user.uid).collection("journal")
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        readJournal();
-      } else {
-        journalList([]);
-      }
-    });
-    update();
+    readJournal();
   }
 }
