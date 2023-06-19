@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:saessak_flutter/controller/plant/plant_controller.dart';
 import 'package:saessak_flutter/database/database.dart';
 import 'package:drift/drift.dart' as drift;
-import '../../model/plant.dart';
-import '../../service/db_service.dart';
 import '../../service/local_notification.dart';
 import '../../view/widget/resist_schedule_dialog.dart';
 
@@ -32,11 +30,27 @@ class ScheduleController extends GetxController {
   Rx<DateTime> focusedDay = Rx(DateTime.now()); // 캘린더 포커스 날짜
 
   // 식물 가져오기
-  getPlants() async {
-    QuerySnapshot snapshot = await DBService(uid: user.uid).getPlants();
-    plantList.addAll(snapshot.docs
-        .map((doc) => Plant.fromMap(doc.data() as Map<String, dynamic>).name)
+  getPlantList() {
+    plantList.value = ['등록식물'];
+    plantList.addAll(Get.find<PlantController>()
+        .plantList
+        .map((plant) => plant.name)
         .toList());
+  }
+
+// 일정등록 다이얼로그 열기
+  goAddScheduleDialog() {
+    getPlantList();
+    plantDropdownValue.value = '등록식물';
+    eventDropdownValue.value = '일정 종류';
+    timeDropdownValue.value = '18';
+    Get.dialog(ResistScheduleDialog());
+  }
+
+// 월단위 일정 가져오기
+  getMonthSchedule(month) async {
+    monthScheduleList.value =
+        await localDb.selectMonthSchedule(month, user.uid);
   }
 
 // 일정추가 - 임시구현, 단순히 events에 Event 인스턴스 추가. 임시 구현시 물주기(알림 주기 15초? 로 설정할 것임)
@@ -60,11 +74,6 @@ class ScheduleController extends GetxController {
     }
   }
 
-  // 월단위 일정 가져오기
-  getMonthSchedule(month) async {
-    monthScheduleList.value = await localDb.selectMonthSchedule(month);
-  }
-
   // 일정 삭제
   deleteSchedule(int id) async {
     await localDb.deleteSchedule(id);
@@ -73,6 +82,7 @@ class ScheduleController extends GetxController {
 
   // 일정 수정 다이얼로그 띄우기
   modifyScheduleDialog(ScheduleData e) {
+    getPlantList();
     if (plantList.contains(e.plant)) {
       plantDropdownValue.value = e.plant;
       timeDropdownValue.value = e.time.toString();
@@ -136,20 +146,17 @@ class ScheduleController extends GetxController {
         plantName: plantDropdownValue.value,
         content: eventDropdownValue.value,
         minute: 00);
-    print('알림 예약 완료, id: $id');
   }
 
   // 푸쉬 취소
   cancelPush(int id) async {
     await FlutterLocalNotification().cancelPush(id);
-    print('알림 취소 완료, id: $id');
   }
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getPlants();
     getMonthSchedule(focusedDay.value.month); // 일정 탭 선택시 월단위 일정 가져오기
     FlutterLocalNotification.init();
     Future.delayed(const Duration(seconds: 3),

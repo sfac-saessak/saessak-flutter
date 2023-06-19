@@ -22,55 +22,56 @@ class CustomDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        height: Get.height*0.36,
-        width: Get.width*0.7,
+        width: Get.width * 0.7,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            child,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                      onTap: leftButtonOnTap,
-                      child: Container(
-                        height: 45,
-                        decoration: BoxDecoration(
-                            color: AppColor.primary10,
-                            border: Border.all(color: AppColor.primary80),
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(4))),
-                        child: Center(
-                            child: Text(leftButtonText,
-                                style: AppTextStyle.body4_m().copyWith(
-                                  color: AppColor.primary,
-                                ))),
-                      )),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                      onTap: rightButtonOnTap,
-                      child: Container(
-                        height: 45,
-                        decoration: BoxDecoration(
-                            color: AppColor.primary10,
-                            border: Border.all(color: AppColor.primary80),
-                            borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(4))),
-                        child: Center(
-                            child: Text(rightButtonText,
-                                style: AppTextStyle.body4_m().copyWith(
-                                  color: AppColor.primary,
-                                ))),
-                      )),
-                ),
-              ],
-            )
-          ],
-        ),
+        child: Wrap(children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              child,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                        onTap: leftButtonOnTap,
+                        child: Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                              color: AppColor.primary10,
+                              border: Border.all(color: AppColor.primary80),
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(4))),
+                          child: Center(
+                              child: Text(leftButtonText,
+                                  style: AppTextStyle.body4_m().copyWith(
+                                    color: AppColor.primary,
+                                  ))),
+                        )),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                        onTap: rightButtonOnTap,
+                        child: Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                              color: AppColor.primary10,
+                              border: Border.all(color: AppColor.primary80),
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(4))),
+                          child: Center(
+                              child: Text(rightButtonText,
+                                  style: AppTextStyle.body4_m().copyWith(
+                                    color: AppColor.primary,
+                                  ))),
+                        )),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ]),
       ),
     );
   }

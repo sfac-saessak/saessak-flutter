@@ -39,7 +39,7 @@ class JournalScreen extends GetView<JournalController> {
                       ),
                       onPressed: (){
                         if (controller.plantList.length <= 0) {
-                          Get.snackbar('식물없음', '식물추가부터해라');
+                          Get.snackbar('등록된 식물이 존재하지 않습니다.', '먼저 식물을 등록해주세요.');
                         } else {
                           Get.to(() => AddJournalPage(journal: null));
                         }
