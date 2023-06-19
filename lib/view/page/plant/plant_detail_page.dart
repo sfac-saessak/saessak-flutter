@@ -112,7 +112,10 @@ class PlantDetailPage extends GetView<PlantDetailController> {
                     children: [
                       Row(
                         children: [
-                          Text('${plant.name}', style: AppTextStyle.body2_m()),
+                          Container(
+                            constraints: BoxConstraints(maxWidth: 150.w),
+                            child: Text('${plant.name}', style: AppTextStyle.body2_m())
+                          ),
                           SizedBox(width: 4.w),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
@@ -125,7 +128,10 @@ class PlantDetailPage extends GetView<PlantDetailController> {
                         ],
                       ),
                       SizedBox(height: 2.h),
-                      Text('${plant.species}', style: AppTextStyle.body3_m(color: AppColor.black40)),
+                      Container(
+                        constraints: BoxConstraints(maxWidth: 150.w),
+                        child: Text('${plant.species}', style: AppTextStyle.body3_m(color: AppColor.black40))
+                      ),
                       Row(
                         children: [
                           Text(
