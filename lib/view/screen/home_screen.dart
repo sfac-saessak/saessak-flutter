@@ -33,27 +33,11 @@ class HomeScreen extends GetView<PlantController> {
                     )
                   ),
                 ),
-                Row(
-                  children: [
-
-                  ],
-                ),
-                Container(
-                  height: 100,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: controller.treeList.length,
-                    itemBuilder: (context, index) {
-                      Tree tree = controller.treeList[index];
-                      return Positioned(
-                        bottom: 0,
-                        left: tree.position.toDouble(),
-                        child: Image.asset('assets/images/tree${tree.treeIdx}.png', height: 100)
-                      );
-                    }
-                  ),
-                )
+                ...controller.treeList.map((tree) => Positioned(
+                    bottom: 0,
+                    left: tree.position.toDouble(),
+                    child: Image.asset('assets/images/tree${tree.treeIdx}.png', height: 70)
+                )),
               ]
             ),
             Container(

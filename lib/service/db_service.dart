@@ -115,7 +115,7 @@ class DBService {
         for (var tree in trees) {
           final existingPosition = tree['position'];
 
-          if ((position >= existingPosition - 40 && position <= existingPosition + 40) ||
+          if ((position >= existingPosition - 20 && position <= existingPosition + 20) ||
               position == existingPosition) {
             overlap = true;
             break;
