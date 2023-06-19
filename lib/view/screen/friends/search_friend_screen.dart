@@ -42,21 +42,17 @@ class SearchFriendScreen extends GetView<FriendsController> {
           Obx(
             () {
               if (controller.searchResult.value != null) {
-                RxBool isFollowed = RxBool(true);
+                RxBool isFollowed = RxBool(false);
+
                 controller
                     .isUserFollowed(controller.searchResult.value!.uid)
                     .then((value) {
                   isFollowed(value);
                 });
-
-                if (isFollowed.value) {
-                  return FriendTile(
-                    user: controller.searchResult.value!,
-                    isFollowed: isFollowed,
-                  );
-                } else {
-                  return Container();
-                }
+                return FriendTile(
+                  user: controller.searchResult.value!,
+                  isFollowed: isFollowed,
+                );
               } else {
                 return Container();
               }
