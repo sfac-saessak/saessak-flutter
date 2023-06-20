@@ -233,14 +233,6 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
     Get.back();
   }
 
-  // 챌린지 포기
-  void exitChallenge(String challengeId) async {
-    await DBService(uid: user.uid).exitChallenge(challengeId);
-    Get.back();
-    getJoinedChallenges();
-    updateAllChallenge();
-  }
-
   // 시간 변환
   String convertTime(Timestamp time) {
     DateTime recentMessageTime = time.toDate();

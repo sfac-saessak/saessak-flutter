@@ -122,6 +122,21 @@ class ChatController extends GetxController {
     await DBService().removeMember(challengeId, uid);
   }
 
+  // 챌린지 포기
+  void exitChallenge(String challengeId) async {
+    await DBService(uid: user.uid).exitChallenge(challengeId);
+    Get.back();
+    Get.find<ChallengeController>().getJoinedChallenges();
+    Get.find<ChallengeController>().updateAllChallenge();
+  }
+
+  // 어드민 채팅방 나가기
+  void exitAdmin(String challengeId, String newAdminUid) async {
+    await DBService(uid: user.uid).changeAdmin(challengeId, newAdminUid);
+    exitChallenge(challengeId);
+    Get.back();
+  }
+
   @override
   void onClose() {
     Get.find<ChallengeController>().getJoinedChallenges();

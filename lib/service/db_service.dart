@@ -368,6 +368,14 @@ class DBService {
     }
   }
 
+  // 챌린지 방장 변경
+  Future changeAdmin(String challengeId, String uid) async {
+    DocumentReference challengeDocRef = challengeCollection.doc(challengeId);
+    await challengeDocRef.update({
+      'admin': uid
+    });
+  }
+
   // 참여자 내보내기
   Future removeMember(String challengeId, String uid) async {
     DocumentReference userDocRef = userCollection.doc(uid);

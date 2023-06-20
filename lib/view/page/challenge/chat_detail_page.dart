@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../controller/challenge/challenge_controller.dart';
 import '../../../controller/challenge/chat_controller.dart';
 import '../../../model/challenge.dart';
 import '../../../model/user_model.dart';
 import '../../../util/app_color.dart';
 import '../../../util/app_text_style.dart';
+import '../../widget/custom_dialog.dart';
 import '../friends/friend_detail_page.dart';
 
 class ChatDetailPage extends StatelessWidget {
@@ -20,6 +20,12 @@ class ChatDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var chatController = Get.find<ChatController>();
+
+    RxList<UserModel> nextAdminList = RxList.from(members);
+    nextAdminList.removeWhere((member) => member.uid == challenge.admin.uid);
+    Rx<UserModel> selectedAdmin = Rx<UserModel>(nextAdminList[0]);
+
     return Scaffold(
       backgroundColor: AppColor.black10,
       appBar: AppBar(
@@ -31,38 +37,74 @@ class ChatDetailPage extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text("챌린지 포기"),
-                        content: Text('${challenge.title} 챌린지를 포기하시겠습니까?'),
-                        actions: [
-                          IconButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            icon: const Icon(
-                              Icons.cancel,
-                              color: Colors.red,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              Get.find<ChallengeController>()
-                                  .exitChallenge(challenge.challengeId!);
-                              Get.back();
-                              Get.snackbar('${challenge.title}', '탈주 완');
-                            },
-                            icon: const Icon(
-                              Icons.done,
-                              color: Colors.green,
-                            ),
-                          ),
+                challenge.admin.uid != FirebaseAuth.instance.currentUser!.uid || members.length < 2
+                ? Get.dialog(
+                  CustomDialog(
+                    leftButtonText: '취소',
+                    rightButtonText: '나가기',
+                    leftButtonOnTap: () {
+                      Get.back();
+                    },
+                    rightButtonOnTap: () {
+                      chatController.exitChallenge(challenge.challengeId!);
+                      Get.back();
+                      Get.snackbar('${challenge.title}', '탈주 완');
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.all(30.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('${challenge.title} 챌린지를\n포기하시겠습니까?'),
                         ],
-                      );
-                    });
+                      )
+                    ),
+                  )
+                )
+                : Get.dialog(
+                    CustomDialog(
+                      leftButtonText: '취소',
+                      rightButtonText: '나가기',
+                      leftButtonOnTap: () {
+                        Get.back();
+                      },
+                      rightButtonOnTap: () {
+                        chatController.exitAdmin(challenge.challengeId!, selectedAdmin.value.uid);
+                        Get.back();
+                        Get.snackbar('${challenge.title}', '탈주 완');
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.all(30.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  Text('다음 관리자를 선택하세요'),
+                                  Obx(
+                                    () => DropdownButton(
+                                      value: selectedAdmin.value.uid,
+                                      items: nextAdminList
+                                          .map((member) => DropdownMenuItem(
+                                          value: member.uid,
+                                          child: Text('${member.name}')
+                                      ))
+                                          .toList(),
+                                      onChanged: (value) {
+                                        selectedAdmin.value =
+                                            nextAdminList.firstWhere(
+                                                  (member) => member.uid == value,
+                                            );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                      ),
+                    )
+                );
               },
               icon: const Icon(Icons.exit_to_app))
         ],
@@ -221,7 +263,7 @@ class ChatDetailPage extends StatelessWidget {
                                       ),
                                       IconButton(
                                         onPressed: () async {
-                                          Get.find<ChatController>().removeMember(challenge.challengeId!, member.uid);
+                                          chatController.removeMember(challenge.challengeId!, member.uid);
                                           members.removeWhere((user) => user.uid == member.uid);
                                           Get.back();
                                         },
