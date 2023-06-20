@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../controller/follow/friends_controller.dart';
 import '../../../util/app_color.dart';
+import '../../../util/app_text_style.dart';
 
 class FriendsPage extends GetView<FriendsController> {
   const FriendsPage({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class FriendsPage extends GetView<FriendsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('친구 관리'),
+        title: Text('친구 관리', style: AppTextStyle.body2_r()),
         centerTitle: true,
         backgroundColor: AppColor.white,
         foregroundColor: AppColor.black,

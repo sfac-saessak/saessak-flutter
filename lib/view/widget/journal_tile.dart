@@ -5,6 +5,7 @@ import '../../controller/schedule_journal/journal_controller.dart';
 import '../../model/journal.dart';
 import '../../util/app_color.dart';
 import '../../util/app_text_style.dart';
+import '../page/plant/plant_detail_page.dart';
 import '../page/schedule_journal/journal/journal_detail_page.dart';
 
 class JournalTile extends StatelessWidget {
@@ -33,14 +34,19 @@ class JournalTile extends StatelessWidget {
                     Container(
                       width: 50,
                       height: 50,
-                      child: CircleAvatar(
-                        backgroundColor: AppColor.black20,
-                        backgroundImage: journal.plant.imageUrl != null
-                            ? NetworkImage(journal.plant.imageUrl!)
-                            : null,
-                        child: journal.plant.imageUrl != null
-                            ? null
-                            : Icon(Icons.person, color: AppColor.white),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.to(() => PlantDetailPage(plant: journal.plant), arguments: [journal.plant]);
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: AppColor.black20,
+                          backgroundImage: journal.plant.imageUrl != null
+                              ? NetworkImage(journal.plant.imageUrl!)
+                              : null,
+                          child: journal.plant.imageUrl != null
+                              ? null
+                              : Icon(Icons.person, color: AppColor.white),
+                        ),
                       ),
                     ),
                     SizedBox(height: 5),
