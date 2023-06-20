@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../controller/main_controller.dart';
@@ -81,11 +82,17 @@ class MainPage extends GetView<MainController> {
       bottomNavigationBar: Obx(
         () => Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(24)),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
             boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(24)),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
             child: BottomNavigationBar(
               backgroundColor: Colors.white,
               elevation: 0,
@@ -99,34 +106,34 @@ class MainPage extends GetView<MainController> {
                 BottomNavigationBarItem(
                   icon: Opacity(
                       opacity: 0.4,
-                      child: Image.asset('assets/images/home.png')),
+                      child: Image.asset('assets/images/home.png', width: 35.w)),
                   label: '홈',
-                  activeIcon: Image.asset('assets/images/home.png'),
+                  activeIcon: Image.asset('assets/images/home.png', width: 35.w),
                 ),
                 BottomNavigationBarItem(
                     icon: Opacity(
                         opacity: 0.4,
-                        child: Image.asset('assets/images/schedule.png')),
+                        child: Image.asset('assets/images/schedule.png', width: 35.w)),
                     label: '일정일지',
-                    activeIcon: Image.asset('assets/images/schedule.png')),
+                    activeIcon: Image.asset('assets/images/schedule.png', width: 35.w)),
                 BottomNavigationBarItem(
                     icon: Opacity(
                         opacity: 0.4,
-                        child: Image.asset('assets/images/community.png')),
+                        child: Image.asset('assets/images/community.png', width: 35.w)),
                     label: '게시판',
-                    activeIcon: Image.asset('assets/images/community.png')),
+                    activeIcon: Image.asset('assets/images/community.png', width: 35.w)),
                 BottomNavigationBarItem(
                     icon: Opacity(
                         opacity: 0.4,
-                        child: Image.asset('assets/images/challenge.png')),
+                        child: Image.asset('assets/images/challenge.png', width: 35.w)),
                     label: '챌린지',
-                    activeIcon: Image.asset('assets/images/challenge.png')),
+                    activeIcon: Image.asset('assets/images/challenge.png', width: 35.w)),
                 BottomNavigationBarItem(
                     icon: Opacity(
                         opacity: 0.4,
-                        child: Image.asset('assets/images/setting.png')),
+                        child: Image.asset('assets/images/setting.png', width: 35.w)),
                     label: '설정',
-                    activeIcon: Image.asset('assets/images/setting.png')),
+                    activeIcon: Image.asset('assets/images/setting.png', width: 35.w)),
               ],
             ),
           ),
