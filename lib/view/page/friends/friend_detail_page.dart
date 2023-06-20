@@ -1,8 +1,10 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/follow/friend_detail_controller.dart';
+import '../../../controller/follow/friends_controller.dart';
 import '../../../util/app_color.dart';
 import '../../../util/app_text_style.dart';
 import 'friends_list_page.dart';
@@ -12,6 +14,12 @@ class FriendDetailPage extends GetView<FriendDetailController> {
 
   @override
   Widget build(BuildContext context) {
+    RxBool isFollowed = RxBool(false);
+    Get.find<FriendsController>()
+        .isUserFollowed(controller.user.uid)
+        .then((value) {
+      isFollowed(value);
+    });
     return WillPopScope(
       onWillPop: () {
         controller.onDelete();
@@ -22,6 +30,18 @@ class FriendDetailPage extends GetView<FriendDetailController> {
           backgroundColor: AppColor.white,
           foregroundColor: AppColor.black,
           elevation: 0,
+          actions: [
+            if(controller.user.uid != FirebaseAuth.instance.currentUser!.uid)
+              Obx(
+                () => IconButton(
+                    onPressed: () {
+                      Get.find<FriendsController>().toggleUserFollow(controller.user.uid);
+                      isFollowed(!isFollowed.value);
+                    },
+                  icon: Icon(isFollowed.value ? Icons.people : Icons.person_add)
+                ),
+              )
+          ],
         ),
         body: Obx(
           () => Container(
