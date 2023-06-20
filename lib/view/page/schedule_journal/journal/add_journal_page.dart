@@ -64,15 +64,18 @@ class AddJournalPage extends GetView<JournalController> {
                   SizedBox(width: 24),
                   journal == null
                       ? Expanded(
-                          child: CustomDropDownButton(
-                            value: controller.selectedPlant.value.name,
+                          child: DropdownButton(
+                            value: controller.selectedPlant.value.plantId,
                             items: controller.plantList
-                                .map((plant) => plant.name)
-                                .toList(),
-                            onChanged: (String? value) {
+                              .map((plant) => DropdownMenuItem(
+                                  value: plant.plantId,
+                                  child: Text('${plant.name}')
+                              ))
+                              .toList(),
+                            onChanged: (value) {
                               controller.selectedPlant.value =
                                   controller.plantList.firstWhere(
-                                (plant) => plant.name == value,
+                                (plant) => plant.plantId == value,
                               );
                               log('${controller.selectedPlant}');
                             },
