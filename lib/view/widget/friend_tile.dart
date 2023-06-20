@@ -17,8 +17,7 @@ class FriendTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<FriendsController>();
-    return Obx(
-      () => GestureDetector(
+    return GestureDetector(
         onTap: () => Get.to(() => FriendDetailPage(), arguments: [user]),
         child: ListTile(
           contentPadding: EdgeInsets.zero, // 패딩 제거
@@ -34,29 +33,31 @@ class FriendTile extends StatelessWidget {
           title: Text(user.name, style: AppTextStyle.body2_m()),
           subtitle: Text(user.email,
               style: AppTextStyle.body4_r(color: AppColor.black40)),
-          trailing: Container(
-            width: 110,
-            height: 35,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      isFollowed.value ? AppColor.black10 : AppColor.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  elevation: 0),
-              onPressed: () {
-                controller.toggleUserFollow(user.uid);
-                isFollowed(!isFollowed.value);
-              },
-              child: isFollowed.value
-                  ? Text('팔로잉', style: AppTextStyle.body3_m())
-                  : Text('팔로우',
-                      style: AppTextStyle.body3_m(color: AppColor.white)),
-            ),
-          ),
+          trailing: user.uid != controller.user.uid
+            ? Container(
+              width: 110,
+              height: 35,
+              child: Obx(
+                () => ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          isFollowed.value ? AppColor.black10 : AppColor.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      elevation: 0),
+                  onPressed: () {
+                    controller.toggleUserFollow(user.uid);
+                    isFollowed(!isFollowed.value);
+                  },
+                  child: isFollowed.value
+                      ? Text('팔로잉', style: AppTextStyle.body3_m())
+                      : Text('팔로우',
+                          style: AppTextStyle.body3_m(color: AppColor.white)),
+                ),
+              ),
+            ) : null,
         ),
-      ),
     );
   }
 }
