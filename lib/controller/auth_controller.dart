@@ -12,51 +12,7 @@ class AuthController extends GetxController {
   login(String id, String pw) => AuthService().login(id, pw);
 
   // 로그아웃
-  logout() {
-    Get.defaultDialog(
-      title: '로그아웃',
-      contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12),
-      content: Text('정말 로그아웃하시겠습니까?'),
-      actions: [
-        Container(
-          width: 100,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              backgroundColor: Colors.grey,
-              elevation: 0,
-            ),
-            onPressed: () {
-              Get.back();
-            },
-            child: Text('취소'),
-          ),
-        ),
-        SizedBox(
-          width: 20,
-        ),
-        Container(
-          width: 100,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              backgroundColor: Colors.red,
-              elevation: 0,
-            ),
-            onPressed: () {
-              Get.back();
-              AuthService().logout();
-            },
-            child: Text('확인'),
-          ),
-        ),
-      ],
-    );
-  }
+  logout() => AuthService().logout();
 
   // 회원가입
   signup(String email, String pw) => AuthService().signup(email, pw);

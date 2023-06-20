@@ -8,6 +8,7 @@ import '../../util/app_color.dart';
 import '../../util/app_text_style.dart';
 import '../page/friends/friends_list_page.dart';
 import '../page/notice_page.dart';
+import '../widget/custom_dialog.dart';
 
 class SettingScreen extends GetView<SettingController> {
   const SettingScreen({Key? key}) : super(key: key);
@@ -231,7 +232,30 @@ class SettingScreen extends GetView<SettingController> {
                           elevation: 0,
                           backgroundColor: AppColor.primary,
                         ),
-                        onPressed: Get.find<AuthController>().logout,
+                        onPressed: () {
+                          Get.dialog(
+                            CustomDialog(
+                              leftButtonText: '취소',
+                              rightButtonText: '확인',
+                              leftButtonOnTap: () {
+                                Get.back();
+                              },
+                              rightButtonOnTap: () {
+                                Get.find<AuthController>().logout();
+                                Get.back();
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text('정말 로그아웃하시겠습니까?'),
+                                    ],
+                                  )
+                              ),
+                            )
+                          );
+                        },
                         child: Text('로그아웃'),
                       ),
                     ),

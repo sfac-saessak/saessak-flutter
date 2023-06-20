@@ -8,6 +8,7 @@ import '../../../controller/challenge/challenge_controller.dart';
 import '../../../model/challenge.dart';
 import '../../../util/app_color.dart';
 import '../../../util/app_text_style.dart';
+import '../../widget/custom_dialog.dart';
 import '../friends/friend_detail_page.dart';
 import 'edit_challenge_page.dart';
 
@@ -179,35 +180,29 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 24),
               child: CustomButton(
                 onPressed: () {
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text("참가"),
-                        content: Text('${challenge.title}에 참가하시겠습니까?'),
-                        actions: [
-                          IconButton(
-                            onPressed: () => Get.back(),
-                            icon: const Icon(
-                              Icons.cancel,
-                              color: Colors.red,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              controller
-                                  .joinChallenge(challenge.challengeId!);
-                              Get.snackbar('${challenge.title}', '참가 완');
-                            },
-                            icon: const Icon(
-                              Icons.done,
-                              color: Colors.green,
-                            ),
-                          ),
-                        ],
-                      );
-                    }
+                  Get.dialog(
+                    CustomDialog(
+                      leftButtonText: '취소',
+                      rightButtonText: '참가',
+                      leftButtonOnTap: () {
+                        Get.back();
+                      },
+                      rightButtonOnTap: () {
+                        controller
+                            .joinChallenge(challenge.challengeId!);
+                        Get.snackbar('${challenge.title}', '참가 완');
+                        Get.back();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('${challenge.title}에 참가하시겠습니까?'),
+                          ],
+                        )
+                      ),
+                    )
                   );
                 },
                 text: '참가하기',
