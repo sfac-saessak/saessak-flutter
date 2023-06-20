@@ -9,6 +9,7 @@ import '../../../controller/plant/plant_detail_controller.dart';
 import '../../../model/plant.dart';
 import '../../../util/app_color.dart';
 import '../../../util/app_text_style.dart';
+import '../../widget/custom_dialog.dart';
 import 'add_plant_page.dart';
 
 class PlantDetailPage extends GetView<PlantDetailController> {
@@ -41,48 +42,27 @@ class PlantDetailPage extends GetView<PlantDetailController> {
             ),
             IconButton(
               onPressed: () {
-                Get.defaultDialog(
-                  title: '식물 삭제',
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12),
-                  content: Text('${plant.name}을 삭제하시겠습니까?'),
-                  actions: [
-                    Container(
-                      width: 100,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          backgroundColor: Colors.grey,
-                          elevation: 0,
-                        ),
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text('취소'),
-                      ),
+                Get.dialog(
+                  CustomDialog(
+                    leftButtonText: '취소',
+                    rightButtonText: '삭제',
+                    leftButtonOnTap: () {
+                      Get.back();
+                    },
+                    rightButtonOnTap: () {
+                      controller.deletePlant();
+                      Get.back();
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('${plant.name}을 삭제하시겠습니까?'),
+                          ],
+                        )
                     ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: 100,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          backgroundColor: Colors.red,
-                          elevation: 0,
-                        ),
-                        onPressed: () {
-                          Get.back();
-                          controller.deletePlant();
-                        },
-                        child: Text('삭제'),
-                      ),
-                    ),
-                  ],
+                  )
                 );
               },
               icon: Icon(Icons.delete),

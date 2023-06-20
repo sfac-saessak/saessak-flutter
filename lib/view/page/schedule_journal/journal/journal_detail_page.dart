@@ -7,6 +7,7 @@ import '../../../../controller/schedule_journal/journal_controller.dart';
 import '../../../../model/journal.dart';
 import '../../../../util/app_color.dart';
 import '../../../../util/app_text_style.dart';
+import '../../../widget/custom_dialog.dart';
 import '../../plant/plant_detail_page.dart';
 
 class JournalDetailPage extends StatelessWidget {
@@ -27,15 +28,36 @@ class JournalDetailPage extends StatelessWidget {
         actions: journal.uid == controller.user.uid
             ? [
                 IconButton(
-                    onPressed: () {
-                      Get.off(() => AddJournalPage(journal: journal));
-                    },
-                    icon: Icon(Icons.edit)),
+                  onPressed: () {
+                    Get.off(() => AddJournalPage(journal: journal));
+                  },
+                  icon: Icon(Icons.edit)),
                 IconButton(
-                    onPressed: () {
-                      controller.deleteJournal(journal.journalId!);
-                    },
-                    icon: Icon(Icons.delete)),
+                  onPressed: () {
+                    Get.dialog(
+                      CustomDialog(
+                        leftButtonText: '취소',
+                        rightButtonText: '삭제',
+                        leftButtonOnTap: () {
+                          Get.back();
+                        },
+                        rightButtonOnTap: () {
+                          controller.deleteJournal(journal.journalId!);
+                          Get.back();
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.all(30.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text('일지를 삭제하시겠습니까?'),
+                              ],
+                            )
+                        ),
+                      )
+                  );
+                },
+                icon: Icon(Icons.delete)),
               ]
             : null,
       ),
