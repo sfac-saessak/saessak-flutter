@@ -350,23 +350,35 @@ class DBService {
 
   // 챌린지 포기
   Future exitChallenge(String challengeId) async {
-    DocumentReference userDocumentReference = userCollection.doc(uid);
-    DocumentReference groupDocumentReference =
-        challengeCollection.doc(challengeId);
+    DocumentReference userDocRef = userCollection.doc(uid);
+    DocumentReference challengeDocRef = challengeCollection.doc(challengeId);
 
-    await userDocumentReference.update({
+    await userDocRef.update({
       "challenges": FieldValue.arrayRemove(["${challengeId}"])
     });
-    await groupDocumentReference.update({
+    await challengeDocRef.update({
       "members": FieldValue.arrayRemove(["${uid}"])
     });
 
-    DocumentSnapshot groupSnapshot = await groupDocumentReference.get();
-    List<dynamic> members = await groupSnapshot['members'];
+    DocumentSnapshot challengeSnapshot = await challengeDocRef.get();
+    List<dynamic> members = await challengeSnapshot['members'];
 
     if (members.length <= 0) {
-      await groupDocumentReference.delete();
+      await challengeDocRef.delete();
     }
+  }
+
+  // 참여자 내보내기
+  Future removeMember(String challengeId, String uid) async {
+    DocumentReference userDocRef = userCollection.doc(uid);
+    DocumentReference challengeDocRef = challengeCollection.doc(challengeId);
+
+    await userDocRef.update({
+      "challenges": FieldValue.arrayRemove(["${challengeId}"])
+    });
+    await challengeDocRef.update({
+      "members": FieldValue.arrayRemove(["${uid}"])
+    });
   }
 
   // 참여중인 챌린지 가져오기

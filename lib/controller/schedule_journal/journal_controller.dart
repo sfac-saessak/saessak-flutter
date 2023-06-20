@@ -92,12 +92,13 @@ class JournalController extends GetxController {
     var journalData = data.data() as Map<String, dynamic>;
     var plantInfo = await getPlantById(journalData['plant']);
     var plant = Plant.fromMap(plantInfo);
+    bool bookmark = journalData['bookmark'];
     journal = Journal(
       plant: plant,
       journalId: journalData['journalId'],
       uid: journalData['uid'],
       writeTime: journalData['writeTime'],
-      bookmark: journalData['bookmark'],
+      bookmark: bookmark.obs,
       content: journalData['content'],
       imageUrl: journalData['imageUrl'],
     );

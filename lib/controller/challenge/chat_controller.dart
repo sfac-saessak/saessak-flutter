@@ -117,6 +117,11 @@ class ChatController extends GetxController {
     memberList(members);
   }
 
+  // 참여자 내보내기
+  void removeMember(String challengeId, String uid) async {
+    await DBService().removeMember(challengeId, uid);
+  }
+
   @override
   void onClose() {
     Get.find<ChallengeController>().getJoinedChallenges();
