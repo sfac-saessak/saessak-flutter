@@ -60,8 +60,18 @@ class ScheduleScreen extends GetView<ScheduleController> {
                           .copyWith(color: AppColor.black80)),
                   // 일정등록 버튼
                   IconButton(
-                      onPressed: controller.goAddScheduleDialog,
-                      icon: Image.asset('assets/images/icon_material_add.png')),
+                    onPressed:
+                        controller.selectedDay.value.day >= DateTime.now().day
+                            ? controller.goAddScheduleDialog
+                            : null,
+                    icon: Image.asset(
+                      'assets/images/icon_material_add.png',
+                      color:
+                          controller.selectedDay.value.day >= DateTime.now().day
+                              ? null
+                              : AppColor.black30,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -94,7 +104,11 @@ class ScheduleScreen extends GetView<ScheduleController> {
                                           .map((e) => Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child: ScheduleContainer(e: e),
+                                                child: ScheduleContainer(
+                                                  e: e,
+                                                  selectedDay: controller
+                                                      .selectedDay.value,
+                                                ),
                                               ))
                                           .toList()
                                     ]

@@ -8,12 +8,13 @@ import 'package:drift/drift.dart' as drift;
 import '../../database/database.dart';
 
 class ScheduleContainer extends StatelessWidget {
-  const ScheduleContainer({super.key, required this.e});
+  const ScheduleContainer(
+      {super.key, required this.e, required this.selectedDay});
 
   final ScheduleData e;
+  final DateTime selectedDay;
   @override
   Widget build(BuildContext context) {
-    print(e.runtimeType);
     return Container(
       height: 50,
       decoration: BoxDecoration(
@@ -53,12 +54,16 @@ class ScheduleContainer extends StatelessWidget {
             ),
           ),
           // 수정버튼
-          IconButton(
-              onPressed: e.isExecuted
-                  ? null
-                  : () =>
-                      Get.find<ScheduleController>().modifyScheduleDialog(e),
-              icon: Image.asset('assets/images/pencil.png')),
+          if (selectedDay.day >= DateTime.now().day)
+            IconButton(
+                onPressed: e.isExecuted
+                    ? null
+                    : () =>
+                        Get.find<ScheduleController>().modifyScheduleDialog(e),
+                icon: Image.asset(
+                  'assets/images/pencil.png',
+                  color: e.isExecuted ? AppColor.black30 : null,
+                )),
           // 삭제버튼
           IconButton(
               onPressed: () {

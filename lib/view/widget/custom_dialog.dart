@@ -15,8 +15,8 @@ class CustomDialog extends StatelessWidget {
   final Widget child;
   final String leftButtonText;
   final String rightButtonText;
-  final VoidCallback leftButtonOnTap;
-  final VoidCallback rightButtonOnTap;
+  final void Function()? leftButtonOnTap;
+  final void Function()? rightButtonOnTap;
 
   @override
   Widget build(BuildContext context) {

@@ -55,8 +55,16 @@ class FriendDetailController extends GetxController with GetSingleTickerProvider
   readPost() async {
     isLoading(true);
     postList([]);
+    
+    var resUser = await DBService().getUserInfoById(this.user.uid);
+    UserModel authorUser = UserModel.fromMap(resUser);
+
     QuerySnapshot snapshot = await DBService().getUserPosts(user.uid);
-    postList(snapshot.docs.map((doc) => Post.fromMap(doc.data() as Map<String, dynamic>)).toList());
+    postList(snapshot.docs.map((doc) {
+      Post post = Post.fromMap(doc.data() as Map<String, dynamic>);
+      post.user = authorUser;
+      return post;
+    }).toList());
     log('${postList}');
     isLoading(false);
   }
