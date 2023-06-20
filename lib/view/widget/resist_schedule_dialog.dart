@@ -61,8 +61,7 @@ class ResistScheduleDialog extends GetView<ScheduleController> {
                       Expanded(
                         child: Text(
                           '${DateFormat('yyyy년 M월 d일').format(controller.selectedDay.value)}',
-                          style:
-                              AppTextStyle.body4_m(color: AppColor.primary),
+                          style: AppTextStyle.body4_m(color: AppColor.primary),
                         ),
                       ),
                     ],
@@ -139,14 +138,20 @@ class ResistScheduleDialog extends GetView<ScheduleController> {
             ]),
           ),
         ),
-        leftButtonOnTap: () => Get.back(),
+        leftButtonOnTap: Get.back,
         rightButtonOnTap: () async {
-          if (e != null) {
-            controller.modifySchedule(e!);
-            Get.back();
+          if (controller.plantDropdownValue.value != '등록식물' &&
+              controller.eventDropdownValue.value != '일정 종류') {
+            if (e != null) {
+              controller.modifySchedule(e!);
+              Get.back();
+            } else {
+              controller.addSchedule();
+              Get.back();
+            }
           } else {
-            controller.addSchedule();
             Get.back();
+            Get.snackbar('일정등록 실패', '대상 식물 또는 일정 종류가 선택되지 않았습니다.');
           }
         });
   }

@@ -11,11 +11,11 @@ class ScheduleController extends GetxController {
   User user = FirebaseAuth.instance.currentUser!;
 
   RxString plantDropdownValue = RxString('등록식물'); // 식물선택 드롭다운 밸류
-  RxString timeDropdownValue = RxString('18'); // 시간선택 드롭다운 밸류
+  RxString timeDropdownValue = RxString('8'); // 시간선택 드롭다운 밸류
   RxString eventDropdownValue = RxString('일정 종류'); // 일정선택 드롭다운 밸류
   RxList<String> plantList = <String>['등록식물'].obs; // 식물 리스트
   List<int> selectTimeList =
-      List<int>.generate(24, (int index) => index); // 시간 리스트
+      List<int>.generate(24, (int index) => index + 1); // 시간 리스트
   List<String> eventList = <String>[
     '일정 종류',
     '급수',
@@ -36,15 +36,6 @@ class ScheduleController extends GetxController {
         .plantList
         .map((plant) => plant.name)
         .toList());
-  }
-
-// 일정등록 다이얼로그 열기
-  goAddScheduleDialog() {
-    getPlantList();
-    plantDropdownValue.value = '등록식물';
-    eventDropdownValue.value = '일정 종류';
-    timeDropdownValue.value = '18';
-    Get.dialog(ResistScheduleDialog());
   }
 
 // 월단위 일정 가져오기
@@ -72,6 +63,8 @@ class ScheduleController extends GetxController {
     if (isDoNotify.value) {
       reservePush(id: id);
     }
+    selectTimeList = List<int>.generate(24, (int index) => index + 1);
+    timeDropdownValue.value = '8';
   }
 
   // 일정 삭제
@@ -80,8 +73,48 @@ class ScheduleController extends GetxController {
     getMonthSchedule(selectedDay.value.month);
   }
 
-  // 일정 수정 다이얼로그 띄우기
+// 일정등록 다이얼로그 열기
+  goAddScheduleDialog() {
+    // 오늘? -> 시간제한
+    if (selectedDay.value.day == DateTime.now().day) {
+      selectTimeList = List<int>.generate(24 - DateTime.now().hour,
+          (int index) => index + DateTime.now().hour + 1);
+      timeDropdownValue.value = (DateTime.now().hour + 1).toString();
+    }
+    // 미래? -> 시간제한 없음
+    if (selectedDay.value.day > DateTime.now().day) {
+      selectTimeList = List<int>.generate(24, (int index) => index + 1);
+      timeDropdownValue.value = '8';
+    }
+
+    getPlantList();
+    plantDropdownValue.value = '등록식물';
+    eventDropdownValue.value = '일정 종류';
+    Get.dialog(ResistScheduleDialog());
+  }
+
+  // 일정 수정 다이얼로그 열기
   modifyScheduleDialog(ScheduleData e) {
+    // 생성 날짜가 오늘? -> 시간제한
+    if (selectedDay.value.day == DateTime.now().day) {
+      // 예약 시간 이미 도래한 경우? -> 드롭박스 기본값은 기존 예약 시간. 드롭박스 선택지는 기본값 + 현재시간 이후 예약시간.
+      if (e.time <= DateTime.now().hour) {
+        selectTimeList = List<int>.generate(24 - DateTime.now().hour,
+            (int index) => index + DateTime.now().hour + 1);
+        selectTimeList.insert(0, e.time);
+        timeDropdownValue.value = e.time.toString();
+      } else {
+        // 아직 예약 시간이 도래하지 않은 경우? -> 드롭박스 기본값은 기존 예약 시간. 드롭박스 선택지는 현재시간 이후 예약시간.
+        selectTimeList = List<int>.generate(24 - DateTime.now().hour,
+            (int index) => index + DateTime.now().hour + 1);
+        timeDropdownValue.value = e.time.toString();
+      }
+    }
+    // 미래날짜? -> 시간제한 없음
+    if (selectedDay.value.day > DateTime.now().day) {
+      selectTimeList = List<int>.generate(24, (int index) => index + 1);
+    }
+
     getPlantList();
     if (plantList.contains(e.plant)) {
       plantDropdownValue.value = e.plant;
@@ -109,9 +142,11 @@ class ScheduleController extends GetxController {
     );
     getMonthSchedule(selectedDay.value.month); // 수정된 데이터로 다시 데이터 가져오기
     cancelPush(e.id); // 기존 푸쉬 예약 취소
-    if (isDoNotify.value) {
+    if (isDoNotify.value && e.time != int.parse(timeDropdownValue.value)) {
+      // 알림체크 && 기존 예약시간과 동일하지 않은 시간 선택시
       reservePush(id: e.id); // 다시 푸쉬 예약
     }
+    selectTimeList = List<int>.generate(24, (int index) => index + 1);
   }
 
   // 체크박스 누르기(일정 수정)

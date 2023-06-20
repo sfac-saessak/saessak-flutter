@@ -454,6 +454,16 @@ class CommunityController extends GetxController
     if (FirebaseAuth.instance.currentUser!.uid == post.userUid) {
       // 게시글 작성페이지로 이동
       await db.collection('community').doc(post.postId).delete();
+      // storage 사진 삭제
+      await FirebaseStorage.instance
+          .ref()
+          .child('/community/post/images/${post.postId}')
+          .listAll()
+          .then((value) => Future.wait(value.items.map((e) async =>
+              await FirebaseStorage.instance
+                  .ref()
+                  .child(e.fullPath)
+                  .delete())));
       await getPosts();
       Get.back();
     } else {

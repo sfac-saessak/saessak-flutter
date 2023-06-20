@@ -1,3 +1,4 @@
+
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,10 +13,9 @@ import '../../service/db_service.dart';
 import '../../view/screen/friends/friend_journal_screen.dart';
 import '../../view/screen/friends/friend_post_screen.dart';
 
-class FriendDetailController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class FriendDetailController extends GetxController with GetSingleTickerProviderStateMixin {
   UserModel user = Get.arguments[0];
-  late TabController tabController; // 탭바 컨트롤러
+  late TabController tabController;         // 탭바 컨트롤러
 
   RxList<UserModel> followingList = <UserModel>[].obs; // 팔로잉 리스트
   RxList<UserModel> followerList = <UserModel>[].obs; // 팔로잉 리스트
@@ -23,14 +23,12 @@ class FriendDetailController extends GetxController
   RxList journalList = [].obs; // 일지 리스트
   RxBool isLoading = false.obs; // 로딩중 상태
 
-  final List<Tab> tabs = <Tab>[
-    // 탭
+  final List<Tab> tabs = <Tab>[             // 탭
     Tab(text: '일지'),
     Tab(text: '게시글'),
   ];
 
-  final List<Widget> tabViews = <Widget>[
-    // 탭 뷰
+  final List<Widget> tabViews = <Widget>[   // 탭 뷰
     FriendJournalScreen(),
     FriendPostScreen(),
   ];
@@ -67,10 +65,16 @@ class FriendDetailController extends GetxController
   readPost() async {
     isLoading(true);
     postList([]);
+
+    var resUser = await DBService().getUserInfoById(this.user.uid);
+    UserModel authorUser = UserModel.fromMap(resUser);
+
     QuerySnapshot snapshot = await DBService().getUserPosts(user.uid);
-    postList(snapshot.docs
-        .map((doc) => Post.fromMap(doc.data() as Map<String, dynamic>))
-        .toList());
+    postList(snapshot.docs.map((doc) {
+      Post post = Post.fromMap(doc.data() as Map<String, dynamic>);
+      post.user = authorUser;
+      return post;
+    }).toList());
     log('${postList}');
     isLoading(false);
   }
