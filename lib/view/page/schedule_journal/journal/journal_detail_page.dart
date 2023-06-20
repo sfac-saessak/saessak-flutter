@@ -7,6 +7,7 @@ import '../../../../controller/schedule_journal/journal_controller.dart';
 import '../../../../model/journal.dart';
 import '../../../../util/app_color.dart';
 import '../../../../util/app_text_style.dart';
+import '../../plant/plant_detail_page.dart';
 
 class JournalDetailPage extends StatelessWidget {
   const JournalDetailPage({Key? key, required this.journal}) : super(key: key);
@@ -45,39 +46,48 @@ class JournalDetailPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  child: CircleAvatar(
-                    backgroundColor: AppColor.black20,
-                    backgroundImage: journal.plant.imageUrl != null
-                        ? NetworkImage(journal.plant.imageUrl!)
-                        : null,
-                    child: journal.plant.imageUrl != null
-                        ? null
-                        : Icon(Icons.person, color: AppColor.white),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => PlantDetailPage(plant: journal.plant), arguments: [journal.plant]);
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: CircleAvatar(
+                          backgroundColor: AppColor.black20,
+                          backgroundImage: journal.plant.imageUrl != null
+                              ? NetworkImage(journal.plant.imageUrl!)
+                              : null,
+                          child: journal.plant.imageUrl != null
+                              ? null
+                              : Icon(Icons.person, color: AppColor.white),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            children: [
+                              Text('${journal.plant.name}',
+                                  style: AppTextStyle.body3_m()),
+                              SizedBox(width: 2),
+                              Text('${journal.plant.species}',
+                                  style:
+                                  AppTextStyle.body4_r(color: AppColor.black40)),
+                            ],
+                          ),
+                          SizedBox(height: 6),
+                          Text(
+                              '${DateFormat("yyyy-MM-dd").format(journal.writeTime.toDate())}',
+                              style: AppTextStyle.body4_r(color: AppColor.black40)),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Text('${journal.plant.name}',
-                            style: AppTextStyle.body3_m()),
-                        SizedBox(width: 2),
-                        Text('${journal.plant.species}',
-                            style:
-                                AppTextStyle.body4_r(color: AppColor.black40)),
-                      ],
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                        '${DateFormat("yyyy-MM-dd").format(journal.writeTime.toDate())}',
-                        style: AppTextStyle.body4_r(color: AppColor.black40)),
-                  ],
                 ),
                 Spacer(),
                 journal.uid == controller.user.uid
@@ -97,17 +107,16 @@ class JournalDetailPage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 24),
-            Container(
+            journal.imageUrl != null
+            ? Container(
               width: double.infinity,
               height: 240,
               decoration: BoxDecoration(
-                image: journal.imageUrl != null
-                    ? DecorationImage(
-                        image: NetworkImage(journal.imageUrl!),
-                        fit: BoxFit.cover)
-                    : null,
+                image: DecorationImage(
+                    image: NetworkImage(journal.imageUrl!),
+                    fit: BoxFit.cover),
               ),
-            ),
+            ) : Container(),
             SizedBox(height: 8),
             Expanded(child: Text('${journal.content}')),
           ],

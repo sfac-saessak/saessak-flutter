@@ -8,6 +8,7 @@ import '../../../controller/challenge/challenge_controller.dart';
 import '../../../model/challenge.dart';
 import '../../../util/app_color.dart';
 import '../../../util/app_text_style.dart';
+import '../friends/friend_detail_page.dart';
 import 'edit_challenge_page.dart';
 
 class ChallengeDetailPage extends GetView<ChallengeController> {
@@ -29,6 +30,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
     }
 
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: AppBar(
         title: Text('챌린지', style: AppTextStyle.body2_r()),
         centerTitle: true,
@@ -54,24 +56,41 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundImage: challenge.admin.profileImg != null
-                      ? NetworkImage(challenge.admin.profileImg!)
-                      : null,
-                ),
-                SizedBox(
-                  width: 12,
-                ),
-                Text(
-                  '${challenge.admin.name}',
-                  style: AppTextStyle.body1_m(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+            GestureDetector(
+              onTap: (){
+                Get.to(() => FriendDetailPage(), arguments: [challenge.admin]);
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundImage: challenge.admin.profileImg != null
+                        ? NetworkImage(challenge.admin.profileImg!)
+                        : null,
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${challenge.admin.name}',
+                        style: AppTextStyle.body1_m(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        '${challenge.admin.email}',
+                        style: AppTextStyle.body4_r(color: AppColor.black40),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: 16,

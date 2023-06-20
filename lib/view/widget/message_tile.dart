@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/message.dart';
 import '../../util/app_color.dart';
 import '../../util/app_text_style.dart';
+import '../page/friends/friend_detail_page.dart';
 
 class MessageTile extends StatelessWidget {
   const MessageTile({Key? key, required this.message, required this.sentByMe, required this.showUserName, required this.showTime})
@@ -26,14 +28,19 @@ class MessageTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (!sentByMe && showUserName)
-                CircleAvatar(
-                  backgroundColor: AppColor.black20,
-                  backgroundImage: message.sender!.profileImg != null
-                    ? NetworkImage(message.sender!.profileImg!)
-                    : null,
-                  child: message.sender!.profileImg != null
-                    ? null
-                    : Icon(Icons.person, color: AppColor.white),
+                GestureDetector(
+                  onTap: (){
+                    Get.to(() => FriendDetailPage(), arguments: [message.sender]);
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: AppColor.black20,
+                    backgroundImage: message.sender!.profileImg != null
+                      ? NetworkImage(message.sender!.profileImg!)
+                      : null,
+                    child: message.sender!.profileImg != null
+                      ? null
+                      : Icon(Icons.person, color: AppColor.white),
+                  ),
                 ),
               SizedBox(width: 8),
               Column(
