@@ -6,7 +6,9 @@ import '../../../controller/follow/friends_controller.dart';
 import '../../../model/user_model.dart';
 
 class FollowingScreen extends GetView<FriendsController> {
-  const FollowingScreen({Key? key}) : super(key: key);
+  const FollowingScreen({Key? key, required this.followingList}) : super(key: key);
+
+  final RxList<UserModel> followingList;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +18,9 @@ class FollowingScreen extends GetView<FriendsController> {
           : Padding(
               padding: const EdgeInsets.all(20),
               child: ListView.builder(
-                itemCount: controller.followingList.length,
+                itemCount: followingList.length,
                 itemBuilder: (context, index) {
-                  UserModel user = controller.followingList[index];
+                  UserModel user = followingList[index];
                   return FriendTile(user: user, isFollowed: true.obs);
                 },
               ),

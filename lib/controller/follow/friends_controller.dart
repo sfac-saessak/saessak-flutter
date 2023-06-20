@@ -24,9 +24,9 @@ class FriendsController extends GetxController
     Tab(text: '친구검색'),
   ];
 
-  final List<Widget> tabViews = <Widget>[
+  late List<Widget> tabViews = <Widget>[
     // 탭 뷰
-    FollowingScreen(),
+    FollowingScreen(followingList: followingList),
     SearchFriendScreen(),
   ];
 
@@ -77,6 +77,11 @@ class FriendsController extends GetxController
     super.onInit();
     tabController = TabController(length: tabs.length, vsync: this);
     getFollowing();
+    tabViews = <Widget>[
+      // 탭 뷰
+      FollowingScreen(followingList: followingList),
+      SearchFriendScreen(),
+    ];
   }
 
   @override

@@ -17,8 +17,8 @@ class FriendDetailController extends GetxController
   UserModel user = Get.arguments[0];
   late TabController tabController; // 탭바 컨트롤러
 
-  RxList followingList = [].obs; // 팔로잉 리스트
-  RxList followerList = [].obs; // 팔로잉 리스트
+  RxList<UserModel> followingList = <UserModel>[].obs; // 팔로잉 리스트
+  RxList<UserModel> followerList = <UserModel>[].obs; // 팔로잉 리스트
   RxList postList = [].obs; // 게시글 리스트
   RxList journalList = [].obs; // 일지 리스트
   RxBool isLoading = false.obs; // 로딩중 상태
@@ -39,7 +39,12 @@ class FriendDetailController extends GetxController
   getFollowing() async {
     isLoading(true);
     var uidList = await DBService().getFollowing(user.uid);
-    followingList(uidList);
+    List<UserModel> following = [];
+    for (var uid in uidList) {
+      var userInfo = await getUserInfoById(uid);
+      following.add(UserModel.fromMap(userInfo));
+    }
+    followingList(following);
     isLoading(false);
     log('${followingList}');
   }
@@ -48,7 +53,12 @@ class FriendDetailController extends GetxController
   getFollower() async {
     isLoading(true);
     var uidList = await DBService().getFollower(user.uid);
-    followerList(uidList);
+    List<UserModel> follower = [];
+    for (var uid in uidList) {
+      var userInfo = await getUserInfoById(uid);
+      follower.add(UserModel.fromMap(userInfo));
+    }
+    followerList(follower);
     log('${followerList}');
     isLoading(false);
   }
@@ -97,6 +107,12 @@ class FriendDetailController extends GetxController
   Future<Map<String, dynamic>> getPlantById(String plantId) async {
     var plantInfo = await DBService().getPlantById(user.uid, plantId);
     return plantInfo;
+  }
+
+  // uid로 유저 정보 가져오기
+  getUserInfoById(String uid) async {
+    var userInfo = await DBService().getUserInfoById(uid);
+    return userInfo;
   }
 
   @override

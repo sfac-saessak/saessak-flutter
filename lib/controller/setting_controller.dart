@@ -16,8 +16,8 @@ class SettingController extends GetxController {
   User get user => FirebaseAuth.instance.currentUser!;
 
   RxList journalList = Get.find<JournalController>().journalList; // 일지 리스트
-  RxList followingList = Get.find<FriendsController>().followingList; // 팔로잉 리스트
-  RxList followerList = [].obs; // 팔로워 리스트
+  RxList<UserModel> followingList = Get.find<FriendsController>().followingList; // 팔로잉 리스트
+  RxList<UserModel> followerList = <UserModel>[].obs; // 팔로워 리스트
   RxList myPostList = [].obs; // 게시글 리스트
   RxBool isLoading = false.obs; // 로딩중 상태
   RxList<Notice> noticeList = <Notice>[].obs; // 공지 리스트

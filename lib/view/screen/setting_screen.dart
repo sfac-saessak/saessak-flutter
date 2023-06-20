@@ -54,7 +54,7 @@ class SettingScreen extends GetView<SettingController> {
                               Get.to(() => FriendsListPage(
                                   userName: controller.user.displayName!,
                                   followingList: controller.followingList,
-                                  followerList: controller.followerList));
+                                  followerList: controller.followerList), arguments: [controller.followingList, controller.followerList]);
                             },
                             child: Column(
                               children: [
@@ -85,7 +85,7 @@ class SettingScreen extends GetView<SettingController> {
                               Get.to(() => FriendsListPage(
                                   userName: controller.user.displayName!,
                                   followingList: controller.followingList,
-                                  followerList: controller.followerList));
+                                  followerList: controller.followerList), arguments: [controller.followingList, controller.followerList]);
                             },
                             child: Column(
                               children: [
