@@ -244,37 +244,29 @@ class ChatDetailPage extends StatelessWidget {
                           challenge.admin.uid == FirebaseAuth.instance.currentUser!.uid && challenge.admin.uid != member.uid
                           ? IconButton(
                             onPressed: (){
-                              showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text("유저 내보내기"),
-                                    content: Text('${member.name} 을 내보내시겠습니까?'),
-                                    actions: [
-                                      IconButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        icon: const Icon(
-                                          Icons.cancel,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          chatController.removeMember(challenge.challengeId!, member.uid);
-                                          members.removeWhere((user) => user.uid == member.uid);
-                                          Get.back();
-                                        },
-                                        icon: const Icon(
-                                          Icons.done,
-                                          color: Colors.green,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                });
+                              Get.dialog(
+                                  CustomDialog(
+                                    leftButtonText: '취소',
+                                    rightButtonText: '확인',
+                                    leftButtonOnTap: () {
+                                      Get.back();
+                                    },
+                                    rightButtonOnTap: () {
+                                      chatController.removeMember(challenge.challengeId!, member.uid);
+                                      members.removeWhere((user) => user.uid == member.uid);
+                                      Get.back();
+                                    },
+                                    child: Container(
+                                        padding: const EdgeInsets.all(30.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text('${member.name} 을 내보내시겠습니까?'),
+                                          ],
+                                        )
+                                    ),
+                                  )
+                              );
                             },
                             icon: Icon(Icons.exit_to_app),
                           ): null,

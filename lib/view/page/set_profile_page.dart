@@ -18,6 +18,11 @@ class SetProfilePage extends GetView<SetProfileController> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColor.white,
+          foregroundColor: AppColor.black,
+          elevation: 0,
+        ),
         body: Center(
           child: SingleChildScrollView(
             child: Padding(
