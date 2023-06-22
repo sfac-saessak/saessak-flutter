@@ -80,7 +80,7 @@ class DBService {
     await plantDocRef.update({
       'plantId': plantDocRef.id,
     });
-    createTree();
+    await createTree();
   }
 
   // 식물 가져오기
@@ -109,11 +109,11 @@ class DBService {
   }
 
   // 나무 생성
-  void createTree() {
+  Future<void> createTree() async {
     final treeIdx = Random().nextInt(10);
     var position = Random().nextInt(281) + 40;
 
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('forest')
         .doc(uid)
         .get()
