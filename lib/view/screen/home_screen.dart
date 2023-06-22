@@ -86,7 +86,7 @@ class HomeScreen extends GetView<PlantController> {
                                                 NetworkImage(plant.imageUrl!),
                                             fit: BoxFit.fitWidth,
                                             colorFilter: ColorFilter.mode(
-                                                Colors.black.withOpacity(0.2),
+                                                Colors.black.withOpacity(0.4),
                                                 BlendMode.darken),
                                           )
                                         : null,

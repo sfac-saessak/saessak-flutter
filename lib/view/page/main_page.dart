@@ -108,32 +108,32 @@ class MainPage extends GetView<MainController> {
                       opacity: 0.4,
                       child: Image.asset('assets/images/home.png', width: 35.w)),
                   label: '홈',
-                  activeIcon: Image.asset('assets/images/home.png', width: 35.w),
+                  activeIcon: Image.asset('assets/images/home.png', width: 38.w),
                 ),
                 BottomNavigationBarItem(
                     icon: Opacity(
                         opacity: 0.4,
                         child: Image.asset('assets/images/schedule.png', width: 35.w)),
                     label: '일정일지',
-                    activeIcon: Image.asset('assets/images/schedule.png', width: 35.w)),
+                    activeIcon: Image.asset('assets/images/schedule.png', width: 38.w)),
                 BottomNavigationBarItem(
                     icon: Opacity(
                         opacity: 0.4,
                         child: Image.asset('assets/images/community.png', width: 35.w)),
                     label: '게시판',
-                    activeIcon: Image.asset('assets/images/community.png', width: 35.w)),
+                    activeIcon: Image.asset('assets/images/community.png', width: 38.w)),
                 BottomNavigationBarItem(
                     icon: Opacity(
                         opacity: 0.4,
                         child: Image.asset('assets/images/challenge.png', width: 35.w)),
                     label: '챌린지',
-                    activeIcon: Image.asset('assets/images/challenge.png', width: 35.w)),
+                    activeIcon: Image.asset('assets/images/challenge.png', width: 38.w)),
                 BottomNavigationBarItem(
                     icon: Opacity(
                         opacity: 0.4,
                         child: Image.asset('assets/images/setting.png', width: 35.w)),
                     label: '설정',
-                    activeIcon: Image.asset('assets/images/setting.png', width: 35.w)),
+                    activeIcon: Image.asset('assets/images/setting.png', width: 38.w)),
               ],
             ),
           ),

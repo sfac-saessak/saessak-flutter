@@ -108,12 +108,24 @@ class ChatController extends GetxController {
   }
 
   // 멤버 가져오기
-  void getMembers() async {
+  getMembers() async {
     List<UserModel> members = [];
     for (var member in challenge.members!) {
       var userInfo = await getUserInfoById(member);
       members.add(UserModel.fromMap(userInfo));
     }
+
+    // UserModel? admin;
+    // for (var member in members) {
+    //   if (member.uid == challenge.admin) {
+    //     admin = member;
+    //     break;
+    //   }
+    // }
+    //
+    // members.remove(admin);
+    // members.insert(0, admin!);
+
     memberList(members);
   }
 

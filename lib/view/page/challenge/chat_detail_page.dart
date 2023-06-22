@@ -174,10 +174,12 @@ class ChatDetailPage extends StatelessWidget {
                     color: AppColor.primary,
                     borderRadius: BorderRadius.circular(99),
                   ),
-                  child: Center(
-                    child: Text(
-                      '${challenge.members!.length}',
-                      style: AppTextStyle.body4_r(color: Colors.white),
+                  child: Obx(
+                    () => Center(
+                      child: Text(
+                        '${members.length}',
+                        style: AppTextStyle.body4_r(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),

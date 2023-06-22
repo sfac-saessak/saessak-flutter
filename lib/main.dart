@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(fontFamily: 'NotoSansKR'),
           initialBinding: BindingsBuilder(() {
             Get.put(AuthController());
