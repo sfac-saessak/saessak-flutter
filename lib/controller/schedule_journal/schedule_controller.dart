@@ -36,7 +36,10 @@ class ScheduleController extends GetxController {
         .plantList
         .map((plant) => plant.name)
         .toList());
+  plantList.value = plantList.value.toSet().toList();
   }
+
+ 
 
 // 월단위 일정 가져오기
   getMonthSchedule(month) async {
