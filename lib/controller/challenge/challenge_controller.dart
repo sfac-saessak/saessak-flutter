@@ -198,6 +198,7 @@ class ChallengeController extends GetxController with GetSingleTickerProviderSta
   // 참여중 챌린지 새로고침
   void joinedChallengeRefresh() async {
     await getJoinedChallenges();
+    log('${joinedChallengeList}');
     joinedRefreshController.refreshCompleted();
   }
 

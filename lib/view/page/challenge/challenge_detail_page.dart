@@ -188,9 +188,7 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                         Get.back();
                       },
                       rightButtonOnTap: () {
-                        controller
-                            .joinChallenge(challenge.challengeId!);
-                         controller.allChallengeRefresh();
+                        controller.joinChallenge(challenge.challengeId!);
                         Get.back();
                         Get.snackbar('${challenge.title}', '챌린지에 참가하였습니다!');
                       },

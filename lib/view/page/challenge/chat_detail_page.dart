@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,10 +26,13 @@ class ChatDetailPage extends StatelessWidget {
 
     Rx<UserModel> selectedAdmin = Rx(members[0]);
     RxList<UserModel> nextAdminList = RxList.from(members);
+
     if (members.length > 1) {
       nextAdminList.removeWhere((member) => member.uid == challenge.admin.uid);
       selectedAdmin = Rx<UserModel>(nextAdminList[0]);
     }
+
+    log('members => ${members}');
 
     return Scaffold(
       backgroundColor: AppColor.black10,
@@ -48,10 +53,11 @@ class ChatDetailPage extends StatelessWidget {
                         leftButtonOnTap: () {
                           Get.back();
                         },
-                        rightButtonOnTap: () {
-                          chatController.exitChallenge(challenge.challengeId!);
+                        rightButtonOnTap: () async {
+                          await chatController.exitChallenge(challenge.challengeId!);
                           Get.back();
-                          Get.snackbar('${challenge.title}', '탈주 완');
+                          Get.back();
+                          Get.snackbar('${challenge.title}', '챌린지를 포기했습니다.');
                         },
                         child: Container(
                             padding: const EdgeInsets.all(30.0),
@@ -68,11 +74,12 @@ class ChatDetailPage extends StatelessWidget {
                         leftButtonOnTap: () {
                           Get.back();
                         },
-                        rightButtonOnTap: () {
-                          chatController.exitAdmin(
+                        rightButtonOnTap: () async {
+                          await chatController.exitAdmin(
                               challenge.challengeId!, selectedAdmin.value.uid);
                           Get.back();
-                          Get.snackbar('${challenge.title}', '탈주 완');
+                          Get.back();
+                          Get.snackbar('${challenge.title}', '챌린지를 포기했습니다.');
                         },
                         child: Container(
                             padding: const EdgeInsets.all(30.0),
