@@ -190,8 +190,9 @@ class ChallengeDetailPage extends GetView<ChallengeController> {
                       rightButtonOnTap: () {
                         controller
                             .joinChallenge(challenge.challengeId!);
-                        Get.snackbar('${challenge.title}', '참가 완');
+                         controller.allChallengeRefresh();
                         Get.back();
+                        Get.snackbar('${challenge.title}', '챌린지에 참가하였습니다!');
                       },
                       child: Container(
                         padding: const EdgeInsets.all(30.0),
