@@ -81,7 +81,8 @@ class AddChallengePage extends GetView<ChallengeController> {
                             controller.startDate.value != null
                               ? '${DateFormat("yyyy-MM-dd").format(controller.startDate.value!.toDate())}'
                               : '선택',
-                            style: AppTextStyle.body3_m(),
+                            style: controller.startDate.value != null
+                              ? AppTextStyle.body4_r() : AppTextStyle.body4_r(color: AppColor.black30),
                           ),
                           Spacer(),
                           Icon(Icons.calendar_today, size: 16, color: AppColor.primary60),
