@@ -146,7 +146,7 @@ class ChatController extends GetxController {
   // 어드민 채팅방 나가기
   Future exitAdmin(String challengeId, String newAdminUid) async {
     await DBService(uid: user.uid).changeAdmin(challengeId, newAdminUid);
-    exitChallenge(challengeId);
+    await exitChallenge(challengeId);
     Get.back();
   }
 
