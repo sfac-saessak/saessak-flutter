@@ -29,7 +29,7 @@ class AddChallengePage extends GetView<ChallengeController> {
             onPressed: () {
               controller.createChallenge();
               Get.back();
-              Get.snackbar('챌린지', '등록 완');
+              Get.snackbar('등록 완료', '챌린지가 생성되었습니다.');
             },
             child: Text('완료', style: AppTextStyle.body3_m(color: AppColor.primary)),
           ),
