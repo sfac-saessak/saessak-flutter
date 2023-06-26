@@ -56,7 +56,7 @@ class AddPlantPage extends GetView<PlantController> {
               : TextButton(
                   onPressed: () {
                     controller.editPlant(plant!);
-                    Get.snackbar('식물', '수정 완');
+                    Get.snackbar('수정 완료', '식물 정보가 수정되었습니다.');
                   },
                   child: Text('수정'),
                 )

@@ -29,7 +29,7 @@ class AddChallengePage extends GetView<ChallengeController> {
             onPressed: () {
               controller.createChallenge();
               Get.back();
-              Get.snackbar('챌린지', '등록 완');
+              Get.snackbar('등록 완료', '챌린지가 생성되었습니다.');
             },
             child: Text('완료', style: AppTextStyle.body3_m(color: AppColor.primary)),
           ),
@@ -81,7 +81,8 @@ class AddChallengePage extends GetView<ChallengeController> {
                             controller.startDate.value != null
                               ? '${DateFormat("yyyy-MM-dd").format(controller.startDate.value!.toDate())}'
                               : '선택',
-                            style: AppTextStyle.body3_m(),
+                            style: controller.startDate.value != null
+                              ? AppTextStyle.body4_r() : AppTextStyle.body4_r(color: AppColor.black30),
                           ),
                           Spacer(),
                           Icon(Icons.calendar_today, size: 16, color: AppColor.primary60),

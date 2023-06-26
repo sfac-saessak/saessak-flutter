@@ -106,7 +106,7 @@ class PlantController extends GetxController {
 
       Get.back();
       getPlants();
-      Get.snackbar('식물', '등록 완');
+      Get.snackbar('등록 완료', '식물이 등록되었습니다.');
     } else {
       Get.snackbar('등록 실패', '식물 정보를 정확히 입력해주세요.');
     }

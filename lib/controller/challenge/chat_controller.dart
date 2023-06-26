@@ -135,17 +135,18 @@ class ChatController extends GetxController {
   }
 
   // 챌린지 포기
-  void exitChallenge(String challengeId) async {
+  Future exitChallenge(String challengeId) async {
     await DBService(uid: user.uid).exitChallenge(challengeId);
-    Get.back();
-    Get.find<ChallengeController>().getJoinedChallenges();
+    await Get.find<ChallengeController>().getJoinedChallenges();
+    Get.find<ChallengeController>().joinedChallengeList.removeWhere((challenge) => challenge.challengeId == challengeId);
     Get.find<ChallengeController>().updateAllChallenge();
+    Get.back();
   }
 
   // 어드민 채팅방 나가기
-  void exitAdmin(String challengeId, String newAdminUid) async {
+  Future exitAdmin(String challengeId, String newAdminUid) async {
     await DBService(uid: user.uid).changeAdmin(challengeId, newAdminUid);
-    exitChallenge(challengeId);
+    await exitChallenge(challengeId);
     Get.back();
   }
 

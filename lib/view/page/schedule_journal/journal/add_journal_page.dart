@@ -36,7 +36,7 @@ class AddJournalPage extends GetView<JournalController> {
                   onPressed: () {
                     controller.addJournal();
                     Get.back();
-                    Get.snackbar('일지', '등록 완');
+                    Get.snackbar('등록 완료', '일지를 기록했습니다.');
                   },
                   child: Text(
                     '등록',
@@ -46,7 +46,7 @@ class AddJournalPage extends GetView<JournalController> {
               : TextButton(
                   onPressed: () {
                     controller.editJournal(journal!);
-                    Get.snackbar('일지', '수정 완');
+                    Get.snackbar('수정 완료', '일지를 수정했습니다.');
                   },
                   child: Text('수정'),
                 )

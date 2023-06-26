@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,9 +24,15 @@ class ChatDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var chatController = Get.find<ChatController>();
 
+    Rx<UserModel> selectedAdmin = Rx(members[0]);
     RxList<UserModel> nextAdminList = RxList.from(members);
-    nextAdminList.removeWhere((member) => member.uid == challenge.admin.uid);
-    Rx<UserModel> selectedAdmin = Rx<UserModel>(nextAdminList[0]);
+
+    if (members.length > 1) {
+      nextAdminList.removeWhere((member) => member.uid == challenge.admin.uid);
+      selectedAdmin = Rx<UserModel>(nextAdminList[0]);
+    }
+
+    log('members => ${members}');
 
     return Scaffold(
       backgroundColor: AppColor.black10,
@@ -37,74 +45,71 @@ class ChatDetailPage extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                challenge.admin.uid != FirebaseAuth.instance.currentUser!.uid || members.length < 2
-                ? Get.dialog(
-                  CustomDialog(
-                    leftButtonText: '취소',
-                    rightButtonText: '나가기',
-                    leftButtonOnTap: () {
-                      Get.back();
-                    },
-                    rightButtonOnTap: () {
-                      chatController.exitChallenge(challenge.challengeId!);
-                      Get.back();
-                      Get.snackbar('${challenge.title}', '탈주 완');
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.all(30.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('${challenge.title} 챌린지를\n포기하시겠습니까?'),
-                        ],
-                      )
-                    ),
-                  )
-                )
-                : Get.dialog(
-                    CustomDialog(
-                      leftButtonText: '취소',
-                      rightButtonText: '나가기',
-                      leftButtonOnTap: () {
-                        Get.back();
-                      },
-                      rightButtonOnTap: () {
-                        chatController.exitAdmin(challenge.challengeId!, selectedAdmin.value.uid);
-                        Get.back();
-                        Get.snackbar('${challenge.title}', '탈주 완');
-                      },
-                      child: Container(
-                          padding: const EdgeInsets.all(30.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  Text('다음 관리자를 선택하세요'),
-                                  Obx(
-                                    () => DropdownButton(
-                                      value: selectedAdmin.value.uid,
-                                      items: nextAdminList
-                                          .map((member) => DropdownMenuItem(
-                                          value: member.uid,
-                                          child: Text('${member.name}')
-                                      ))
-                                          .toList(),
-                                      onChanged: (value) {
-                                        selectedAdmin.value =
-                                            nextAdminList.firstWhere(
-                                                  (member) => member.uid == value,
-                                            );
-                                      },
+                challenge.admin.uid != FirebaseAuth.instance.currentUser!.uid ||
+                        members.length < 2
+                    ? Get.dialog(CustomDialog(
+                        leftButtonText: '취소',
+                        rightButtonText: '나가기',
+                        leftButtonOnTap: () {
+                          Get.back();
+                        },
+                        rightButtonOnTap: () async {
+                          await chatController.exitChallenge(challenge.challengeId!);
+                          Get.back();
+                          Get.back();
+                          Get.snackbar('${challenge.title}', '챌린지를 포기했습니다.');
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.all(30.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text('${challenge.title} 챌린지를\n포기하시겠습니까?'),
+                              ],
+                            )),
+                      ))
+                    : Get.dialog(CustomDialog(
+                        leftButtonText: '취소',
+                        rightButtonText: '나가기',
+                        leftButtonOnTap: () {
+                          Get.back();
+                        },
+                        rightButtonOnTap: () async {
+                          await chatController.exitAdmin(
+                              challenge.challengeId!, selectedAdmin.value.uid);
+                          Get.back();
+                          Get.back();
+                          Get.snackbar('${challenge.title}', '챌린지를 포기했습니다.');
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.all(30.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Column(
+                                  children: [
+                                    Text('다음 관리자를 선택하세요'),
+                                    Obx(
+                                      () => DropdownButton(
+                                        value: selectedAdmin.value.uid,
+                                        items: nextAdminList
+                                            .map((member) => DropdownMenuItem(
+                                                value: member.uid,
+                                                child: Text('${member.name}')))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          selectedAdmin.value =
+                                              nextAdminList.firstWhere(
+                                            (member) => member.uid == value,
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )
-                      ),
-                    )
-                );
+                                  ],
+                                ),
+                              ],
+                            )),
+                      ));
               },
               icon: const Icon(Icons.exit_to_app))
         ],
@@ -197,8 +202,9 @@ class ChatDetailPage extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
-                          onTap: (){
-                            Get.to(() => FriendDetailPage(), arguments: [member]);
+                          onTap: () {
+                            Get.to(() => FriendDetailPage(),
+                                arguments: [member]);
                           },
                           tileColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -239,39 +245,42 @@ class ChatDetailPage extends StatelessWidget {
                           ),
                           subtitle: Text(
                             '${member.email}',
-                            style: AppTextStyle.body3_r(color: AppColor.black60),
+                            style:
+                                AppTextStyle.body3_r(color: AppColor.black60),
                           ),
-                          trailing:
-
-                          challenge.admin.uid == FirebaseAuth.instance.currentUser!.uid && challenge.admin.uid != member.uid
-                          ? IconButton(
-                            onPressed: (){
-                              Get.dialog(
-                                  CustomDialog(
-                                    leftButtonText: '취소',
-                                    rightButtonText: '확인',
-                                    leftButtonOnTap: () {
-                                      Get.back();
-                                    },
-                                    rightButtonOnTap: () {
-                                      chatController.removeMember(challenge.challengeId!, member.uid);
-                                      members.removeWhere((user) => user.uid == member.uid);
-                                      Get.back();
-                                    },
-                                    child: Container(
-                                        padding: const EdgeInsets.all(30.0),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text('${member.name} 을 내보내시겠습니까?'),
-                                          ],
-                                        )
-                                    ),
-                                  )
-                              );
-                            },
-                            icon: Icon(Icons.exit_to_app),
-                          ): null,
+                          trailing: challenge.admin.uid ==
+                                      FirebaseAuth.instance.currentUser!.uid &&
+                                  challenge.admin.uid != member.uid
+                              ? IconButton(
+                                  onPressed: () {
+                                    Get.dialog(CustomDialog(
+                                      leftButtonText: '취소',
+                                      rightButtonText: '확인',
+                                      leftButtonOnTap: () {
+                                        Get.back();
+                                      },
+                                      rightButtonOnTap: () {
+                                        chatController.removeMember(
+                                            challenge.challengeId!, member.uid);
+                                        members.removeWhere(
+                                            (user) => user.uid == member.uid);
+                                        Get.back();
+                                      },
+                                      child: Container(
+                                          padding: const EdgeInsets.all(30.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  '${member.name} 을 내보내시겠습니까?'),
+                                            ],
+                                          )),
+                                    ));
+                                  },
+                                  icon: Icon(Icons.exit_to_app),
+                                )
+                              : null,
                         ),
                       );
                     }),
